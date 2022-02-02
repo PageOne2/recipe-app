@@ -1,0 +1,29 @@
+.more {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.more .more_btn,
+.disabled {
+  padding: 10px 45px;
+  cursor: pointer;
+  border: none;
+  font-size: 20px;
+  border-radius: 3px;
+}
+
+.more .more_btn {
+  background-color: rgb(255, 99, 71);
+  color: rgb(255, 255, 255);
+}
+
+.more .disabled {
+  background-color: rgb(197, 197, 197);
+  color: rgb(112, 112, 112);
+  cursor: auto;
+}
+
+.more .more_btn:hover {
+  background-color: rgb(250, 116, 92);
+}

@@ -1,0 +1,47 @@
+import RecipeActionTypes from "./recipe.types"
+
+const INITIAL_STATE = {
+    noResultsMR: false,
+    noResultsML: false,
+    m_r_page: 1,
+    m_l_page: 1,
+    class: 'mostRecent',
+    most_recent_recipes: [],
+    most_liked_recipes: []
+}
+
+const recipeReducer = (state = INITIAL_STATE, action) => {
+    switch (action.type) {
+        case RecipeActionTypes.GET_MOST_RECENT_RECIPES_SUCCESS:
+            return {
+                ...state,
+                m_r_page: state.m_r_page + 1,
+                class: 'mostRecent',
+                most_recent_recipes: [...state.most_recent_recipes, ...action.payload]
+            }
+        case RecipeActionTypes.GET_MOST_LIKED_RECIPES_SUCCESS:
+            return {
+                ...state,
+                m_l_page: state.m_l_page + 1,
+                class: 'mostLiked',
+                most_liked_recipes: [...state.most_liked_recipes, ...action.payload]
+            }
+        case RecipeActionTypes.CHANGE_CLASS_NAME: {
+            return {
+                ...state,
+                class: action.payload
+            }
+        }
+        case RecipeActionTypes.KEEP_PAGE: {
+            return {
+                ...state,
+                noResultsMR: state.noResultsMR ? true : action.payload[0],
+                noResultsML: state.noResultsML ? true : action.payload[1]
+            }
+        }
+        default: 
+            return state
+    }
+}
+
+export default recipeReducer
