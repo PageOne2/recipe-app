@@ -1,0 +1,7 @@
+const sagaActionTypes = {
+    GET_MOST_RECENT_RECIPES_START: 'GET_MOST_RECENT_RECIPES_START',
+    GET_MOST_LIKED_RECIPES_START: 'GET_MOST_LIKED_RECIPES_START',
+    KEEP_PAGE: 'KEEP_PAGE'
+}
+
+export default sagaActionTypes

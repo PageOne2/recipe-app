@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   getMostRecentRecipes,
   getMostLikedRecipes,
-} from "../../redux/recipe/recipe.action";
+} from "../../redux/recipeReducer/sagaActions";
 
 import "./more-button.styles.css";
 

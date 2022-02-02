@@ -1,7 +1,7 @@
-import RecipeActionTypes from './recipe.types'
+import RecipeActionTypes from './sagaActionTypes'
 import { takeLatest, put, call, all } from 'redux-saga/effects'
 
-import { getMostRecentRecipesSuccess, getMostLikedSuccess, keepPage } from './recipe.action'
+import { getMostRecentRecipesSuccess, getMostLikedRecipesSuccess, keepPage } from './recipeReducer'
 
 export function* getMostRecent({payload}) {
     try {
@@ -19,13 +19,12 @@ export function* getMostRecent({payload}) {
 }
 
 export function* getMostLiked({payload}) {
-    console.log(payload)
     try {
         let data = yield fetch(`http://localhost:3000/api/recipes/mostLiked/${payload}`)
         let res = yield data.json()
 
         if(res.data.recipes.length) {
-            yield put(getMostLikedSuccess(res.data.recipes))
+            yield put(getMostLikedRecipesSuccess(res.data.recipes))
         } else {
             yield put(keepPage([false, true]))
         }
