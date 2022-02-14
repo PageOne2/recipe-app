@@ -1,11 +1,13 @@
 import React from "react";
 
+import { Link } from "react-router-dom";
+
 import recipeImage from "../../assets/default.jpg";
 
 import "./recipe.card.styles.css";
 
 const RecipeCard = ({
-  item: { recipeName, likes, preparationTime, imageCover, user },
+  item: { recipeName, likes, preparationTime, imageCover, user, _id },
 }) => {
   return (
     <div className="recipe-card">
@@ -19,7 +21,9 @@ const RecipeCard = ({
       </div>
       <div className="recipe-image">
         <div className="overlay">
-          <button>Go To Recipe</button>
+          <Link to={`/recipe/${_id}`}>
+            <button>Go To Recipe</button>
+          </Link>
         </div>
         <img src={recipeImage} alt="dish" />
       </div>

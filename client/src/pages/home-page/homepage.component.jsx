@@ -20,7 +20,7 @@ const HomePage = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getMostRecentRecipes(1));
+    dispatch(getMostRecentRecipes(recentPage));
   }, [dispatch]);
 
   return (
