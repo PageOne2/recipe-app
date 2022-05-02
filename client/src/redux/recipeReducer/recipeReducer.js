@@ -10,7 +10,8 @@ export const recipeReducer = createSlice({
         m_l_page: 1,
         class: 'mostRecent',
         most_recent_recipes: [],
-        most_liked_recipes: []
+        most_liked_recipes: [],
+        recipeById: {}
     },
     reducers: {
         changeClassName: (state, action) => {
@@ -32,6 +33,12 @@ export const recipeReducer = createSlice({
                 most_liked_recipes: [...state.most_liked_recipes, ...action.payload]
             }
         },
+        getRecipeByIdSuccess: (state, action) => {
+            return {
+                ...state,
+                recipeById: action.payload
+            }
+        },
         keepPage: (state, action) => {
             return {
                 ...state,
@@ -42,6 +49,6 @@ export const recipeReducer = createSlice({
     }
 })
 
-export const { changeClassName, getMostRecentRecipesSuccess, getMostLikedRecipesSuccess, keepPage } = recipeReducer.actions
+export const { changeClassName, getMostRecentRecipesSuccess, getMostLikedRecipesSuccess, getRecipeByIdSuccess, keepPage } = recipeReducer.actions
 
 export default recipeReducer.reducer

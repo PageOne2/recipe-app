@@ -10,6 +10,11 @@ export const getMostLikedRecipes = (page) => ({
     payload: page
 })
 
+export const getRecipeById = (id) => ({
+    type: sagaActionTypes.GET_RECIPE_BY_ID,
+    payload: id
+})
+
 export const keepPage = (page) => ({
     type: sagaActionTypes.KEEP_PAGE,
     payload: page

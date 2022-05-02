@@ -1,6 +1,7 @@
 import React from "react";
 
 import { Link } from "react-router-dom";
+import RecipeInitialInfo from "../recipe-initial-info/recipe-initial-info.component"
 
 import recipeImage from "../../assets/default.jpg";
 
@@ -22,7 +23,7 @@ const RecipeCard = ({
       <div className="recipe-image">
         <div className="overlay">
           <Link to={`/recipe/${_id}`}>
-            <button>Go To Recipe</button>
+            <button className="go-to-btn">Go To Recipe</button>
           </Link>
         </div>
         <img src={recipeImage} alt="dish" />
@@ -30,18 +31,7 @@ const RecipeCard = ({
       <div className="recipe-name">
         <h3>{recipeName}</h3>
       </div>
-      <div className="more-info">
-        <div className="likes">
-          <span className="material-icons" id="heart-icon">
-            favorite
-          </span>
-          <span className="number">{likes}</span>
-        </div>
-        <div className="time">
-          <span className="material-icons">timer</span>
-          <span className="minutes">{preparationTime} MIN</span>
-        </div>
-      </div>
+      <RecipeInitialInfo likes={likes} preparationTime={preparationTime} />
     </div>
   );
 };

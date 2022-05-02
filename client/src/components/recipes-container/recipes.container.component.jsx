@@ -22,14 +22,14 @@ const RecipesContainer = () => {
       ));
     } else if (btnClass === "mostLiked" && mostLikedRecipes.length) {
       return mostLikedRecipes.map((item) => (
-        <RecipeCard key={item._id} item={item} />
+        <RecipeCard key={`${item._id}${item.likes}`} item={item} />
       ));
     } else {
       return null;
     }
   };
 
-  return <div className="cards">{loadRecipes(btnClass)}</div>;
+  return <div className="recipe-cards-container">{loadRecipes(btnClass)}</div>;
 };
 
 export default RecipesContainer;
