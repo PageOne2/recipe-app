@@ -2,12 +2,13 @@ import React, { useEffect } from "react";
 
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
-import { getRecipeById } from '../../redux/recipeReducer/sagaActions';
+import { getRecipeById } from '../../redux/redux-saga/sagaActions';
 
 import RecipeInitialInfo from "../../components/recipe-initial-info/recipe-initial-info.component";
 import Spinner from "../../components/spinner/spinner.component";
 
 import recipeImage from "../../assets/default.jpg"
+import { v4 as uuidv4 } from "uuid";
 
 import "./recipe-page.styles.css";
 
@@ -37,7 +38,7 @@ const RecipePage = () => {
                   <h4 className="method-title">Method</h4>
                   <ol className="method">
                     {recipe.method?.map(item => (
-                      <li>{item}</li>   
+                      <li key={uuidv4()} >{item}</li>   
                     ))}
                   </ol>
                 </div>
@@ -47,7 +48,7 @@ const RecipePage = () => {
                 <h4 className="ingredients-title">Ingredients</h4>
                 <ul className="ingredients">
                   {recipe.ingredients?.map(ingredient => (
-                    <li>{ ingredient }</li>
+                    <li key={uuidv4()}>{ ingredient }</li>
                   ))}
                 </ul>
               </div>

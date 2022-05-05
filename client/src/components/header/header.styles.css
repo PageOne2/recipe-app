@@ -15,6 +15,10 @@
   padding: 0px 150px;
 }
 
+.header .nav-bar a {
+  text-decoration: none;
+}
+
 .header .nav-bar .logo {
   font-size: 25px;
   font-family: math;
