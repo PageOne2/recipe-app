@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { getMostRecentRecipes } from '../../redux/redux-saga/sagaActions';
 
 import RecipeCard from "../../components/recipe-card/recipe.card.component";
 
@@ -9,13 +10,16 @@ import { v4 as uuidv4 } from "uuid";
 import "./recipes.container.styles.css";
 
 const RecipesContainer = () => {
-  const mostRecentRecipes = useSelector(
-    (state) => state.recipe.most_recent_recipes
-  );
-  const mostLikedRecipes = useSelector(
-    (state) => state.recipe.most_liked_recipes
-  );
-  const btnClass = useSelector((state) => state.recipe.class);
+  const isRedirected = useSelector((state) => state.user.isRedirected);
+  const mostRecentPage = useSelector((state) => state.recipe.m_r_page);
+  const mostRecentRecipes = useSelector((state) => state.recipe.most_recent_recipes);
+  const mostLikedRecipes = useSelector((state) => state.recipe.most_liked_recipes);
+  const btnClass = useSelector((state) => state.recipe.btn_class);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (!isRedirected) dispatch(getMostRecentRecipes(mostRecentPage));
+  }, [])
 
   const loadRecipes = (btnClass) => {
     if (btnClass === "mostRecent" && mostRecentRecipes.length) {

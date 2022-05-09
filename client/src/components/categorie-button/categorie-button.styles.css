@@ -1,0 +1,28 @@
+.sort {
+  display: flex;
+  justify-content: space-between;
+  margin: 50px 50px 40px 50px;
+}
+
+.opt-btn {
+  padding: 2px 5px;
+  background-color: rgba(255, 255, 255, 0);
+  border-right: none;
+  border-left: 2px solid rgb(255, 165, 0);
+  border-top: none;
+  border-bottom: 2px solid rgb(255, 165, 0);
+  border-radius: 3px;
+  font-size: 20px;
+  color: black;
+  cursor: pointer;
+}
+
+.opt-btn:hover {
+  background-color: rgb(255, 165, 0);
+  color: #fff;
+}
+
+.opt-btn.mostRecent,
+.opt-btn.mostLiked {
+  background-color: rgb(255, 165, 0);
+}

@@ -33,7 +33,7 @@ const LoginPage = () => {
             setTimeout(() => {
               setSubmitting(false);
               navigate('/')
-            }, 400)
+            }, 1000)
           }}
         >
           <Form>

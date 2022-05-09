@@ -5,14 +5,14 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   getMostRecentRecipes,
   getMostLikedRecipes,
-} from "../../redux/recipeReducer/sagaActions";
+} from "../../redux/redux-saga/sagaActions";
 
 import "./more-button.styles.css";
 
 const MoreButton = () => {
-  const getRecentPage = useSelector((state) => state.recipe.m_r_page);
-  const getMostLikedPage = useSelector((state) => state.recipe.m_l_page);
-  const btnClass = useSelector((state) => state.recipe.class);
+  const mostRecentPage = useSelector((state) => state.recipe.m_r_page);
+  const mostLikedPage = useSelector((state) => state.recipe.m_l_page);
+  const btnClass = useSelector((state) => state.recipe.btn_class);
   const noResultsMR = useSelector((state) => state.recipe.noResultsMR);
   const noResultsML = useSelector((state) => state.recipe.noResultsML);
   const dispatch = useDispatch();
@@ -32,8 +32,8 @@ const MoreButton = () => {
         }
         onClick={() => {
           btnClass === "mostRecent"
-            ? dispatch(getMostRecentRecipes(getRecentPage))
-            : dispatch(getMostLikedRecipes(getMostLikedPage));
+            ? dispatch(getMostRecentRecipes(mostRecentPage))
+            : dispatch(getMostLikedRecipes(mostLikedPage));
         }}
       >
         More

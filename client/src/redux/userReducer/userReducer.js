@@ -4,12 +4,15 @@ export const userReducer = createSlice({
   name: 'user',
   initialState: {
     isLoggedIn: false,
+    isRedirected: false,
     userData: {},
   },
   reducers: {
     getUserSuccess: (state, action) => {
       return {
+        ...state,
         isLoggedIn: true,
+        isRedirected: true,
         userData: action.payload
       }
     }

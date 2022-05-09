@@ -26,12 +26,12 @@
   cursor: pointer;
 }
 
-.header .nav-bar .options {
+.header .nav-bar .authenticate {
   display: flex;
   align-items: center;
 }
 
-.nav-bar .options .log-in {
+.nav-bar .authenticate .log-in {
   background-color: #fdfdfd;
   color: #000;
   margin-right: 15px;
@@ -40,11 +40,11 @@
   cursor: pointer;
 }
 
-.nav-bar .options .log-in:hover {
+.nav-bar .authenticate .log-in:hover {
   background-color: #e6e6e6;
 }
 
-.nav-bar .options .sign-up {
+.nav-bar .authenticate .sign-up {
   color: #fff;
   background-color: #ffb91a;
   padding: 5px 7px;
@@ -52,6 +52,6 @@
   cursor: pointer;
 }
 
-.nav-bar .options .sign-up:hover {
+.nav-bar .authenticate .sign-up:hover {
   background-color: #f5cd6f;
 }
