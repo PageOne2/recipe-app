@@ -15,9 +15,23 @@ export const getRecipeById = (id) => ({
     payload: id
 })
 
-export const getUser = (credentials) => ({
-    type: sagaActionTypes.GET_USER,
+export const logUser = (credentials) => ({
+    type: sagaActionTypes.LOG_USER,
     payload: credentials
+})
+
+export const getUser = () => ({
+    type: sagaActionTypes.GET_USER,
+})
+
+export const likeRecipe = (id) => ({
+    type: sagaActionTypes.LIKE_RECIPE,
+    payload: id
+})
+
+export const dislikeRecipe = (id) => ({
+    type: sagaActionTypes.DISLIKE_RECIPE,
+    payload: id
 })
 
 export const keepPage = (page) => ({

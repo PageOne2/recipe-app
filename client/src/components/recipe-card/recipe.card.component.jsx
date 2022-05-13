@@ -1,7 +1,7 @@
 import React from "react";
 
 import { Link } from "react-router-dom";
-import RecipeInitialInfo from "../recipe-initial-info/recipe-initial-info.component"
+import RecipeInitialInfo from "../recipe-initial-info/recipe-initial-info.component";
 
 import recipeImage from "../../assets/default.jpg";
 
@@ -10,6 +10,7 @@ import "./recipe.card.styles.css";
 const RecipeCard = ({
   item: { recipeName, likes, preparationTime, imageCover, user, _id },
 }) => {
+
   return (
     <div className="recipe-card">
       <div className="user">
@@ -31,7 +32,7 @@ const RecipeCard = ({
       <div className="recipe-name">
         <h3>{recipeName}</h3>
       </div>
-      <RecipeInitialInfo likes={likes} preparationTime={preparationTime} />
+      <RecipeInitialInfo id={_id} likes={likes} preparationTime={preparationTime} />
     </div>
   );
 };

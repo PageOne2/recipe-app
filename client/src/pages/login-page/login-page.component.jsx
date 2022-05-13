@@ -5,7 +5,7 @@ import * as Yup from 'yup';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-import { getUser } from '../../redux/redux-saga/sagaActions';
+import { logUser } from '../../redux/redux-saga/sagaActions';
 
 import './login-page.styles.css';
 
@@ -29,7 +29,7 @@ const LoginPage = () => {
               .required('Required'),
           })}
           onSubmit={(values, { setSubmitting }) => {
-            dispatch(getUser(values));            
+            dispatch(logUser(values));            
             setTimeout(() => {
               setSubmitting(false);
               navigate('/')

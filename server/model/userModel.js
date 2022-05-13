@@ -24,6 +24,7 @@ const userSchema = mongoose.Schema({
         enum: ['admin', 'user'],
         default: 'user'
     },
+    likedRecipes: { type: [String] },
     password: {
         type: String,
         required: [true, 'Please provide a password!'],

@@ -17,7 +17,21 @@
 }
 
 .more-info .likes #heart-icon {
-  color: red;
+  color: #fd7b7b;
+  cursor: pointer;
+}
+
+.more-info .likes #heart-icon:hover {
+  color: #ff0000;
+}
+
+.more-info .likes #heart-icon-liked {
+  color: #ff0000;
+  cursor: pointer;
+}
+
+.more-info .likes #heart-icon-liked:hover {
+  color: #fd7b7b;
 }
 
 .more-info .likes .number {
