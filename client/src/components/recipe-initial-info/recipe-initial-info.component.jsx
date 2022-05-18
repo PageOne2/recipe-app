@@ -9,6 +9,7 @@ import "./recipe-initial-info.styles.css"
 const RecipeInitialInfo = ({ id, likes, preparationTime }) => {
   const [notLogged, setNotLogged] = useState(false);
   const [liked, setLiked] = useState(false);
+  const [likesNumber, setLikesNumber] = useState(likes);
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
   const userLikes = useSelector((state) => state.user.userLikedRecipes);
   const dispatch = useDispatch();
@@ -20,17 +21,14 @@ const RecipeInitialInfo = ({ id, likes, preparationTime }) => {
   const likeRecipeFn = (id) => {
     if (isLoggedIn) {
       if (!userLikes.includes(id) && !liked) {
-        setTimeout(() => {
-          dispatch(likeRecipe(id));
-          setLiked(true);
-        }, 500)
+        dispatch(likeRecipe(id));
+        setLiked(true);
+        setLikesNumber(prev => prev + 1);
       } else {
-        const filteredUserLikes = userLikes.filter(x => x !== id);
-        setTimeout(() => {
-          dispatch(dislikeRecipe(id));
-          dispatch(userLikedRecipes(['dislike', filteredUserLikes]))
-          setLiked(false);
-        }, 500)
+        dispatch(dislikeRecipe(id));
+        dispatch(userLikedRecipes({ type: 'dislike', id }))
+        setLiked(false);
+        setLikesNumber(prev => prev - 1);
       }
     } else {
       setNotLogged(true);
@@ -43,7 +41,7 @@ const RecipeInitialInfo = ({ id, likes, preparationTime }) => {
         <span className="material-icons" id={liked ? "heart-icon-liked" : "heart-icon"} onClick={() => likeRecipeFn(id)}>
           favorite
         </span>
-        <span className="number">{likes}</span>
+        <span className="number">{likesNumber}</span>
       </div>
       <div className="time">
         <span className="material-icons">timer</span>

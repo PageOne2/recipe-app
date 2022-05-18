@@ -20,8 +20,8 @@ export const logUser = (credentials) => ({
     payload: credentials
 })
 
-export const getUser = () => ({
-    type: sagaActionTypes.GET_USER,
+export const getMe = () => ({
+    type: sagaActionTypes.GET_ME,
 })
 
 export const likeRecipe = (id) => ({

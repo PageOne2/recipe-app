@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import Cookies from "js-cookie";
-import { getUser } from "../../redux/redux-saga/sagaActions";
+import { getMe } from "../../redux/redux-saga/sagaActions";
 
 import CategorieButton from "../../components/categorie-button/categorie-button.component"
 import RecipesContainer from "../../components/recipes-container/recipes.container.component";
@@ -16,7 +16,7 @@ const HomePage = () => {
   useEffect(() => {
     const jwt = Cookies.get('jwt');
     if (jwt) {
-      dispatch(getUser())
+      dispatch(getMe())
     }
   }, [dispatch])
 

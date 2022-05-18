@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
+import Cookies from 'js-cookie';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 import { logUser } from '../../redux/redux-saga/sagaActions';
+import { redirection } from '../../redux/userReducer/userReducer';
 
 import './login-page.styles.css';
 
@@ -13,6 +15,14 @@ import './login-page.styles.css';
 const LoginPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const jwt = Cookies.get('jwt');
+    if (jwt) { 
+      dispatch(redirection(true));
+      navigate('/');
+    }
+  }, [])
 
   return (
     <div className='login-page'>

@@ -42,7 +42,7 @@ const RecipePage = () => {
                     ))}
                   </ol>
                 </div>
-                <RecipeInitialInfo likes={recipe.likes} preparationTime={recipe.preparationTime} />
+                <RecipeInitialInfo id={params.recipeId} likes={recipe.likes} preparationTime={recipe.preparationTime} />
               </div>
               <div className="recipe-page-ingredient">
                 <h4 className="ingredients-title">Ingredients</h4>

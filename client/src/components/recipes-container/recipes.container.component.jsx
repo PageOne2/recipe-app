@@ -10,7 +10,7 @@ import { v4 as uuidv4 } from "uuid";
 import "./recipes.container.styles.css";
 
 const RecipesContainer = () => {
-  const isRedirected = useSelector((state) => state.user.isRedirected);
+  const redirected = useSelector((state) => state.user.redirected);
   const mostRecentPage = useSelector((state) => state.recipe.m_r_page);
   const mostRecentRecipes = useSelector((state) => state.recipe.most_recent_recipes);
   const mostLikedRecipes = useSelector((state) => state.recipe.most_liked_recipes);
@@ -18,7 +18,7 @@ const RecipesContainer = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!isRedirected) dispatch(getMostRecentRecipes(mostRecentPage));
+    if (!redirected) dispatch(getMostRecentRecipes(mostRecentPage));
   }, [])
 
   const loadRecipes = (btnClass) => {

@@ -120,18 +120,9 @@ exports.getMyRecipes = catchAsync(async (req, res, next) => {
   })
 })
 
-const getRecipeLikesInfo = async (req) => {
-  const userLikes = await User.find({ _id: req.user.id }, { likedRecipes: 1 });
-  const recipeLikes = await Recipe.find({ _id: req.params.id }, { likes: 1 });
-  const userLikedRecipes = userLikes[0].likedRecipes;
-  return [recipeLikes, userLikedRecipes];
-}
-
 exports.likeRecipe = catchAsync( async (req, res, next) => {
-  const infoArr = await getRecipeLikesInfo(req);
-  const allLikes = [...infoArr[1], req.params.id];
-  await User.findByIdAndUpdate(req.user.id, { likedRecipes: allLikes });
-  await Recipe.findByIdAndUpdate(req.params.id, { likes: infoArr[0][0].likes + 1 });
+  await User.findByIdAndUpdate(req.user.id, { $push: { 'likedRecipes': req.params.id } });
+  await Recipe.findByIdAndUpdate({ _id: req.params.id}, { $inc: { 'likes' : 1 }});
 
   res.status(200).json({
     status: 'success'
@@ -139,13 +130,8 @@ exports.likeRecipe = catchAsync( async (req, res, next) => {
 })
 
 exports.dislikeRecipe = catchAsync( async (req, res, next) => {
-  const infoArr = await getRecipeLikesInfo(req);
-  infoArr[1].forEach((id, idx) => {
-    if (id === req.params.id) infoArr[1].splice(idx, 1)
-  })
-  const allLikes = [...infoArr[1]];
-  await User.findByIdAndUpdate(req.user.id, { likedRecipes: allLikes });
-  await Recipe.findByIdAndUpdate(req.params.id, { likes: infoArr[0][0].likes - 1 });
+  await User.findByIdAndUpdate({ _id: req.user.id }, { $pull: { 'likedRecipes': req.params.id } });
+  await Recipe.findByIdAndUpdate({ _id: req.params.id }, { $inc: { 'likes': -1 }});
 
   res.status(200).json({
     status: 'success'
