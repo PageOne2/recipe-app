@@ -2,6 +2,7 @@ import SagaActionTypes from '../redux-saga/sagaActionTypes';
 import { takeLatest, put, call, all } from 'redux-saga/effects';
 
 import { getUserSuccess, userLikedRecipes } from './userReducer';
+import { recipeLiked, recipeDisliked } from '../recipeReducer/recipeReducer';
 
 import Cookies from 'js-cookie';
 
@@ -56,8 +57,10 @@ export function* likeRecipe({payload}) {
       },
       signal
     });
+    let res = yield data.json();
     if (data.status === 200) {
       yield put(userLikedRecipes({ type: 'like', id: payload }));
+      yield put(recipeLiked({ id: payload, likes: res.likes }));
     }
   } catch (err) {
 
@@ -69,13 +72,17 @@ export function* dislikeRecipe({payload}) {
   aborter = new AbortController();
   const signal = aborter.signal;
   try {
-    yield fetch(`http://localhost:3000/api/users/dislikeRecipe/${payload}`, {
+    let data = yield fetch(`http://localhost:3000/api/users/dislikeRecipe/${payload}`, {
       method: 'PATCH',
       headers: {
         'Authorization': 'Bearer ' + Cookies.get('jwt')
       },
       signal
     });
+    let res = yield data.json();
+    if (data.status === 200) {
+      yield put(recipeDisliked({ id: payload, likes: res.likes }));
+    }
   } catch (err) {
 
   }

@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-
 export const recipeReducer = createSlice({
   name: 'recipe',
   initialState: {
@@ -19,6 +18,27 @@ export const recipeReducer = createSlice({
         ...state,
         btn_class: action.payload
       }
+    },
+    recipeLiked: (state, action) => {
+      const mrRecipeIdx = state.most_recent_recipes.findIndex(el => el._id === action.payload.id);
+      const mlRecipeIdx = state.most_liked_recipes.findIndex(el => el._id === action.payload.id);
+      const mrrNewArray = [...state.most_recent_recipes];
+      const mlrNewArray = [...state.most_liked_recipes];
+      console.log('alooooooooooooooo')
+      if (mrRecipeIdx > -1) mrrNewArray[mrRecipeIdx].likes = action.payload.likes;
+      if (mlRecipeIdx > -1) mlrNewArray[mlRecipeIdx].likes = action.payload.likes;
+      state.most_recent_recipes = mrrNewArray;
+      state.most_liked_recipes = mlrNewArray
+    },
+    recipeDisliked: (state, action) => {
+      const mrRecipeIdx = state.most_recent_recipes.findIndex(el => el._id === action.payload.id);
+      const mlRecipeIdx = state.most_liked_recipes.findIndex(el => el._id === action.payload.id);
+      const mrrNewArray = [...state.most_recent_recipes];
+      const mlrNewArray = [...state.most_liked_recipes];
+      if (mrRecipeIdx > -1) mrrNewArray[mrRecipeIdx].likes = action.payload.likes;
+      if (mlRecipeIdx > -1) mlrNewArray[mlRecipeIdx].likes = action.payload.likes;
+      state.most_recent_recipes = mrrNewArray;
+      state.most_liked_recipes = mlrNewArray
     },
     getMostRecentRecipesSuccess: (state, action) => {
       return {
@@ -52,6 +72,6 @@ export const recipeReducer = createSlice({
   }
 })
 
-export const { changeClassName, getMostRecentRecipesSuccess, getMostLikedRecipesSuccess, getRecipeByIdSuccess, keepPage } = recipeReducer.actions
+export const { changeClassName, recipeLiked, recipeDisliked, getMostRecentRecipesSuccess, getMostLikedRecipesSuccess, getRecipeByIdSuccess, keepPage } = recipeReducer.actions
 
 export default recipeReducer.reducer

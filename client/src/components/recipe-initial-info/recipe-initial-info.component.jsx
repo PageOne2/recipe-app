@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 
 import { useDispatch, useSelector } from "react-redux";
 import { likeRecipe, dislikeRecipe } from "../../redux/redux-saga/sagaActions";
@@ -9,13 +9,18 @@ import "./recipe-initial-info.styles.css"
 const RecipeInitialInfo = ({ id, likes, preparationTime }) => {
   const [notLogged, setNotLogged] = useState(false);
   const [liked, setLiked] = useState(false);
-  const [likesNumber, setLikesNumber] = useState(likes);
+  const [likesNumber, setLikesNumber] = useState(0);
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
   const userLikes = useSelector((state) => state.user.userLikedRecipes);
   const dispatch = useDispatch();
+  const value = useRef(null);
 
   useEffect(() => {
-    if (userLikes.includes(id)) setLiked(true);
+    if (userLikes.includes(id)) {
+      setLiked(true);
+      // console.log(typeof parseInt(value.current.innerText))
+      // if (parseInt(value.current.innerText) === likes) setLikesNumber(likes + 1);
+    }
   }, [])
 
   const likeRecipeFn = (id) => {
@@ -23,12 +28,12 @@ const RecipeInitialInfo = ({ id, likes, preparationTime }) => {
       if (!userLikes.includes(id) && !liked) {
         dispatch(likeRecipe(id));
         setLiked(true);
-        setLikesNumber(prev => prev + 1);
+        // setLikesNumber(likes + 1);
       } else {
         dispatch(dislikeRecipe(id));
         dispatch(userLikedRecipes({ type: 'dislike', id }))
         setLiked(false);
-        setLikesNumber(prev => prev - 1);
+        // setLikesNumber(likes - 1);
       }
     } else {
       setNotLogged(true);
@@ -41,7 +46,7 @@ const RecipeInitialInfo = ({ id, likes, preparationTime }) => {
         <span className="material-icons" id={liked ? "heart-icon-liked" : "heart-icon"} onClick={() => likeRecipeFn(id)}>
           favorite
         </span>
-        <span className="number">{likesNumber}</span>
+        <span className="number" ref={value}>{likes}</span>
       </div>
       <div className="time">
         <span className="material-icons">timer</span>
