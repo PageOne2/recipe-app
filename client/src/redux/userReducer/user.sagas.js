@@ -44,22 +44,16 @@ export function* getMe() {
   }
 }
 
-let aborter = null;
 export function* likeRecipe({payload}) {
-  if (aborter) aborter.abort();
-  aborter = new AbortController();
-  const signal = aborter.signal;
   try {
     let data = yield fetch(`http://localhost:3000/api/users/likeRecipe/${payload}`, {
       method: 'PATCH',
       headers: {
         'Authorization': 'Bearer ' + Cookies.get('jwt')
-      },
-      signal
+      }
     });
     let res = yield data.json();
     if (data.status === 200) {
-      yield put(userLikedRecipes({ type: 'like', id: payload }));
       yield put(recipeLiked({ id: payload, likes: res.likes }));
     }
   } catch (err) {
@@ -68,16 +62,12 @@ export function* likeRecipe({payload}) {
 }
 
 export function* dislikeRecipe({payload}) {
-  if (aborter) aborter.abort();
-  aborter = new AbortController();
-  const signal = aborter.signal;
   try {
     let data = yield fetch(`http://localhost:3000/api/users/dislikeRecipe/${payload}`, {
       method: 'PATCH',
       headers: {
         'Authorization': 'Bearer ' + Cookies.get('jwt')
-      },
-      signal
+      }
     });
     let res = yield data.json();
     if (data.status === 200) {

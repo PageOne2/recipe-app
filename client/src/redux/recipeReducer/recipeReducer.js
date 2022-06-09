@@ -24,7 +24,6 @@ export const recipeReducer = createSlice({
       const mlRecipeIdx = state.most_liked_recipes.findIndex(el => el._id === action.payload.id);
       const mrrNewArray = [...state.most_recent_recipes];
       const mlrNewArray = [...state.most_liked_recipes];
-      console.log('alooooooooooooooo')
       if (mrRecipeIdx > -1) mrrNewArray[mrRecipeIdx].likes = action.payload.likes;
       if (mlRecipeIdx > -1) mlrNewArray[mlRecipeIdx].likes = action.payload.likes;
       state.most_recent_recipes = mrrNewArray;

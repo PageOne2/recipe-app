@@ -9,7 +9,6 @@ import "./recipe-initial-info.styles.css"
 const RecipeInitialInfo = ({ id, likes, preparationTime }) => {
   const [notLogged, setNotLogged] = useState(false);
   const [liked, setLiked] = useState(false);
-  const [likesNumber, setLikesNumber] = useState(0);
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
   const userLikes = useSelector((state) => state.user.userLikedRecipes);
   const dispatch = useDispatch();
@@ -18,22 +17,19 @@ const RecipeInitialInfo = ({ id, likes, preparationTime }) => {
   useEffect(() => {
     if (userLikes.includes(id)) {
       setLiked(true);
-      // console.log(typeof parseInt(value.current.innerText))
-      // if (parseInt(value.current.innerText) === likes) setLikesNumber(likes + 1);
     }
   }, [])
 
   const likeRecipeFn = (id) => {
     if (isLoggedIn) {
       if (!userLikes.includes(id) && !liked) {
+        dispatch(userLikedRecipes({ type: 'like', id }));
         dispatch(likeRecipe(id));
         setLiked(true);
-        // setLikesNumber(likes + 1);
       } else {
+        dispatch(userLikedRecipes({ type: 'dislike', id }));
         dispatch(dislikeRecipe(id));
-        dispatch(userLikedRecipes({ type: 'dislike', id }))
         setLiked(false);
-        // setLikesNumber(likes - 1);
       }
     } else {
       setNotLogged(true);

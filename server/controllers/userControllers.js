@@ -121,8 +121,8 @@ exports.getMyRecipes = catchAsync(async (req, res, next) => {
 })
 
 exports.likeRecipe = catchAsync( async (req, res, next) => {
-  await User.findByIdAndUpdate(req.user.id, { $push: { 'likedRecipes': req.params.id } });
   const likes = await Recipe.findByIdAndUpdate({ _id: req.params.id}, { $inc: { 'likes' : 1 }}, { new: true, select: 'likes' });
+  await User.findByIdAndUpdate(req.user.id, { $push: { 'likedRecipes': req.params.id } });
 
   res.status(200).json({
     status: 'success',
@@ -131,8 +131,8 @@ exports.likeRecipe = catchAsync( async (req, res, next) => {
 })
 
 exports.dislikeRecipe = catchAsync( async (req, res, next) => {
-  await User.findByIdAndUpdate({ _id: req.user.id }, { $pull: { 'likedRecipes': req.params.id } });
   const likes = await Recipe.findByIdAndUpdate({ _id: req.params.id }, { $inc: { 'likes': -1 }}, { new: true, select: 'likes' });
+  await User.findByIdAndUpdate({ _id: req.user.id }, { $pull: { 'likedRecipes': req.params.id } });
 
   res.status(200).json({
     status: 'success',
