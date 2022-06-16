@@ -11,7 +11,7 @@ import {
 import "./categorie-button.styles.css";
 
 const CategorieButton = () => {
-  const btnClass = useSelector((state) => state.recipe.btn_class);
+  const categorie = useSelector((state) => state.recipe.categorie);
   const mostRecentPage = useSelector((state) => state.recipe.m_r_page);
   const mostLikedPage = useSelector((state) => state.recipe.m_l_page);
   const dispatch = useDispatch();
@@ -21,7 +21,7 @@ const CategorieButton = () => {
       <div className="most-recent">
         <button
           className={
-            btnClass === "mostRecent" ? `opt-btn ${btnClass}` : "opt-btn"
+            categorie === "mostRecent" ? `opt-btn ${categorie}` : "opt-btn"
           }
           onClick={() => {
             mostRecentPage !== 1
@@ -35,7 +35,7 @@ const CategorieButton = () => {
       <div className="most-liked">
         <button
           className={
-            btnClass === "mostLiked" ? `opt-btn ${btnClass}` : "opt-btn"
+            categorie === "mostLiked" ? `opt-btn ${categorie}` : "opt-btn"
           }
           onClick={() => {
             mostLikedPage !== 1

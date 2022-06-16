@@ -12,7 +12,7 @@ import "./more-button.styles.css";
 const MoreButton = () => {
   const mostRecentPage = useSelector((state) => state.recipe.m_r_page);
   const mostLikedPage = useSelector((state) => state.recipe.m_l_page);
-  const btnClass = useSelector((state) => state.recipe.btn_class);
+  const categorie = useSelector((state) => state.recipe.categorie);
   const noResultsMR = useSelector((state) => state.recipe.noResultsMR);
   const noResultsML = useSelector((state) => state.recipe.noResultsML);
   const dispatch = useDispatch();
@@ -21,17 +21,17 @@ const MoreButton = () => {
     <div className="more">
       <button
         disabled={
-          (noResultsMR && btnClass === "mostRecent") ||
-          (noResultsML && btnClass === "mostLiked")
+          (noResultsMR && categorie === "mostRecent") ||
+          (noResultsML && categorie === "mostLiked")
         }
         className={
-          (noResultsMR && btnClass === "mostRecent") ||
-          (noResultsML && btnClass === "mostLiked")
+          (noResultsMR && categorie === "mostRecent") ||
+          (noResultsML && categorie === "mostLiked")
             ? "disabled"
             : "more_btn"
         }
         onClick={() => {
-          btnClass === "mostRecent"
+          categorie === "mostRecent"
             ? dispatch(getMostRecentRecipes(mostRecentPage))
             : dispatch(getMostLikedRecipes(mostLikedPage));
         }}

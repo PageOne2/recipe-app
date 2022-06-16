@@ -14,19 +14,19 @@ const RecipesContainer = () => {
   const mostRecentPage = useSelector((state) => state.recipe.m_r_page);
   const mostRecentRecipes = useSelector((state) => state.recipe.most_recent_recipes);
   const mostLikedRecipes = useSelector((state) => state.recipe.most_liked_recipes);
-  const btnClass = useSelector((state) => state.recipe.btn_class);
+  const categorie = useSelector((state) => state.recipe.categorie);
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (!redirected) dispatch(getMostRecentRecipes(mostRecentPage));
   }, [])
 
-  const loadRecipes = (btnClass) => {
-    if (btnClass === "mostRecent" && mostRecentRecipes.length) {
+  const loadRecipes = (categorie) => {
+    if (categorie === "mostRecent" && mostRecentRecipes.length) {
       return mostRecentRecipes.map((item) => (
         <RecipeCard key={uuidv4()} item={item} />
       ));
-    } else if (btnClass === "mostLiked" && mostLikedRecipes.length) {
+    } else if (categorie === "mostLiked" && mostLikedRecipes.length) {
       const existingCardsIds = []; 
       return mostLikedRecipes.map((item) => {
         if (existingCardsIds.includes(item._id)) return; 
@@ -38,7 +38,7 @@ const RecipesContainer = () => {
     }
   };
 
-  return <div className="recipe-cards-container">{loadRecipes(btnClass)}</div>;
+  return <div className="recipe-cards-container">{loadRecipes(categorie)}</div>;
 };
 
 export default RecipesContainer;

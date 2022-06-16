@@ -7,7 +7,7 @@ export const recipeReducer = createSlice({
     noResultsML: false,
     m_r_page: 1,
     m_l_page: 1,
-    btn_class: 'mostRecent',
+    categorie: 'mostRecent',
     most_recent_recipes: [],
     most_liked_recipes: [],
     recipeById: {}
@@ -16,14 +16,14 @@ export const recipeReducer = createSlice({
     changeClassName: (state, action) => {
       return {
         ...state,
-        btn_class: action.payload
+        categorie: action.payload
       }
     },
     getMostRecentRecipesSuccess: (state, action) => {
       return {
         ...state,
         m_r_page: state.m_r_page + 1,
-        btn_class: 'mostRecent',
+        categorie: 'mostRecent',
         most_recent_recipes: [...state.most_recent_recipes, ...action.payload]
       }
     },
@@ -31,7 +31,7 @@ export const recipeReducer = createSlice({
       return {
         ...state,
         m_l_page: state.m_l_page + 1,
-        btn_class: 'mostLiked',
+        categorie: 'mostLiked',
         most_liked_recipes: [...state.most_liked_recipes, ...action.payload]
       }
     },
