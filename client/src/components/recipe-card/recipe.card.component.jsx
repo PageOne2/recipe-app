@@ -8,9 +8,8 @@ import recipeImage from "../../assets/default.jpg";
 import "./recipe.card.styles.css";
 
 const RecipeCard = ({
-  item: { recipeName, likes, preparationTime, imageCover, user, _id },
+  item: { recipeName, likes, preparationTime, imageCover, user, _id }
 }) => {
-
   return (
     <div className="recipe-card">
       <div className="user">

@@ -1,9 +1,6 @@
 import SagaActionTypes from '../redux-saga/sagaActionTypes';
 import { takeLatest, put, call, all } from 'redux-saga/effects';
-
-import { getUserSuccess, userLikedRecipes } from './userReducer';
-import { recipeLiked, recipeDisliked } from '../recipeReducer/recipeReducer';
-
+import { getUserSuccess, userLikedRecipes, recipeLiked, recipeDisliked } from './userReducer';
 import Cookies from 'js-cookie';
 
 export function* logUser({payload}) {
@@ -18,8 +15,10 @@ export function* logUser({payload}) {
     let res = yield data.json();
     if (res.data.user && res.token) {
       Cookies.set('jwt', res.token);
-      yield put(getUserSuccess(res.data.user));
-      yield put(userLikedRecipes(res.data.user.likedRecipes));
+      yield all([
+        put(getUserSuccess(res.data.user)),
+        put(userLikedRecipes(res.data.user.likedRecipes))
+      ])
     }
   } catch (err) {
 
@@ -36,8 +35,10 @@ export function* getMe() {
     });
     let res = yield data.json(); 
     if (res.data.user) {
-      yield put(getUserSuccess(res.data.user));
-      yield put(userLikedRecipes(res.data.user.likedRecipes));
+      yield all([
+        put(getUserSuccess(res.data.user)),
+        put(userLikedRecipes(res.data.user.likedRecipes))
+      ])
     }
   } catch(err) {
 

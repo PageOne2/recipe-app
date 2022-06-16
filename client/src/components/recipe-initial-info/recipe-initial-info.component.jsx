@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { useDispatch, useSelector } from "react-redux";
 import { likeRecipe, dislikeRecipe } from "../../redux/redux-saga/sagaActions";
@@ -9,16 +9,29 @@ import "./recipe-initial-info.styles.css"
 const RecipeInitialInfo = ({ id, likes, preparationTime }) => {
   const [notLogged, setNotLogged] = useState(false);
   const [liked, setLiked] = useState(false);
+  const [likesTotal, setLikesTotal] = useState(likes);
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
   const userLikes = useSelector((state) => state.user.userLikedRecipes);
+  const interactedRecipes = useSelector((state) => state.user.interactedRecipes);
   const dispatch = useDispatch();
-  const value = useRef(null);
 
   useEffect(() => {
+    const isTouched = interactedRecipes.find(x => x.id === id);
+    // Recipe like button that was not "touched" but it is liked already
     if (userLikes.includes(id)) {
       setLiked(true);
+      // Recipe that is now liked and that have been "touched"
+      if (isTouched) {
+        setLikesTotal(isTouched.likes);
+      }
+    } else if (isTouched) {
+      // Recipe that have been "touched" but is not liked
+      setLikesTotal(isTouched.likes);
+    } else {
+      // Recipe that is not liked and has not been "touched"
+      setLikesTotal(likes);
     }
-  }, [])
+  }, [interactedRecipes])
 
   const likeRecipeFn = (id) => {
     if (isLoggedIn) {
@@ -42,7 +55,7 @@ const RecipeInitialInfo = ({ id, likes, preparationTime }) => {
         <span className="material-icons" id={liked ? "heart-icon-liked" : "heart-icon"} onClick={() => likeRecipeFn(id)}>
           favorite
         </span>
-        <span className="number" ref={value}>{likes}</span>
+        <span className="number">{likesTotal}</span>
       </div>
       <div className="time">
         <span className="material-icons">timer</span>

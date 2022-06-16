@@ -7,6 +7,7 @@ export const userReducer = createSlice({
     redirected: false,
     userLikedRecipes: [],
     userData: {},
+    interactedRecipes: []
   },
   reducers: {
     getUserSuccess: (state, action) => {
@@ -26,6 +27,20 @@ export const userReducer = createSlice({
         : state.userLikedRecipes.filter(x => x !== action.payload.id) 
       }
     },
+    recipeLiked: (state, action) => {
+      const recipeIdx = state.interactedRecipes.findIndex(x => x.id === action.payload.id);
+      const newArray = [...state.interactedRecipes];
+      if (recipeIdx > -1) newArray[recipeIdx].likes = action.payload.likes;
+      else newArray.push(action.payload);
+      state.interactedRecipes = newArray;
+    },
+    recipeDisliked: (state, action) => {
+      const recipeIdx = state.interactedRecipes.findIndex(x => x.id === action.payload.id);
+      const newArray = [...state.interactedRecipes];
+      if (recipeIdx > -1) newArray[recipeIdx].likes = action.payload.likes;
+      else newArray.push(action.payload);
+      state.interactedRecipes = newArray;
+    },
     redirection: (state, action) => {
       return {
         ...state,
@@ -35,6 +50,6 @@ export const userReducer = createSlice({
   }
 })
 
-export const { getUserSuccess, userLikedRecipes, redirection } = userReducer.actions;
+export const { getUserSuccess, userLikedRecipes, recipeLiked, recipeDisliked, redirection } = userReducer.actions;
 
 export default userReducer.reducer;

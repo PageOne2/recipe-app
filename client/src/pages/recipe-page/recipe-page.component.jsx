@@ -14,12 +14,12 @@ import "./recipe-page.styles.css";
 
 const RecipePage = () => {
   const params = useParams();
-  const recipe = useSelector(state => state.recipe.recipeById);
+  const recipe = useSelector((state) => state.recipe.recipeById);
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getRecipeById(params.recipeId));
-  }, [dispatch]);
+  }, []);
 
   return (
     <div className="recipe-page-container">

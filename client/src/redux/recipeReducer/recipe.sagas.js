@@ -1,6 +1,5 @@
 import SagaActionTypes from '../redux-saga/sagaActionTypes';
 import { takeLatest, put, call, all } from 'redux-saga/effects';
-
 import {
   getMostRecentRecipesSuccess,
   getMostLikedRecipesSuccess,
@@ -62,7 +61,7 @@ export function* onGetMostLiked() {
 }
 
 export function* onGetById() {
-  yield takeLatest(SagaActionTypes.GET_RECIPE_BY_ID, getRecipeById)
+  yield takeLatest(SagaActionTypes.GET_RECIPE_BY_ID_START, getRecipeById)
 }
 
 export function* recipeSagas() {
