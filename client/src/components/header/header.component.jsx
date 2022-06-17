@@ -1,14 +1,21 @@
 import React from "react";
 
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { logOut } from "../../redux/userReducer/userReducer";
 import { Link } from "react-router-dom";
-
+import Cookie from "js-cookie";
 
 import "./header.styles.css";
 
 const Header = () => {
+  const dispatch = useDispatch();
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
   const userName = useSelector((state) => state.user.userData);
+
+  const handleClick = () => {
+    Cookie.remove('jwt');
+    dispatch(logOut());
+  }
 
   return (
     <div className="header">
@@ -24,7 +31,10 @@ const Header = () => {
             </Link>
             <div className="sign-up">Sign-Up</div>
           </div>
-          : <div className="user">{`Welcome ${userName.name.split(' ')[0]}!`}</div>
+          : <div className="profile">
+              <div className="user">{`Welcome ${userName.name.split(' ')[0]}!`}</div>
+              <div><button onClick={handleClick}>Log Out</button></div>
+            </div>
           }
         </div>
       </div>

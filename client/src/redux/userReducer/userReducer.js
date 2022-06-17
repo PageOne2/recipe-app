@@ -46,10 +46,11 @@ export const userReducer = createSlice({
         ...state,
         redirected: action.payload
       }
-    }
+    },
+    logOut: (state, action) => {}
   }
 })
 
-export const { getUserSuccess, userLikedRecipes, recipeLiked, recipeDisliked, redirection } = userReducer.actions;
+export const { getUserSuccess, userLikedRecipes, recipeLiked, recipeDisliked, redirection, logOut } = userReducer.actions;
 
 export default userReducer.reducer;

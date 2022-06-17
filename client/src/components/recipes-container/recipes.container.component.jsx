@@ -11,6 +11,7 @@ import "./recipes.container.styles.css";
 
 const RecipesContainer = () => {
   const redirected = useSelector((state) => state.user.redirected);
+  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
   const mostRecentPage = useSelector((state) => state.recipe.m_r_page);
   const mostRecentRecipes = useSelector((state) => state.recipe.most_recent_recipes);
   const mostLikedRecipes = useSelector((state) => state.recipe.most_liked_recipes);
@@ -19,7 +20,7 @@ const RecipesContainer = () => {
 
   useEffect(() => {
     if (!redirected) dispatch(getMostRecentRecipes(mostRecentPage));
-  }, [])
+  }, [isLoggedIn])
 
   const loadRecipes = (categorie) => {
     if (categorie === "mostRecent" && mostRecentRecipes.length) {
