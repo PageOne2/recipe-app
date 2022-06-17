@@ -1,13 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import Cookies from 'js-cookie';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-
 import { logUser } from '../../redux/redux-saga/sagaActions';
-import { redirection } from '../../redux/userReducer/userReducer';
 
 import './login-page.styles.css';
 
@@ -15,14 +12,17 @@ import './login-page.styles.css';
 const LoginPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+  const [failedLog, setFailedLog] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  
   useEffect(() => {
-    const jwt = Cookies.get('jwt');
-    if (jwt) { 
-      dispatch(redirection(true));
+    if (isLoggedIn) { 
       navigate('/');
+    } else if (isSubmitted) {
+      setFailedLog(true);
     }
-  }, [])
+  }, [isLoggedIn, isSubmitted]);
 
   return (
     <div className='login-page'>
@@ -33,17 +33,16 @@ const LoginPage = () => {
         <Formik
           initialValues={{ email: '', password: '' }}
           validationSchema={Yup.object({
-            email: Yup.string().email('Invalid email address').required('Required'),
+            email: Yup.string().email('Invalid email format').required('Required'),
             password: Yup.string()
               .min(8)
               .required('Required'),
           })}
-          onSubmit={(values, { setSubmitting }) => {
+          onSubmit={(values, { setSubmitting, resetForm }) => {
             dispatch(logUser(values));            
-            setTimeout(() => {
-              setSubmitting(false);
-              navigate('/')
-            }, 1000)
+            setSubmitting(false);
+            resetForm();
+            setTimeout(() => setIsSubmitted(true), 400);
           }}
         >
           <Form>
@@ -62,6 +61,7 @@ const LoginPage = () => {
           </Form>
         </Formik>
       </div>
+      { failedLog ? <div><h3>Info is wrong!</h3></div> : null}
     </div>
   )
 }
