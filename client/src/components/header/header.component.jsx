@@ -29,7 +29,9 @@ const Header = () => {
             <Link to="/login">
               <div className="log-in">Log In</div>
             </Link>
-            <div className="sign-up">Sign-Up</div>
+            <Link to="/signup">
+              <div className="sign-up">Sign-Up</div>
+            </Link>
           </div>
           : <div className="profile">
               <div className="user">{`Welcome ${userName.name.split(' ')[0]}!`}</div>

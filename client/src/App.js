@@ -6,6 +6,7 @@ import Header from './components/header/header.component';
 import HomePage from './pages/home-page/homepage.component';
 import RecipePage from './pages/recipe-page/recipe-page.component';
 import LoginPage from './pages/login-page/login-page.component';
+import SignUpPage from './pages/signup-page/signup.component';
 
 import { getMe } from './redux/redux-saga/sagaActions';
 import Cookies from 'js-cookie';
@@ -29,6 +30,7 @@ function App() {
         </Route>
         <Route path='/recipe/:recipeId' element={<RecipePage />}></Route>
         <Route path='/login' element={<LoginPage />}></Route>
+        <Route path='/signup' element={<SignUpPage />}></Route>
       </Routes>
     </div>
   );

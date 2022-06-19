@@ -25,6 +25,28 @@ export function* logUser({payload}) {
   }
 }
 
+export function* signUp({payload}) {
+  try {
+    let data = yield fetch('http://localhost:3000/api/users/signup', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    });
+    let res = yield data.json();
+    if (res.data.user && res.token) {
+      Cookies.set('jwt', res.token);
+      yield all([
+        put(getUserSuccess(res.data.user)),
+        put(userLikedRecipes(res.data.user.likedRecipes))
+      ])
+    }
+  } catch (err) {
+
+  }
+}
+
 export function* getMe() {
   try {
     let data = yield fetch('http://localhost:3000/api/users/me', {
@@ -83,6 +105,10 @@ export function* onLogUser() {
   yield takeLatest(SagaActionTypes.LOG_USER, logUser);
 }
 
+export function* onSignUp() {
+  yield takeLatest(SagaActionTypes.SIGN_UP_USER_START, signUp);
+}
+
 export function* onGetUser() {
   yield takeLatest(SagaActionTypes.GET_ME, getMe);
 }
@@ -98,6 +124,7 @@ export function* onDislikeRecipe() {
 export function* userSagas() {
   yield all([
     call(onLogUser),
+    call(onSignUp),
     call(onGetUser),
     call(onLikeRecipe),
     call(onDislikeRecipe)

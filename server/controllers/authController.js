@@ -13,7 +13,7 @@ const signToken = id => {
     })
 }
 
-// Give the user generated token 
+// Give user the generated token 
 const createSendToken = (user, statusCode, res) => {
     const token = signToken(user._id)
 

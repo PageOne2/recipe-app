@@ -20,6 +20,11 @@ export const logUser = (credentials) => ({
     payload: credentials
 })
 
+export const signUp = (credentials) => ({
+    type: sagaActionTypes.SIGN_UP_USER_START,
+    payload: credentials
+})
+
 export const getMe = () => ({
     type: sagaActionTypes.GET_ME,
 })
