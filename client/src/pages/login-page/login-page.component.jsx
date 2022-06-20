@@ -13,16 +13,16 @@ const LoginPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
-  const [failedLog, setFailedLog] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const errorMessage = useSelector((state) => state.user.errorMessage);
+  const [failedLog, setFailedLog] = useState({fail: false, errMessage: ''});
   
   useEffect(() => {
     if (isLoggedIn) { 
       navigate('/');
-    } else if (isSubmitted) {
-      setFailedLog(true);
+    } else if (errorMessage) {
+      setFailedLog({fail: true, errMessage: errorMessage});
     }
-  }, [isLoggedIn, isSubmitted]);
+  }, [isLoggedIn, errorMessage]);
 
   return (
     <div className='login-page'>
@@ -42,7 +42,6 @@ const LoginPage = () => {
             dispatch(logUser(values));            
             setSubmitting(false);
             resetForm();
-            setTimeout(() => setIsSubmitted(true), 400);
           }}
         >
           <Form>
@@ -61,7 +60,7 @@ const LoginPage = () => {
           </Form>
         </Formik>
       </div>
-      { failedLog ? <div><h3>Info is wrong!</h3></div> : null}
+      { failedLog.fail ? <div><h3>{failedLog.errMessage}</h3></div> : null}
     </div>
   )
 }
