@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,12 +10,16 @@ const SignUpPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+  const errorMessage = useSelector((state) => state.user.errorMessage);
+  const [failedLog, setFailedLog] = useState({ fail: false, errMessage: '' });
 
   useEffect(() => {
     if (isLoggedIn) {
       navigate("/");
+    } else if (errorMessage) {
+      setFailedLog({ fail: true, errMessage: errorMessage });
     }
-  }, [isLoggedIn]);
+  }, [isLoggedIn, errorMessage]);
 
   return (
     <div className="signup-page">
@@ -60,6 +65,7 @@ const SignUpPage = () => {
           </Form>
         </Formik>
       </div>
+      {failedLog.fail && <div><h3>{failedLog.errMessage}</h3></div>}
     </div>
   )
 }
