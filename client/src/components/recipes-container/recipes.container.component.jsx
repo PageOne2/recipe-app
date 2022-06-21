@@ -8,8 +8,8 @@ import "./recipes.container.styles.css";
 
 const RecipesContainer = () => {
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
-  const mostRecentRecipes = useSelector((state) => state.recipe.most_recent_recipes);
-  const mostLikedRecipes = useSelector((state) => state.recipe.most_liked_recipes);
+  const mostRecentRecipes = useSelector((state) => state.recipe.mostRecentRecipes);
+  const mostLikedRecipes = useSelector((state) => state.recipe.mostLikedRecipes);
   const categorie = useSelector((state) => state.recipe.categorie);
   const dispatch = useDispatch();
 

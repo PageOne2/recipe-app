@@ -3,13 +3,13 @@ import { createSlice } from '@reduxjs/toolkit'
 export const recipeReducer = createSlice({
   name: 'recipe',
   initialState: {
-    noResultsMR: false,
-    noResultsML: false,
-    m_r_page: 0,
-    m_l_page: 0,
+    noResultsMostRecent: false,
+    noResultsMostLiked: false,
+    mostRecentPage: 0,
+    mostLikedPage: 0,
     categorie: 'mostRecent',
-    most_recent_recipes: [],
-    most_liked_recipes: [],
+    mostRecentRecipes: [],
+    mostLikedRecipes: [],
     recipeById: {}
   },
   reducers: {
@@ -22,17 +22,17 @@ export const recipeReducer = createSlice({
     getMostRecentRecipesSuccess: (state, action) => {
       return {
         ...state,
-        m_r_page: state.m_r_page + 1,
+        mostRecentPage: state.mostRecentPage + 1,
         categorie: 'mostRecent',
-        most_recent_recipes: [...state.most_recent_recipes, ...action.payload]
+        mostRecentRecipes: [...state.mostRecentRecipes, ...action.payload]
       }
     },
     getMostLikedRecipesSuccess: (state, action) => {
       return {
         ...state,
-        m_l_page: state.m_l_page + 1,
+        mostLikedPage: state.mostLikedPage + 1,
         categorie: 'mostLiked',
-        most_liked_recipes: [...state.most_liked_recipes, ...action.payload]
+        mostLikedRecipes: [...state.mostLikedRecipes, ...action.payload]
       }
     },
     getRecipeByIdSuccess: (state, action) => {
@@ -44,8 +44,8 @@ export const recipeReducer = createSlice({
     keepPage: (state, action) => {
       return {
         ...state,
-        noResultsMR: state.noResultsMR ? true : action.payload[0],
-        noResultsML: state.noResultsML ? true : action.payload[1]
+        noResultsMostRecent: state.noResultsMostRecent ? true : action.payload[0],
+        noResultsMostLiked: state.noResultsMostLiked ? true : action.payload[1]
       }
     }
   }
