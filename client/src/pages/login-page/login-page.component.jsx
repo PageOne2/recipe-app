@@ -5,6 +5,7 @@ import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { logUser } from '../../redux/redux-saga/sagaActions';
+import { logInUserFailure } from '../../redux/userReducer/userReducer';
 
 import './login-page.styles.css';
 
@@ -13,16 +14,22 @@ const LoginPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
-  const errorMessage = useSelector((state) => state.user.errorMessage);
+  const logInErrorMessage = useSelector((state) => state.user.logInErrorMessage);
   const [failedLog, setFailedLog] = useState({fail: false, errMessage: ''});
   
   useEffect(() => {
     if (isLoggedIn) { 
       navigate('/');
-    } else if (errorMessage) {
-      setFailedLog({fail: true, errMessage: errorMessage});
+    } else if (logInErrorMessage) {
+      setFailedLog({fail: true, errMessage: logInErrorMessage});
     }
-  }, [isLoggedIn, errorMessage]);
+  }, [isLoggedIn, logInErrorMessage]);
+  
+  useEffect(() => {
+    return () => {      
+      dispatch(logInUserFailure(''));
+    }
+  }, []);
 
   return (
     <div className='login-page'>

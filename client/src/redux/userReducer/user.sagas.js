@@ -1,6 +1,6 @@
 import SagaActionTypes from '../redux-saga/sagaActionTypes';
 import { takeLatest, put, call, all } from 'redux-saga/effects';
-import { getUserSuccess, getUserFailure, userLikedRecipes, recipeLiked, recipeDisliked } from './userReducer';
+import { getUserSuccess, logInUserFailure, signUpUserFailure, userLikedRecipes, recipeLiked, recipeDisliked } from './userReducer';
 import Cookies from 'js-cookie';
 
 export function* logUser({payload}) {
@@ -23,7 +23,7 @@ export function* logUser({payload}) {
       throw new Error(res.message);
     }
   } catch (err) {
-    yield put(getUserFailure(err.message));
+    yield put(logInUserFailure(err.message));
   }
 }
 
@@ -47,7 +47,7 @@ export function* signUp({payload}) {
       throw new Error(res.message);
     }
   } catch (err) {
-    yield put(getUserFailure(err.message));
+    yield put(signUpUserFailure(err.message));
   }
 }
 

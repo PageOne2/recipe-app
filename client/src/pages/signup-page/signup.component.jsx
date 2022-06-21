@@ -5,21 +5,28 @@ import { useDispatch, useSelector } from "react-redux";
 import { signUp } from "../../redux/redux-saga/sagaActions";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom"; 
+import { signUpUserFailure } from "../../redux/userReducer/userReducer";
 
 const SignUpPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
-  const errorMessage = useSelector((state) => state.user.errorMessage);
+  const signUpErrorMessage = useSelector((state) => state.user.signUpErrorMessage);
   const [failedLog, setFailedLog] = useState({ fail: false, errMessage: '' });
 
   useEffect(() => {
     if (isLoggedIn) {
       navigate("/");
-    } else if (errorMessage) {
-      setFailedLog({ fail: true, errMessage: errorMessage });
+    } else if (signUpErrorMessage) {
+      setFailedLog({ fail: true, errMessage: signUpErrorMessage });
     }
-  }, [isLoggedIn, errorMessage]);
+  }, [isLoggedIn, signUpErrorMessage]);
+
+  useEffect(() => {
+    return () => {
+      dispatch(signUpUserFailure(''));
+    }
+  }, []);
 
   return (
     <div className="signup-page">

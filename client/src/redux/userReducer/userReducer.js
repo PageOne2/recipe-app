@@ -4,7 +4,8 @@ export const userReducer = createSlice({
   name: 'user',
   initialState: {
     isLoggedIn: false,
-    errorMessage: '',
+    logInErrorMessage: '',
+    signUpErrorMessage: '',
     redirected: false,
     userLikedRecipes: [],
     userData: {},
@@ -20,11 +21,16 @@ export const userReducer = createSlice({
         userData: action.payload
       }
     },
-    getUserFailure: (state, action) => {
+    logInUserFailure: (state, action) => {
       return {
         ...state,
-        isLoggedIn: false,
-        errorMessage: action.payload
+        logInErrorMessage: action.payload
+      }
+    },
+    signUpUserFailure: (state, action) => {
+      return {
+        ...state,
+        signUpErrorMessage: action.payload
       }
     },
     userLikedRecipes: (state, action) => {
@@ -59,6 +65,6 @@ export const userReducer = createSlice({
   }
 })
 
-export const { getUserSuccess, getUserFailure, userLikedRecipes, recipeLiked, recipeDisliked, redirection, logOut } = userReducer.actions;
+export const { getUserSuccess, logInUserFailure, signUpUserFailure, userLikedRecipes, recipeLiked, recipeDisliked, redirection, logOut } = userReducer.actions;
 
 export default userReducer.reducer;
