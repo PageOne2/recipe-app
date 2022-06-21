@@ -1,7 +1,4 @@
-import React from "react";
-
 import { useDispatch, useSelector } from "react-redux";
-
 import {
   getMostRecentRecipes,
   getMostLikedRecipes,
@@ -32,8 +29,8 @@ const MoreButton = () => {
         }
         onClick={() => {
           categorie === "mostRecent"
-            ? dispatch(getMostRecentRecipes(mostRecentPage))
-            : dispatch(getMostLikedRecipes(mostLikedPage));
+            ? dispatch(getMostRecentRecipes(mostRecentPage + 1))
+            : dispatch(getMostLikedRecipes(mostLikedPage + 1));
         }}
       >
         More

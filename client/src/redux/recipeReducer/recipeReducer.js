@@ -5,15 +5,15 @@ export const recipeReducer = createSlice({
   initialState: {
     noResultsMR: false,
     noResultsML: false,
-    m_r_page: 1,
-    m_l_page: 1,
+    m_r_page: 0,
+    m_l_page: 0,
     categorie: 'mostRecent',
     most_recent_recipes: [],
     most_liked_recipes: [],
     recipeById: {}
   },
   reducers: {
-    changeClassName: (state, action) => {
+    changeCategorie: (state, action) => {
       return {
         ...state,
         categorie: action.payload
@@ -51,6 +51,6 @@ export const recipeReducer = createSlice({
   }
 })
 
-export const { changeClassName, getMostRecentRecipesSuccess, getMostLikedRecipesSuccess, getRecipeByIdSuccess, keepPage } = recipeReducer.actions
+export const { changeCategorie, getMostRecentRecipesSuccess, getMostLikedRecipesSuccess, getRecipeByIdSuccess, keepPage } = recipeReducer.actions
 
 export default recipeReducer.reducer
