@@ -1,8 +1,5 @@
-import React from "react";
-
 import { Link } from "react-router-dom";
 import RecipeInitialInfo from "../recipe-initial-info/recipe-initial-info.component";
-
 import recipeImage from "../../assets/default.jpg";
 
 import "./recipe.card.styles.css";
