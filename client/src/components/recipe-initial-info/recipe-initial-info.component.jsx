@@ -25,7 +25,7 @@ const RecipeInitialInfo = ({ id, likes, preparationTime }) => {
         setLikesTotal(isTouched.likes);
       }
     } else if (isTouched) {
-      // Recipe that have been "touched" but is not liked
+      // Recipe that have been "touched" but is not liked = disliked
       setLikesTotal(isTouched.likes);
     } else {
       // Recipe that is not liked and has not been "touched"

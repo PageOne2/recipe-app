@@ -1,14 +1,12 @@
-import React, { useEffect } from "react";
-
+import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { getRecipeById } from '../../redux/redux-saga/sagaActions';
-
 import RecipeInitialInfo from "../../components/recipe-initial-info/recipe-initial-info.component";
 import Spinner from "../../components/spinner/spinner.component";
-
 import recipeImage from "../../assets/default.jpg"
 import { v4 as uuidv4 } from "uuid";
+import { getRecipeByIdSuccess } from "../../redux/recipeReducer/recipeReducer";
 
 import "./recipe-page.styles.css";
 
@@ -19,6 +17,9 @@ const RecipePage = () => {
 
   useEffect(() => {
     dispatch(getRecipeById(params.recipeId));
+    return () => {
+      dispatch(getRecipeByIdSuccess({}));
+    }
   }, []);
 
   return (
