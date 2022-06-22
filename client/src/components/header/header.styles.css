@@ -15,23 +15,23 @@
   padding: 0px 150px;
 }
 
-.header .nav-bar a {
+.nav-bar a {
   text-decoration: none;
 }
 
-.header .nav-bar .logo {
+.nav-bar .logo {
   font-size: 25px;
   font-family: math;
   color: #fff;
   cursor: pointer;
 }
 
-.header .nav-bar .authenticate {
+.user-log .authenticate {
   display: flex;
   align-items: center;
 }
 
-.nav-bar .authenticate .log-in {
+.authenticate .log-in {
   background-color: #fdfdfd;
   color: #000;
   margin-right: 15px;
@@ -40,11 +40,11 @@
   cursor: pointer;
 }
 
-.nav-bar .authenticate .log-in:hover {
+.authenticate .log-in:hover {
   background-color: #e6e6e6;
 }
 
-.nav-bar .authenticate .sign-up {
+.authenticate .sign-up {
   color: #fff;
   background-color: #ffb91a;
   padding: 5px 7px;
@@ -52,6 +52,40 @@
   cursor: pointer;
 }
 
-.nav-bar .authenticate .sign-up:hover {
+.authenticate .sign-up:hover {
   background-color: #f5cd6f;
+}
+
+.user-log .profile {
+  display: flex;
+  align-items: center;
+}
+
+.profile .user {
+  padding-right: 20px;
+}
+
+.user .my-profile {
+  color: #fff;
+  background-color: #f95b5b;
+  padding: 5px 7px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.user .my-profile:hover {
+  background-color: #ff3939;
+}
+
+.log-out .log-out-btn {
+  color: #000;
+  background-color: #fff;
+  padding: 5px 7px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.log-out .log-out-btn:hover {
+  background-color: #e6e6e6;
 }

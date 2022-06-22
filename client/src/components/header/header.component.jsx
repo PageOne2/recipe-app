@@ -21,7 +21,7 @@ const Header = () => {
         <Link to="/">
           <div className="logo">Dishes</div>
         </Link>
-        <div>
+        <div className="user-log">
           {!isLoggedIn ?
           <div className="authenticate">
             <Link to="/login">
@@ -32,8 +32,8 @@ const Header = () => {
             </Link>
           </div>
           : <div className="profile">
-              <div className="user">{`Welcome ${userName.name.split(' ')[0]}!`}</div>
-              <div><button onClick={handleClick}>Log Out</button></div>
+              <div className="user"><Link to="/myprofile"><div className="my-profile">My Profile &rarr;</div></Link></div>
+              <div className="log-out"><button className="log-out-btn" onClick={handleClick}>Log Out</button></div>
             </div>
           }
         </div>
