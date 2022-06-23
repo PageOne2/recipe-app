@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { logUser } from '../../redux/redux-saga/sagaActions';
 import { logInUserFailure } from '../../redux/userReducer/userReducer';
+import ErrorModal from '../../components/error-modal/error.modal.component';
 
 import './login-page.styles.css';
 
@@ -32,6 +33,7 @@ const LoginPage = () => {
 
   return (
     <div className='login-page'>
+      <ErrorModal showModal={failedLog.fail} errMessage={failedLog.errMessage}/>
       <div className='form'>
         <div className="title">
           <h2>Login</h2>
@@ -66,7 +68,6 @@ const LoginPage = () => {
           </Form>
         </Formik>
       </div>
-      { failedLog.fail ? <div><h3>{failedLog.errMessage}</h3></div> : null}
     </div>
   )
 }

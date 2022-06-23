@@ -1,0 +1,29 @@
+.err-msg {
+  display: flex;
+  background-color: #ffd4d4;
+  border: 2px solid #ff7575;
+  padding: 10px 25px;
+  position: absolute;
+  top: -50px;
+  animation: drop 1s forwards;
+}
+
+.err-msg h3 {
+  color: #313130;
+}
+
+.err-msg .close-err-msg {
+  position: relative;
+  right: -15px;
+  background: none;
+  border: none;
+  font-size: 18px;
+  font-weight: bold;
+  color: #ff2323;
+  cursor: pointer;
+}
+
+@keyframes drop {
+  from {top: -50px;}
+  to {top: 170px;}
+}
