@@ -7,6 +7,7 @@ export const userReducer = createSlice({
     logInErrorMessage: '',
     signUpErrorMessage: '',
     userLikedRecipes: [],
+    myRecipes: [],
     userData: {},
     interactedRecipes: []
   },
@@ -39,6 +40,12 @@ export const userReducer = createSlice({
         : state.userLikedRecipes.filter(x => x !== action.payload.id) 
       }
     },
+    getMyRecipesSuccess: (state, action) => {
+      return {
+        ...state,
+        myRecipes: action.payload
+      }
+    },
     recipeLiked: (state, action) => {
       const recipeIdx = state.interactedRecipes.findIndex(x => x.id === action.payload.id);
       const newArray = [...state.interactedRecipes];
@@ -57,6 +64,14 @@ export const userReducer = createSlice({
   }
 })
 
-export const { getUserSuccess, logInUserFailure, signUpUserFailure, userLikedRecipes, recipeLiked, recipeDisliked, logOut } = userReducer.actions;
+export const { 
+  getUserSuccess, 
+  logInUserFailure, 
+  signUpUserFailure, 
+  userLikedRecipes, 
+  getMyRecipesSuccess,
+  recipeLiked, 
+  recipeDisliked, 
+  logOut } = userReducer.actions;
 
 export default userReducer.reducer;

@@ -1,0 +1,15 @@
+.profile-container {
+  margin: 40px;
+}
+
+.profile-container .user-info {
+  display: flex;
+  align-items: center;
+}
+
+.user-info .profile-pic {
+  width: 150px;
+  height: 150px;
+  border-radius: 100%;
+  margin-right: 40px;
+}

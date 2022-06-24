@@ -1,6 +1,14 @@
 import SagaActionTypes from '../redux-saga/sagaActionTypes';
 import { takeLatest, put, call, all } from 'redux-saga/effects';
-import { getUserSuccess, logInUserFailure, signUpUserFailure, userLikedRecipes, recipeLiked, recipeDisliked } from './userReducer';
+import { 
+  getUserSuccess, 
+  logInUserFailure, 
+  signUpUserFailure, 
+  userLikedRecipes, 
+  getMyRecipesSuccess,
+  recipeLiked, 
+  recipeDisliked 
+} from './userReducer';
 import Cookies from 'js-cookie';
 
 export function* logUser({payload}) {
@@ -71,6 +79,23 @@ export function* getMe() {
   }
 }
 
+export function* getMyRecipes() {
+  try {
+    let data = yield fetch('http://localhost:3000/api/users/myRecipes', {
+      method: 'GET',
+      headers: {
+        'Authorization': 'Bearer ' + Cookies.get('jwt')
+      }
+    });
+    let res = yield data.json();
+    if (data.status === 200) {
+      yield put(getMyRecipesSuccess(res.data.myRecipes));
+    }
+  } catch (err) {
+    console.log(err)
+  }
+}
+
 export function* likeRecipe({payload}) {
   try {
     let data = yield fetch(`http://localhost:3000/api/users/likeRecipe/${payload}`, {
@@ -117,6 +142,10 @@ export function* onGetUser() {
   yield takeLatest(SagaActionTypes.GET_ME, getMe);
 }
 
+export function* onGetMyRecipes() {
+  yield takeLatest(SagaActionTypes.GET_MY_RECIPES_START, getMyRecipes);
+}
+
 export function* onLikeRecipe() {
   yield takeLatest(SagaActionTypes.LIKE_RECIPE, likeRecipe);
 }
@@ -130,6 +159,7 @@ export function* userSagas() {
     call(onLogUser),
     call(onSignUp),
     call(onGetUser),
+    call(onGetMyRecipes),
     call(onLikeRecipe),
     call(onDislikeRecipe)
   ])
