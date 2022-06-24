@@ -8,6 +8,8 @@ import { useNavigate } from "react-router-dom";
 import { signUpUserFailure } from "../../redux/userReducer/userReducer";
 import ErrorModal from "../../components/error-modal/error.modal.component";
 
+import "./signup.styles.css";
+
 const SignUpPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();

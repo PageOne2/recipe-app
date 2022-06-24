@@ -1,0 +1,63 @@
+.signup-page{
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.title h2 {
+  margin-bottom: 20px;
+}
+
+.form {
+  padding: 0 25px;
+  border-radius: 3px;
+  border: 1px solid #d9d9d9;
+  background-color: #e1e1e1;
+}
+
+.form .title {
+  padding: 25px 0 30px 0;
+}
+
+.form form {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 50px;
+}
+
+.form-label {
+  margin: 5px 0 10px 0;
+  font-size: 20px;
+}
+
+.form-input {
+  margin-bottom: 35px;
+  width: 350px;
+  height: 30px;
+}
+
+.error-msg {
+  color: #ff0000;
+  font-size: 15px;
+  padding-bottom: 5px;
+}
+
+.btn-message {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.btn-message .submit-btn {
+  /* width: 100px; */
+  /* margin: 15px 0; */
+  cursor: pointer;
+  padding: 8px 15px;
+}
+
+.btn-message .message {
+  font-size: 15px;
+}
