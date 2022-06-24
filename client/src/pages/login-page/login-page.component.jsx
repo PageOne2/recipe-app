@@ -22,6 +22,8 @@ const LoginPage = () => {
       navigate('/');
     } else if (logInErrorMessage) {
       setFailedLog({fail: true, errMessage: logInErrorMessage});
+    } else {
+      setFailedLog({fail: false, errMessage: ''});
     }
   }, [isLoggedIn, logInErrorMessage]);
   
@@ -31,9 +33,13 @@ const LoginPage = () => {
     }
   }, []);
 
+  const handleClick = () => {
+    dispatch(logInUserFailure(''));
+  }
+
   return (
     <div className='login-page'>
-      <ErrorModal showModal={failedLog.fail} errMessage={failedLog.errMessage}/>
+      <ErrorModal showModal={failedLog.fail} errMessage={failedLog.errMessage} handleClick={handleClick}/>
       <div className='form'>
         <div className="title">
           <h2>Login</h2>
