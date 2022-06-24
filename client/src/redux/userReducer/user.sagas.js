@@ -37,7 +37,7 @@ export function* signUp({payload}) {
       body: JSON.stringify(payload)
     });
     let res = yield data.json();
-    if (data.status === 200) {
+    if (data.status === 201) {
       Cookies.set('jwt', res.token);
       yield all([
         put(getUserSuccess(res.data.user)),

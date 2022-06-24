@@ -6,6 +6,7 @@ import { signUp } from "../../redux/redux-saga/sagaActions";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom"; 
 import { signUpUserFailure } from "../../redux/userReducer/userReducer";
+import ErrorModal from "../../components/error-modal/error.modal.component";
 
 const SignUpPage = () => {
   const dispatch = useDispatch();
@@ -19,6 +20,8 @@ const SignUpPage = () => {
       navigate("/");
     } else if (signUpErrorMessage) {
       setFailedLog({ fail: true, errMessage: signUpErrorMessage });
+    } else {
+      setFailedLog({ fail: false, errMessage: '' })
     }
   }, [isLoggedIn, signUpErrorMessage]);
 
@@ -30,6 +33,7 @@ const SignUpPage = () => {
 
   return (
     <div className="signup-page">
+      <ErrorModal showModal={failedLog.fail} errMessage={failedLog.errMessage} signUpPage={true}/>
       <div className="form">
         <div className="title">
           <h1>Sign Up</h1>
@@ -72,7 +76,6 @@ const SignUpPage = () => {
           </Form>
         </Formik>
       </div>
-      {failedLog.fail && <div><h3>{failedLog.errMessage}</h3></div>}
     </div>
   )
 }

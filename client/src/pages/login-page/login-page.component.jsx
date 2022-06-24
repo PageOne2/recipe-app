@@ -9,7 +9,6 @@ import ErrorModal from '../../components/error-modal/error.modal.component';
 
 import './login-page.styles.css';
 
-
 const LoginPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -33,13 +32,9 @@ const LoginPage = () => {
     }
   }, []);
 
-  const handleClick = () => {
-    dispatch(logInUserFailure(''));
-  }
-
   return (
     <div className='login-page'>
-      <ErrorModal showModal={failedLog.fail} errMessage={failedLog.errMessage} handleClick={handleClick}/>
+      <ErrorModal showModal={failedLog.fail} errMessage={failedLog.errMessage} logInPage={true}/>
       <div className='form'>
         <div className="title">
           <h2>Login</h2>
