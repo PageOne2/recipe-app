@@ -5,7 +5,7 @@ import { userLikedRecipes } from "../../redux/userReducer/userReducer";
 
 import "./recipe-initial-info.styles.css"
 
-const RecipeInitialInfo = ({ id, likes, preparationTime }) => {
+const RecipeInitialInfo = ({ id, myRecipe, likes, preparationTime }) => {
   const [notLogged, setNotLogged] = useState(false);
   const [liked, setLiked] = useState(false);
   const [likesTotal, setLikesTotal] = useState(likes);
@@ -51,9 +51,11 @@ const RecipeInitialInfo = ({ id, likes, preparationTime }) => {
   return (
     <div className="more-info">
       <div className="likes">
-        <span className="material-icons" id={liked ? "heart-icon-liked" : "heart-icon"} onClick={() => likeRecipeFn(id)}>
-          favorite
-        </span>
+        {!myRecipe &&
+          <span className="material-icons" id={liked ? "heart-icon-liked" : "heart-icon"} onClick={() => likeRecipeFn(id)}>
+            favorite
+          </span>
+        }
         <span className="number">{likesTotal}</span>
       </div>
       <div className="time">

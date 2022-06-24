@@ -24,14 +24,14 @@ const RecipesContainer = () => {
   const loadRecipes = (categorie) => {
     if (categorie === "mostRecent" && mostRecentRecipes.length) {
       return mostRecentRecipes.map((item) => (
-        <RecipeCard key={uuidv4()} item={item} />
+        <RecipeCard key={uuidv4()} item={item}/>
       ));
     } else if (categorie === "mostLiked" && mostLikedRecipes.length) {
       const existingCardsIds = []; 
       return mostLikedRecipes.map((item) => {
         if (existingCardsIds.includes(item._id)) return; 
         existingCardsIds.push(item._id);
-        return <RecipeCard key={uuidv4()} item={item} />
+        return <RecipeCard key={uuidv4()} item={item}/>
       });
     } else {
       return null;
