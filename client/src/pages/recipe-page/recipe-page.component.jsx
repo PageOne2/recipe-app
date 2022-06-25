@@ -17,6 +17,8 @@ const RecipePage = () => {
   const myRecipe = () => {
     if (Object.keys(recipe).length) {
       return Object.keys(isUserLogged).length && isUserLogged._id === recipe.user._id ? true : false;
+    } else {
+      return false
     }
   };
   const dispatch = useDispatch();
