@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { getRecipeById } from '../../redux/redux-saga/sagaActions';
@@ -13,6 +13,12 @@ import "./recipe-page.styles.css";
 const RecipePage = () => {
   const params = useParams();
   const recipe = useSelector((state) => state.recipe.recipeById);
+  const isUserLogged = useSelector((state) => state.user.userData);
+  const myRecipe = () => {
+    if (Object.keys(recipe).length) {
+      return Object.keys(isUserLogged).length && isUserLogged._id === recipe.user._id ? true : false;
+    }
+  };
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -43,7 +49,7 @@ const RecipePage = () => {
                     ))}
                   </ol>
                 </div>
-                <RecipeInitialInfo id={params.recipeId} likes={recipe.likes} preparationTime={recipe.preparationTime} />
+                <RecipeInitialInfo id={params.recipeId} myRecipe={myRecipe()} likes={recipe.likes} preparationTime={recipe.preparationTime} />
               </div>
               <div className="recipe-page-ingredient">
                 <h4 className="ingredients-title">Ingredients</h4>
