@@ -9,7 +9,12 @@ import {
 
 export function* getMostRecent({ payload }) {
   try {
-    let data = yield fetch(`http://localhost:3000/api/recipes/mostRecent/${payload}`);
+    let data = yield fetch(`http://localhost:3000/api/recipes/mostRecent/${payload}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
     let res = yield data.json();
 
     if (res.data.recipes.length) {
@@ -25,7 +30,12 @@ export function* getMostRecent({ payload }) {
 
 export function* getMostLiked({ payload }) {
   try {
-    let data = yield fetch(`http://localhost:3000/api/recipes/mostLiked/${payload}`);
+    let data = yield fetch(`http://localhost:3000/api/recipes/mostLiked/${payload}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
     let res = yield data.json();
 
     if (res.data.recipes.length) {
@@ -41,7 +51,12 @@ export function* getMostLiked({ payload }) {
 
 export function* getRecipeById({ payload }) {
   try {
-    let data = yield fetch(`http://localhost:3000/api/recipes/${payload}`);
+    let data = yield fetch(`http://localhost:3000/api/recipes/${payload}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
     let res = yield data.json();
 
     if (res.data.recipe) {

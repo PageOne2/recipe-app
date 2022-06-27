@@ -64,6 +64,7 @@ export function* getMe() {
     let data = yield fetch('http://localhost:3000/api/users/me', {
       method: 'GET',
       headers: {
+        'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + Cookies.get('jwt')
       }
     });
@@ -103,6 +104,7 @@ export function* getMyRecipes() {
     let data = yield fetch('http://localhost:3000/api/users/myRecipes', {
       method: 'GET',
       headers: {
+        'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + Cookies.get('jwt')
       }
     });
@@ -120,6 +122,7 @@ export function* likeRecipe({payload}) {
     let data = yield fetch(`http://localhost:3000/api/users/likeRecipe/${payload}`, {
       method: 'PATCH',
       headers: {
+        'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + Cookies.get('jwt')
       }
     });
@@ -137,6 +140,7 @@ export function* dislikeRecipe({payload}) {
     let data = yield fetch(`http://localhost:3000/api/users/dislikeRecipe/${payload}`, {
       method: 'PATCH',
       headers: {
+        'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + Cookies.get('jwt')
       }
     });
