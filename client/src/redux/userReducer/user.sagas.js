@@ -79,6 +79,25 @@ export function* getMe() {
   }
 }
 
+export function* updateUserPassword({payload}) {
+  try {
+    let data = yield fetch('http://localhost:3000/api/users/updateMyPassword', {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + Cookies.get('jwt')
+      },
+      body: JSON.stringify(payload)
+    });
+    let res = yield data.json();
+    if (data.status === 200) {
+      Cookies.set('jwt', res.token);
+    }
+  } catch (err) {
+
+  }
+}
+
 export function* getMyRecipes() {
   try {
     let data = yield fetch('http://localhost:3000/api/users/myRecipes', {
@@ -142,6 +161,10 @@ export function* onGetUser() {
   yield takeLatest(SagaActionTypes.GET_ME, getMe);
 }
 
+export function* onUpdateUserPassword() {
+  yield takeLatest(SagaActionTypes.UPDATE_USER_PASSWORD_START, updateUserPassword);
+}
+
 export function* onGetMyRecipes() {
   yield takeLatest(SagaActionTypes.GET_MY_RECIPES_START, getMyRecipes);
 }
@@ -159,6 +182,7 @@ export function* userSagas() {
     call(onLogUser),
     call(onSignUp),
     call(onGetUser),
+    call(onUpdateUserPassword),
     call(onGetMyRecipes),
     call(onLikeRecipe),
     call(onDislikeRecipe)
