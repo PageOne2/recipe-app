@@ -16,7 +16,7 @@ router.patch('/resetPassword/:token', authController.resetPassword)
 router.use(authController.protect)
 
 router.get('/me', userController.getMe, userController.getUser)
-router.patch('/updateMyPassword', authController.updatePassword)
+router.patch('/updateMyPassword', authController.protect, authController.updatePassword)
 router.patch('/updateMe', userController.updateUserPhoto, userController.resizeUserPhoto, userController.updateMe)
 router.patch('/likeRecipe/:id', authController.protect, userController.likeRecipe)
 router.patch('/dislikeRecipe/:id', authController.protect, userController.dislikeRecipe)
