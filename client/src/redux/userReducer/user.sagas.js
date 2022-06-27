@@ -69,7 +69,7 @@ export function* getMe() {
       }
     });
     let res = yield data.json(); 
-    if (res.data.user) {
+    if (data.status === 200) {
       yield all([
         put(getUserSuccess(res.data.user)),
         put(userLikedRecipes(res.data.user.likedRecipes))

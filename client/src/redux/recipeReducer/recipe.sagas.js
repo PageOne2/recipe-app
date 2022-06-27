@@ -16,8 +16,7 @@ export function* getMostRecent({ payload }) {
       }
     });
     let res = yield data.json();
-
-    if (res.data.recipes.length) {
+    if (data.status === 200) {
       yield put(getMostRecentRecipesSuccess(res.data.recipes));
     } else {
       yield put(keepPage([true, false]));
@@ -37,8 +36,7 @@ export function* getMostLiked({ payload }) {
       }
     });
     let res = yield data.json();
-
-    if (res.data.recipes.length) {
+    if (data.status === 200) {
       yield put(getMostLikedRecipesSuccess(res.data.recipes));
     } else {
       yield put(keepPage([false, true]));
@@ -58,8 +56,7 @@ export function* getRecipeById({ payload }) {
       }
     });
     let res = yield data.json();
-
-    if (res.data.recipe) {
+    if (data.status === 200) {
       yield put(getRecipeByIdSuccess(res.data.recipe));
     }
   } catch (err) {
