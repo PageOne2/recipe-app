@@ -36,7 +36,7 @@ const LoginPage = () => {
     <div className='login-page'>
       <ErrorModal showModal={failedLog.fail} errMessage={failedLog.errMessage} logInPage={true}/>
       <div className='form'>
-        <div className="title">
+        <div className="form-title">
           <h2>Login</h2>
         </div>
         <Formik
@@ -54,18 +54,16 @@ const LoginPage = () => {
           }}
         >
           <Form>
-            <label className='form-label' htmlFor='email'>Email</label>
             <ErrorMessage name='email' render={msg => <div className='error-msg'>{msg}</div>} />
-            <Field className='form-input' name='email' type='email' />
+            <Field className='form-input' name='email' type='email' placeholder="Email"/>
 
-            <label className='form-label' htmlFor='password'>Password</label>
             <ErrorMessage name='password' render={msg => <div className='error-msg'>{msg}</div>} />
-            <Field className='form-input' name='password' type='password' />
+            <Field className='form-input' name='password' type='password' placeholder="Password"/>
 
             <div className='btn-message'>
-              <button className='submit-btn' type='submit'>Submit</button>
               <p className='message'>You don't have a account yet? <a>Sign Up</a></p>
             </div>
+            <button className='submit-btn' type='submit'>Submit</button>
           </Form>
         </Formik>
       </div>

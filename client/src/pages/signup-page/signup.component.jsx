@@ -37,8 +37,8 @@ const SignUpPage = () => {
     <div className="signup-page">
       <ErrorModal showModal={failedLog.fail} errMessage={failedLog.errMessage} signUpPage={true}/>
       <div className="form">
-        <div className="title">
-          <h1>Sign Up</h1>
+        <div className="form-title">
+          <h2>Sign Up</h2>
         </div>
         <Formik
           initialValues={{ name: '', email: '', password: '', passwordConfirm: '' }}
@@ -55,26 +55,22 @@ const SignUpPage = () => {
           }}
         >
           <Form>
-            <label className="for-label" htmlFor="name">Name</label>
             <ErrorMessage name="name" render={msg => <div className="error-msg">{msg}</div>} />
-            <Field className="form-input" name="name" type="text" />
+            <Field className="form-input" name="name" type="text" placeholder="Name"/>
 
-            <label className="for-label" htmlFor="email">Email</label>
             <ErrorMessage name="email" render={msg => <div className="error-msg">{msg}</div>} />
-            <Field className="form-input" name="email" type="email" />
+            <Field className="form-input" name="email" type="email" placeholder="Email"/>
 
-            <label className="for-label" htmlFor="password">Password</label>
             <ErrorMessage name="password" render={msg => <div className="error-msg">{msg}</div>} />
-            <Field className="form-input" name="password" type="password" />
+            <Field className="form-input" name="password" type="password" placeholder="Password"/>
 
-            <label className="for-label" htmlFor="passwordConfirm">Confirm Password</label>
             <ErrorMessage name="passwordConfirm" render={msg => <div className="error-msg">{msg}</div>} />
-            <Field className="form-input" name="passwordConfirm" type="password" />
+            <Field className="form-input" name="passwordConfirm" type="password" placeholder="Confirm Password"/>
 
             <div className='btn-message'>
-              <button className='submit-btn' type='submit'>Submit</button>
               <p className='message'>Already have an account ? <a>Log In</a></p>
             </div>
+            <button className='submit-btn' type='submit'>Submit</button>
           </Form>
         </Formik>
       </div>
