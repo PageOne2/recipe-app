@@ -12,7 +12,7 @@ const CategorieButton = () => {
       <div className="most-recent">
         <button
           className={
-            categorie === "mostRecent" ? `opt-btn ${categorie}` : "opt-btn"
+            categorie === "mostRecent" ? `${categorie}` : `${categorie} inactive`
           }
           onClick={() => dispatch(changeCategorie("mostRecent"))}
         >
@@ -22,7 +22,7 @@ const CategorieButton = () => {
       <div className="most-liked">
         <button
           className={
-            categorie === "mostLiked" ? `opt-btn ${categorie}` : "opt-btn"
+            categorie === "mostLiked" ? `${categorie}` : `${categorie} inactive`
           }
           onClick={() => dispatch(changeCategorie("mostLiked"))}
         >

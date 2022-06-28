@@ -27,12 +27,8 @@
   cursor: pointer;
 }
 
-.tab-titles .inactive {
-  opacity: 0.6;
-}
-
 .tab-titles .inactive:hover {
-  opacity: 10;
+  opacity: 1;
 }
 
 .my-recipes {
