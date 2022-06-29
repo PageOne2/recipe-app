@@ -9,7 +9,6 @@ const HomePage = () => {
     <div className="homepage">
       <CategorieButton />
       <RecipesContainer />
-      <MoreButton />
     </div>
   );
 };

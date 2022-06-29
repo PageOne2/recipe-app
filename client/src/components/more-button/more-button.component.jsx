@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getMostRecentRecipes,
@@ -13,25 +14,32 @@ const MoreButton = () => {
   const noResultsMostRecent = useSelector((state) => state.recipe.noResultsMostRecent);
   const noResultsMostLiked = useSelector((state) => state.recipe.noResultsMostLiked);
   const dispatch = useDispatch();
+  const [btnState, setBtnState] = useState({ disabled: false, class: "more_btn" });
+
+  useEffect(() => {
+    if (categorie === "mostRecent" && noResultsMostRecent) {
+      setBtnState({ disabled: true, class: "disabled" }); 
+    } else if (categorie === "mostLiked" && noResultsMostLiked) {
+      setBtnState({ disabled: true, class: "disabled" }); 
+    }
+  }, [noResultsMostRecent, noResultsMostLiked])
+
+  const handleClick = () => {
+    if (categorie === "mostRecent") {
+      if (noResultsMostRecent) return;
+      dispatch(getMostRecentRecipes(mostRecentPage + 1));
+    } else if (categorie === "mostLiked") {
+      if (noResultsMostLiked) return;
+      dispatch(getMostLikedRecipes(mostLikedPage + 1));
+    }
+  }
 
   return (
     <div className="more">
       <button
-        disabled={
-          (noResultsMostRecent && categorie === "mostRecent") ||
-          (noResultsMostLiked && categorie === "mostLiked")
-        }
-        className={
-          (noResultsMostRecent && categorie === "mostRecent") ||
-          (noResultsMostLiked && categorie === "mostLiked")
-            ? "disabled"
-            : "more_btn"
-        }
-        onClick={() => {
-          categorie === "mostRecent"
-            ? dispatch(getMostRecentRecipes(mostRecentPage + 1))
-            : dispatch(getMostLikedRecipes(mostLikedPage + 1));
-        }}
+        disabled={btnState.disabled}
+        className={btnState.class}
+        onClick={() => handleClick()}
       >
         More
       </button>
