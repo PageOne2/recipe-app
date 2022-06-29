@@ -42,11 +42,13 @@ export const recipeReducer = createSlice({
       }
     },
     keepPage: (state, action) => {
-      return {
-        ...state,
-        noResultsMostRecent: state.noResultsMostRecent ? true : action.payload[0],
-        noResultsMostLiked: state.noResultsMostLiked ? true : action.payload[1]
+      let newState = {};
+      if (action.payload === 'mostRecent') {
+        newState = {...state, noResultsMostRecent: true};
+      } else if (action.payload === 'mostLiked') {
+        newState = {...state, noResultsMostLiked: true};
       }
+      return newState;
     }
   }
 })
