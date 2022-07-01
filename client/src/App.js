@@ -8,6 +8,7 @@ import RecipePage from './pages/recipe-page/recipe-page.component';
 import LoginPage from './pages/login-page/login-page.component';
 import SignUpPage from './pages/signup-page/signup.component';
 import ProfilePage from './pages/profile-page/profile.component';
+import ShareRecipePage from './pages/share-recipe-page/share-recipe-page.component';
 import { getMe } from './redux/redux-saga/sagaActions';
 import Cookies from 'js-cookie';
 
@@ -32,6 +33,7 @@ function App() {
         <Route path='/login' element={<LoginPage />}></Route>
         <Route path='/signup' element={<SignUpPage />}></Route>
         <Route path='/myprofile' element={<ProfilePage />}></Route>
+        <Route path='/sharerecipe' element={<ShareRecipePage />}></Route>
       </Routes>
     </div>
   );
