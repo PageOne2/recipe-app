@@ -5,7 +5,6 @@ const authController = require('../controllers/authController')
 
 const router = express.Router()
 
-router.get('/myRecipes', authController.protect, userController.getMyRecipes)
 
 router.post('/signup', authController.signUp)
 router.post('/login', authController.login)
@@ -16,10 +15,11 @@ router.patch('/resetPassword/:token', authController.resetPassword)
 router.use(authController.protect)
 
 router.get('/me', userController.getMe, userController.getUser)
-router.patch('/updateMyPassword', authController.protect, authController.updatePassword)
+router.patch('/updateMyPassword', authController.updatePassword)
 router.patch('/updateMe', userController.updateUserPhoto, userController.resizeUserPhoto, userController.updateMe)
-router.patch('/likeRecipe/:id', authController.protect, userController.likeRecipe)
-router.patch('/dislikeRecipe/:id', authController.protect, userController.dislikeRecipe)
+router.patch('/likeRecipe/:id', userController.likeRecipe)
+router.patch('/dislikeRecipe/:id', userController.dislikeRecipe)
+router.get('/myRecipes', userController.getMyRecipes)
 
 router
     .route('/user/:id')
