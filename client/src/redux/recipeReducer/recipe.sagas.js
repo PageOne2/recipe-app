@@ -9,7 +9,7 @@ import {
 
 export function* getMostRecent({ payload }) {
   try {
-    const apiUrl = process.env.ENVIROMENT === 'production' ? `${process.env.API_URL}/recipes/mostRecent/${payload}` : `http://localhost:3000/api/recipes/mostRecent/${payload}`;
+    const apiUrl = process.env.NODE_ENV === 'production' ? `${process.env.API_URL}/recipes/mostRecent/${payload}` : `http://localhost:3000/api/recipes/mostRecent/${payload}`;
     let data = yield fetch(apiUrl, {
       method: 'GET',
       headers: {
@@ -31,7 +31,7 @@ export function* getMostRecent({ payload }) {
 
 export function* getMostLiked({ payload }) {
   try {
-    const apiUrl = process.env.ENVIROMENT === 'production' ? `${process.env.API_URL}/recipes/mostLiked/${payload}` : `http://localhost:3000/api/recipes/mostLiked/${payload}`;
+    const apiUrl = process.env.NODE_ENV === 'production' ? `${process.env.API_URL}/recipes/mostLiked/${payload}` : `http://localhost:3000/api/recipes/mostLiked/${payload}`;
     let data = yield fetch(apiUrl, {
       method: 'GET',
       headers: {
@@ -53,7 +53,7 @@ export function* getMostLiked({ payload }) {
 
 export function* getRecipeById({ payload }) {
   try {
-    const apiUrl = process.env.ENVIROMENT === 'production' ? `${process.env.API_URL}/recipes/${payload}` : `http://localhost:3000/api/recipes/${payload}`;
+    const apiUrl = process.env.NODE_ENV === 'production' ? `${process.env.API_URL}/recipes/${payload}` : `http://localhost:3000/api/recipes/${payload}`;
     let data = yield fetch(apiUrl, {
       method: 'GET',
       headers: {
