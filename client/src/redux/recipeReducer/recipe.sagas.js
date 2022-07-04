@@ -9,7 +9,8 @@ import {
 
 export function* getMostRecent({ payload }) {
   try {
-    let data = yield fetch(`http://localhost:3000/api/recipes/mostRecent/${payload}`, {
+    const apiUrl = process.env.API_URL ? `${process.env.API_URL}/recipes/mostRecent/${payload}` : `http://localhost:3000/api/recipes/mostRecent/${payload}`;
+    let data = yield fetch(apiUrl, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
@@ -30,7 +31,8 @@ export function* getMostRecent({ payload }) {
 
 export function* getMostLiked({ payload }) {
   try {
-    let data = yield fetch(`http://localhost:3000/api/recipes/mostLiked/${payload}`, {
+    const apiUrl = process.env.API_URL ? `${process.env.API_URL}/recipes/mostLiked/${payload}` : `http://localhost:3000/api/recipes/mostLiked/${payload}`;
+    let data = yield fetch(apiUrl, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
@@ -51,7 +53,8 @@ export function* getMostLiked({ payload }) {
 
 export function* getRecipeById({ payload }) {
   try {
-    let data = yield fetch(`http://localhost:3000/api/recipes/${payload}`, {
+    const apiUrl = process.env.API_URL ? `${process.env.API_URL}/recipes/${payload}` : `http://localhost:3000/api/recipes/${payload}`;
+    let data = yield fetch(apiUrl, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
