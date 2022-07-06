@@ -54,14 +54,14 @@
   width: 100%;
 }
 
-.recipe-info {
+.share-recipe-info {
   width: 50%;
   padding: 30px;
   overflow-y: scroll;
   direction: rtl;
 }
 
-.recipe-info .recipe-info-title {
+.share-recipe-info .recipe-info-title {
   font-size: 18px;
   padding: 5px 0 20px 0;
   margin: 5px 5px 15px 5px;
@@ -76,12 +76,12 @@
   border-radius: 20px;
 }
 
-.recipe-name h3 {
+.recipe-name-field h3 {
   background-color: #f5ae37;
   color: #fff;
 }
 
-.recipe-name p {
+.recipe-name-field p {
   padding: 20px 0 0 5px;
 }
 
@@ -95,7 +95,7 @@
   color: #fff;
 }
 
-.recipe-info .preparation-time {
+.share-recipe-info .preparation-time {
   display: flex;
   align-items: baseline;
 }
@@ -115,15 +115,29 @@
 
 .recipe-item {
   display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 10px;
 }
 
 .recipe-item li {
-  padding-bottom: 4px;
+  word-break: break-word;
+  padding-right: 15px;
 }
 
-.recipe-item .delete-item-btn {
-  padding-left: 20px;
-  color: red;
+.recipe-item .edit-or-delete {
+  display: flex;
+}
+
+.edit-or-delete .edit-item-icon {
+  font-size: 18px;
+  margin-right: 10px;
+  color:#2c2c2c;
   cursor: pointer;
 }
 
+.edit-or-delete .delete-item-icon {
+  font-size: 18px;
+  color: #ff2121;
+  cursor: pointer;
+}

@@ -4,7 +4,8 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { v4 as uuidv4 } from "uuid";
 import { createRecipe } from "../../redux/redux-saga/sagaActions";
-// import DeleteIcon from '@mui/icons-material/Delete';
+import Delete from "@material-ui/icons/Delete";
+import Edit from "@material-ui/icons/Edit";
 
 import "./share-recipe-page.styles.css";
 
@@ -12,7 +13,7 @@ const ShareRecipePage = () => {
   const [recipeInfo, setRecipeInfo] = useState({
     recipeName: '',
     ingredients: [],
-    method: [],
+    methods: [],
     preparationTime: 0
   });
   const recipeNameInput = useRef(null);
@@ -37,8 +38,18 @@ const ShareRecipePage = () => {
       setRecipeInfo(prev => ({ ...prev, ingredients: prev.ingredients.concat(ingredientInput.current.value) }));
       setTimeout(() => ingredientInput.current.value = '', 200);
     } else if (field === 'method') {
-      setRecipeInfo(prev => ({ ...prev, method: prev.method.concat(methodInput.current.value) }));
+      setRecipeInfo(prev => ({ ...prev, methods: prev.methods.concat(methodInput.current.value) }));
       setTimeout(() => methodInput.current.value = '', 200);
+    }
+  }
+
+  const handleDeleteItem = (idx, field) => {
+    if (field === "ingredient") {
+      const ingredientsNewArr = recipeInfo.ingredients.filter((item, index) => index !== idx);
+      setRecipeInfo(prev => ({ ...prev, ingredients: ingredientsNewArr }));
+    } else if (field === "method") {
+      const methodsNewArr = recipeInfo.methods.filter((item, index) => index !== idx);
+      setRecipeInfo(prev => ({ ...prev, methods: methodsNewArr }));
     }
   }
 
@@ -89,27 +100,35 @@ const ShareRecipePage = () => {
           <div className="submit-btn-wrapper"><button type="submit" className="submit-btn">Share Recipe</button></div>
         </form>
       </div>
-      <div className="recipe-info">
-        <div className="recipe-info-title recipe-name">
+      <div className="share-recipe-info">
+        <div className="recipe-info-title recipe-name-field">
           <h3>Recipe Name</h3>
           {recipeInfo.recipeName.length ? <p>{recipeInfo.recipeName}</p> : null}
         </div>
         <div className="recipe-info-title ingredients">
           <h3>Ingredients</h3>
           <ul className="items-list">
-            { recipeInfo.ingredients.map(item => (
-              <li key={uuidv4()}>{item}</li>
+            { recipeInfo.ingredients.map((item, idx) => (
+              <div className="recipe-item" key={uuidv4()}>
+                <li>{item}</li>
+                <div className="edit-or-delete">
+                  <Edit className="edit-item-icon"/>
+                  <Delete className="delete-item-icon" onClick={() => handleDeleteItem(idx, 'ingredient')}/>
+                </div>
+              </div>
             ))}
           </ul>
         </div>
         <div className="recipe-info-title methods">
           <h3>Methods</h3>
           <ol className="items-list">
-            { recipeInfo.method.map(item => ( 
-              <div className="recipe-item">
-                <li key={uuidv4()}>{item}</li>
-                <div className="delete-item-btn">X</div>
-                {/* <DeleteIcon /> */}
+            { recipeInfo.methods.map((item, idx) => ( 
+              <div className="recipe-item" key={uuidv4()}>
+                <li>{item}</li>
+                <div className="edit-or-delete">
+                  <Edit className="edit-item-icon"/>
+                  <Delete className="delete-item-icon" onClick={() => handleDeleteItem(idx, 'method')}/>
+                </div>
               </div>
             ))}
           </ol>
