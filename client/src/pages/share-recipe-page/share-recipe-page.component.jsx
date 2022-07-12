@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from "uuid";
 import { createRecipe } from "../../redux/redux-saga/sagaActions";
 import Delete from "@material-ui/icons/Delete";
 import Edit from "@material-ui/icons/Edit";
+import Close from "@material-ui/icons/Close";
 
 import "./share-recipe-page.styles.css";
 
@@ -16,9 +17,13 @@ const ShareRecipePage = () => {
     methods: [],
     preparationTime: 0
   });
+  const [editMode, setEditMode] = useState(false);
+  const [itemBeingEdited, setItemBeingEdited] = useState({ field: '', item: "", itemIdx: null });
+  const editableItem = useRef(null);
   const recipeNameInput = useRef(null);
   const ingredientInput = useRef(null);
   const methodInput = useRef(null);
+  const ingredientRecipeItems = useRef(null);
   const dispatch = useDispatch();
 
   const handleSubmit = (e) => {
@@ -44,6 +49,7 @@ const ShareRecipePage = () => {
   }
 
   const handleDeleteItem = (idx, field) => {
+    if (editMode) setEditMode(false);
     if (field === "ingredient") {
       const ingredientsNewArr = recipeInfo.ingredients.filter((item, index) => index !== idx);
       setRecipeInfo(prev => ({ ...prev, ingredients: ingredientsNewArr }));
@@ -51,6 +57,26 @@ const ShareRecipePage = () => {
       const methodsNewArr = recipeInfo.methods.filter((item, index) => index !== idx);
       setRecipeInfo(prev => ({ ...prev, methods: methodsNewArr }));
     }
+  }
+  
+  const openItemEditor = (field, item, idx) => {
+    setItemBeingEdited({ field: field, item: item, itemIdx: idx });
+    setEditMode(true);
+  }
+
+  const handleEditedItem = (field, idx) => {
+    if (editableItem.current.innerText.length) {
+      if (field === "ingredients") {
+        const ingredientsNewArray = recipeInfo.ingredients;
+        ingredientsNewArray[idx] = editableItem.current.innerText.replace(/\s+/g,' ').trim();
+        setRecipeInfo(prev => ({ ...prev, ingredients: ingredientsNewArray }));
+      } else if (field === "methods") {
+        const methodsNewArray = recipeInfo.methods;
+        methodsNewArray[idx] = editableItem.current.innerText.replace(/\s+/g,' ').trim();
+        setRecipeInfo(prev => ({ ...prev, methods: methodsNewArray }));
+      }
+    }
+    setEditMode(false);
   }
 
   return (
@@ -107,12 +133,12 @@ const ShareRecipePage = () => {
         </div>
         <div className="recipe-info-title ingredients">
           <h3>Ingredients</h3>
-          <ul className="items-list">
+          <ul className="items-list" ref={ingredientRecipeItems}>
             { recipeInfo.ingredients.map((item, idx) => (
               <div className="recipe-item" key={uuidv4()}>
                 <li>{item}</li>
                 <div className="edit-or-delete">
-                  <Edit className="edit-item-icon"/>
+                  <Edit className="edit-item-icon" onClick={() => openItemEditor('ingredients', item, idx)}/>
                   <Delete className="delete-item-icon" onClick={() => handleDeleteItem(idx, 'ingredient')}/>
                 </div>
               </div>
@@ -126,7 +152,7 @@ const ShareRecipePage = () => {
               <div className="recipe-item" key={uuidv4()}>
                 <li>{item}</li>
                 <div className="edit-or-delete">
-                  <Edit className="edit-item-icon"/>
+                  <Edit className="edit-item-icon" onClick={() => openItemEditor('methods' ,item, idx)}/>
                   <Delete className="delete-item-icon" onClick={() => handleDeleteItem(idx, 'method')}/>
                 </div>
               </div>
@@ -135,9 +161,24 @@ const ShareRecipePage = () => {
         </div>
         <div className="recipe-info-title preparation-time">
           <h3>Preparation Time</h3>
-          <p>{recipeInfo.preparationTime} min</p>
+          <p>{recipeInfo.preparationTime} minutes</p>
         </div>
       </div>
+      {editMode &&
+      <div className="edit-mode">
+        <div className="item">
+          <div className="item-div">
+            <div contentEditable="true" suppressContentEditableWarning="true" ref={editableItem}>{itemBeingEdited.item}</div>
+          </div>
+          <div className="edit-btn">
+            <button onClick={() => handleEditedItem(itemBeingEdited.field, itemBeingEdited.itemIdx)}>Edit</button>
+          </div>
+        </div>
+        <div className="close-edit-btn">
+          <Close className="close-edit-icon" onClick={() => setEditMode(false)}/>
+        </div>
+      </div>
+      }
     </div>
   )
 }
