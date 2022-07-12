@@ -36,13 +36,13 @@ const ShareRecipePage = () => {
 
   const handleClick = (e, field) => {
     e.preventDefault(e);
-    if (field === 'recipeName') {
+    if (field === 'recipeName' && recipeNameInput.current.value.length) {
       setRecipeInfo(prev => ({ ...prev, recipeName: recipeNameInput.current.value.toUpperCase() }));
       setTimeout(() => recipeNameInput.current.value = '', 200);
-    } else if (field === 'ingredient') {
+    } else if (field === 'ingredient' && ingredientInput.current.value.length) {
       setRecipeInfo(prev => ({ ...prev, ingredients: prev.ingredients.concat(ingredientInput.current.value) }));
       setTimeout(() => ingredientInput.current.value = '', 200);
-    } else if (field === 'method') {
+    } else if (field === 'method' && methodInput.current.value.length) {
       setRecipeInfo(prev => ({ ...prev, methods: prev.methods.concat(methodInput.current.value) }));
       setTimeout(() => methodInput.current.value = '', 200);
     }

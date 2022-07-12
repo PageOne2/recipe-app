@@ -46,6 +46,10 @@
   cursor: pointer; 
 }
 
+.add-btn button:hover {
+  background-color: #3a3a3a;
+}
+
 .submit-btn-wrapper {
   width: 150px;
 }
@@ -57,6 +61,7 @@
 .share-recipe-info {
   position: relative;
   width: 50%;
+  height: 100%;
   padding: 30px;
   overflow-y: scroll;
   direction: rtl;
@@ -118,7 +123,7 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  padding-bottom: 10px;
+  padding-bottom: 15px;
 }
 
 .recipe-item li {
@@ -168,6 +173,10 @@
   cursor: pointer;
 }
 
+.item .edit-btn button:hover {
+  background-color: #3a3a3a;
+}
+
 .edit-mode .close-edit-btn {
   position: absolute;
   top: -10px;
@@ -176,6 +185,10 @@
   background-color: #f95b5b;
   border-radius: 100%;
   cursor: pointer;
+}
+
+.edit-mode .close-edit-btn:hover {
+  background-color: #f34646;
 }
 
 .edit-mode .close-edit-btn .close-edit-icon {
@@ -198,5 +211,27 @@
   font-size: 18px;
   color: #ff2121;
   cursor: pointer;
+}
+
+/* width */
+.share-recipe-info::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+/* .share-recipe-info::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 2px rgb(129, 129, 129); 
+  border-radius: 10px;
+} */
+ 
+/* Handle */
+.share-recipe-info::-webkit-scrollbar-thumb {
+  background: #f0f0f0; 
+  /* border-radius: 10px; */
+}
+
+/* Handle on hover */
+.share-recipe-info::-webkit-scrollbar-thumb:hover {
+  background: #a3a3a3; 
 }
 
