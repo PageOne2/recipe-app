@@ -87,8 +87,11 @@
   color: #fff;
 }
 
-.recipe-name-field p {
-  padding: 20px 0 0 5px;
+.recipe-name-field .recipe-name-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 20px 0px 0px 5px;
 }
 
 .ingredients h3 {

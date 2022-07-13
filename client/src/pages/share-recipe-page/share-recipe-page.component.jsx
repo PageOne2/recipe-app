@@ -64,7 +64,9 @@ const ShareRecipePage = () => {
 
   const handleDeleteItem = (idx, field) => {
     if (editMode) setEditMode(false);
-    if (field === "ingredient") {
+    if (field === "recipeName") {
+      setRecipeInfo(prev => ({ ...prev, recipeName: '' }));
+    } else if (field === "ingredient") {
       const ingredientsNewArr = recipeInfo.ingredients.filter((item, index) => index !== idx);
       setRecipeInfo(prev => ({ ...prev, ingredients: ingredientsNewArr }));
     } else if (field === "method") {
@@ -80,7 +82,10 @@ const ShareRecipePage = () => {
 
   const handleEditedItem = (field, idx) => {
     if (editableItem.current.innerText.length) {
-      if (field === "ingredients") {
+      if (field === "recipeName") {
+        const newRecipeName = editableItem.current.innerText.replace(/\s+/g, ' ').trim().toUpperCase();
+        setRecipeInfo(prev => ({ ...prev, recipeName: newRecipeName }));
+      } else if (field === "ingredients") {
         const ingredientsNewArray = recipeInfo.ingredients;
         ingredientsNewArray[idx] = editableItem.current.innerText.replace(/\s+/g,' ').trim();
         setRecipeInfo(prev => ({ ...prev, ingredients: ingredientsNewArray }));
@@ -150,7 +155,15 @@ const ShareRecipePage = () => {
       <div className="share-recipe-info">
         <div className="recipe-info-title recipe-name-field">
           <h3>Recipe Name</h3>
-          {recipeInfo.recipeName.length ? <p>{recipeInfo.recipeName}</p> : null}
+          {recipeInfo.recipeName.length ? 
+          <div className="recipe-name-wrapper">
+            <p>{recipeInfo.recipeName}</p>
+            <div className="edit-or-delete">
+              <Edit className="edit-item-icon" onClick={() => openItemEditor('recipeName', recipeInfo.recipeName, null)}/>
+              <Delete className="delete-item-icon" onClick={() => handleDeleteItem(null, 'recipeName')}/>
+            </div>
+          </div>
+          : null}
         </div>
         <div className="recipe-info-title ingredients">
           <h3>Ingredients</h3>
@@ -173,7 +186,7 @@ const ShareRecipePage = () => {
               <div className="recipe-item" key={uuidv4()}>
                 <li>{item}</li>
                 <div className="edit-or-delete">
-                  <Edit className="edit-item-icon" onClick={() => openItemEditor('methods' ,item, idx)}/>
+                  <Edit className="edit-item-icon" onClick={() => openItemEditor('methods', item, idx)}/>
                   <Delete className="delete-item-icon" onClick={() => handleDeleteItem(idx, 'method')}/>
                 </div>
               </div>
