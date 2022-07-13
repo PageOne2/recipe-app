@@ -9,7 +9,8 @@ export const userReducer = createSlice({
     userLikedRecipes: [],
     myRecipes: [],
     userData: {},
-    interactedRecipes: []
+    interactedRecipes: [],
+    createdRecipes: []
   },
   reducers: {
     getUserSuccess: (state, action) => {
@@ -60,6 +61,12 @@ export const userReducer = createSlice({
       else newArray.push(action.payload);
       state.interactedRecipes = newArray;
     },
+    createRecipeSuccess: (state, action) => {
+      return {
+        ...state,
+        createdRecipes: [...state.createdRecipes, action.payload]
+      }
+    },
     logOut: (state, action) => {}
   }
 })
@@ -72,6 +79,7 @@ export const {
   getMyRecipesSuccess,
   recipeLiked, 
   recipeDisliked, 
+  createRecipeSuccess,
   logOut } = userReducer.actions;
 
 export default userReducer.reducer;

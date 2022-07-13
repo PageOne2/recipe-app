@@ -7,7 +7,8 @@ import {
   userLikedRecipes, 
   getMyRecipesSuccess,
   recipeLiked, 
-  recipeDisliked 
+  recipeDisliked,
+  createRecipeSuccess 
 } from './userReducer';
 import Cookies from 'js-cookie';
 
@@ -160,6 +161,26 @@ export function* dislikeRecipe({payload}) {
   }
 }
 
+export function* createRecipe({ payload }) {
+  try {
+    const apiUrl = process.env.NODE_ENV === 'production' ? `${process.env.REACT_APP_API_URL}/recipes` : 'http://localhost:3000/api/recipes';
+    let data = yield fetch(apiUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + Cookies.get('jwt')
+      },
+      body: JSON.stringify(payload)
+    });
+    let res = yield data.json();
+    if (data.status === 201) {
+      yield put(createRecipeSuccess(res.data.recipe));
+    }
+  } catch (err) {
+    
+  }
+}
+
 export function* onLogUser() {
   yield takeLatest(SagaActionTypes.LOG_USER, logUser);
 }
@@ -188,6 +209,10 @@ export function* onDislikeRecipe() {
   yield takeLatest(SagaActionTypes.DISLIKE_RECIPE, dislikeRecipe);
 }
 
+export function* onCreateRecipe() {
+  yield takeLatest(SagaActionTypes.CREATE_RECIPE_START, createRecipe)
+}
+
 export function* userSagas() {
   yield all([
     call(onLogUser),
@@ -196,6 +221,7 @@ export function* userSagas() {
     call(onUpdateUserPassword),
     call(onGetMyRecipes),
     call(onLikeRecipe),
-    call(onDislikeRecipe)
+    call(onDislikeRecipe),
+    call(onCreateRecipe)
   ])
 }

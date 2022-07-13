@@ -101,9 +101,9 @@
   color: #fff;
 }
 
-.share-recipe-info .preparation-time {
-  display: flex;
-  align-items: baseline;
+.servings h3 {
+  background-color: #0ca981;
+  color: #fff;
 }
 
 .preparation-time h3 {
@@ -111,7 +111,12 @@
   color: #fff;
 }
 
-.preparation-time p {
+.servings, .preparation-time {
+  display: flex;
+  align-items: baseline;
+}
+
+.servings p, .preparation-time p {
   margin-left: 15px;
 }
 

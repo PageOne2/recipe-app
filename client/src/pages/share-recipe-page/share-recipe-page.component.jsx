@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { v4 as uuidv4 } from "uuid";
@@ -7,6 +7,7 @@ import { createRecipe } from "../../redux/redux-saga/sagaActions";
 import Delete from "@material-ui/icons/Delete";
 import Edit from "@material-ui/icons/Edit";
 import Close from "@material-ui/icons/Close";
+import { formatRecipeName } from "../../utils/formatStr";
 
 import "./share-recipe-page.styles.css";
 
@@ -15,6 +16,7 @@ const ShareRecipePage = () => {
     recipeName: '',
     ingredients: [],
     methods: [],
+    servings: 0,
     preparationTime: 0
   });
   const [editMode, setEditMode] = useState(false);
@@ -24,14 +26,26 @@ const ShareRecipePage = () => {
   const ingredientInput = useRef(null);
   const methodInput = useRef(null);
   const ingredientRecipeItems = useRef(null);
+  const { _id } = useSelector((state) => state.user.userData); 
   const dispatch = useDispatch();
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const recipeObj = {
+      recipeName: formatRecipeName(recipeInfo.recipeName),
+      ingredients: recipeInfo.ingredients,
+      method: recipeInfo.methods,
+      servings: parseInt(recipeInfo.servings),
+      preparationTime: parseInt(recipeInfo.preparationTime),
+      imageCover: "default.jpg",
+      user: _id  
+    };
+    dispatch(createRecipe(recipeObj));
   }
 
   const handleChange = (value, field) => {
-    if (field === 'time') setRecipeInfo(prev => ({ ...prev, preparationTime: value }));
+    if (field === 'servings' && value >= 0) setRecipeInfo(prev => ({ ...prev, servings: value }));
+    if (field === 'time' && value >= 0) setRecipeInfo(prev => ({ ...prev, preparationTime: value }));
   }
 
   const handleClick = (e, field) => {
@@ -118,8 +132,15 @@ const ShareRecipePage = () => {
 
           <div className="input-container">
             <div className="input-wrapper">
+              <label htmlFor="servings">How many servings</label>
+              <input className="share-input" name="servings" type="number" min="0" onChange={(e) => handleChange(e.target.value, 'servings')}/>
+            </div>
+          </div>
+
+          <div className="input-container">
+            <div className="input-wrapper">
               <label htmlFor="preparationTime">Preparation time in minutes</label>
-              <input className="share-input" name="preparationTime" type="number" onChange={(e) => handleChange(e.target.value, 'time')}/>
+              <input className="share-input" name="preparationTime" type="number" min="0" onChange={(e) => handleChange(e.target.value, 'time')}/>
             </div>
           </div>
 
@@ -158,6 +179,10 @@ const ShareRecipePage = () => {
               </div>
             ))}
           </ol>
+        </div>
+        <div className="recipe-info-title servings">
+          <h3>Servings</h3>
+          <p>{recipeInfo.servings} servings</p>
         </div>
         <div className="recipe-info-title preparation-time">
           <h3>Preparation Time</h3>

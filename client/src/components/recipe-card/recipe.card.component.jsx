@@ -2,6 +2,7 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import RecipeInitialInfo from "../recipe-initial-info/recipe-initial-info.component";
 import recipeImage from "../../assets/default.jpg";
+import { formatRecipeName } from "../../utils/formatStr";
 
 import "./recipe.card.styles.css";
 
@@ -30,7 +31,7 @@ const RecipeCard = ({
         <img src={recipeImage} alt="dish" />
       </div>
       <div className="recipe-name">
-        <h3>{recipeName}</h3>
+        <h3>{formatRecipeName(recipeName)}</h3>
       </div>
       <RecipeInitialInfo id={_id} myRecipe={myRecipe} likes={likes} preparationTime={preparationTime} />
     </div>
