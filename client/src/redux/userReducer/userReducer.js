@@ -10,7 +10,7 @@ export const userReducer = createSlice({
     myRecipes: [],
     userData: {},
     interactedRecipes: [],
-    createdRecipes: []
+    createdRecipe: {}
   },
   reducers: {
     getUserSuccess: (state, action) => {
@@ -64,7 +64,7 @@ export const userReducer = createSlice({
     createRecipeSuccess: (state, action) => {
       return {
         ...state,
-        createdRecipes: [...state.createdRecipes, action.payload]
+        createdRecipe: action.payload
       }
     },
     logOut: (state, action) => {}

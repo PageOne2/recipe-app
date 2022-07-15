@@ -1,13 +1,12 @@
-import { useState, useRef } from "react";
+import { useEffect ,useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Formik, Form, Field, ErrorMessage } from "formik";
-import * as Yup from "yup";
 import { v4 as uuidv4 } from "uuid";
 import { createRecipe } from "../../redux/redux-saga/sagaActions";
+import { formatRecipeName } from "../../utils/formatStr";
+import { createRecipeSuccess } from "../../redux/userReducer/userReducer";
 import Delete from "@material-ui/icons/Delete";
 import Edit from "@material-ui/icons/Edit";
 import Close from "@material-ui/icons/Close";
-import { formatRecipeName } from "../../utils/formatStr";
 
 import "./share-recipe-page.styles.css";
 
@@ -21,26 +20,45 @@ const ShareRecipePage = () => {
   });
   const [editMode, setEditMode] = useState(false);
   const [itemBeingEdited, setItemBeingEdited] = useState({ field: '', item: "", itemIdx: null });
+  const [recipeShared, setRecipeShared] = useState(false);
   const editableItem = useRef(null);
   const recipeNameInput = useRef(null);
   const ingredientInput = useRef(null);
   const methodInput = useRef(null);
   const ingredientRecipeItems = useRef(null);
   const { _id } = useSelector((state) => state.user.userData); 
+  const createdRecipe = useSelector((state) => state.user.createdRecipe);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (Object.keys(createdRecipe).length) {
+      setRecipeShared(true);
+      setTimeout(() => {
+        setRecipeShared(false);
+      }, 5000);
+    }
+  }, [createdRecipe]);
+
+  useEffect(() => {
+    return () => {
+      dispatch(createRecipeSuccess({}));
+    }
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const recipeObj = {
-      recipeName: formatRecipeName(recipeInfo.recipeName),
-      ingredients: recipeInfo.ingredients,
-      method: recipeInfo.methods,
-      servings: parseInt(recipeInfo.servings),
-      preparationTime: parseInt(recipeInfo.preparationTime),
-      imageCover: "default.jpg",
-      user: _id  
-    };
-    dispatch(createRecipe(recipeObj));
+    if (recipeInfo.recipeName.length && recipeInfo.ingredients && recipeInfo.methods.length) {
+      const recipeObj = {
+        recipeName: formatRecipeName(recipeInfo.recipeName),
+        ingredients: recipeInfo.ingredients,
+        method: recipeInfo.methods,
+        servings: parseInt(recipeInfo.servings),
+        preparationTime: parseInt(recipeInfo.preparationTime),
+        imageCover: "default.jpg",
+        user: _id  
+      };
+      dispatch(createRecipe(recipeObj));
+    }
   }
 
   const handleChange = (value, field) => {
@@ -215,6 +233,11 @@ const ShareRecipePage = () => {
         <div className="close-edit-btn">
           <Close className="close-edit-icon" onClick={() => setEditMode(false)}/>
         </div>
+      </div>
+      }
+      {recipeShared &&
+      <div className="recipe-created-modal">
+        <div>Recipe Created Successfully!</div>
       </div>
       }
     </div>
