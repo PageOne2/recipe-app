@@ -1,4 +1,4 @@
-import { useEffect ,useState, useRef } from "react";
+import { useEffect ,useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
 import { createRecipe } from "../../redux/redux-saga/sagaActions";
@@ -11,30 +11,32 @@ import Close from "@material-ui/icons/Close";
 import "./share-recipe-page.styles.css";
 
 const ShareRecipePage = () => {
-  const [recipeInfo, setRecipeInfo] = useState({
-    recipeName: '',
+  const recipeInfoInitialState = {
+    recipeName: "",
     ingredients: [],
     methods: [],
     servings: 0,
     preparationTime: 0
-  });
+  };
+  const [recipeInfo, setRecipeInfo] = useState(recipeInfoInitialState);
   const [editMode, setEditMode] = useState(false);
-  const [itemBeingEdited, setItemBeingEdited] = useState({ field: '', item: "", itemIdx: null });
-  const [recipeShared, setRecipeShared] = useState(false);
-  const editableItem = useRef(null);
-  const recipeNameInput = useRef(null);
-  const ingredientInput = useRef(null);
-  const methodInput = useRef(null);
-  const ingredientRecipeItems = useRef(null);
+  const [itemBeingEdited, setItemBeingEdited] = useState({ field: "", item: "", itemIdx: null });
+  const [recipeSharedSuccess, setRecipeSharedSuccess] = useState(false);
+  const [recipeSharedFail, setRecipeSharedFail] = useState({ fail: false, message: "" });
+  const [recipeNameInputValue, setRecipeNameInputValue] = useState("");
+  const [ingredientInputValue, setIngredientInputValue] = useState("");
+  const [methodInputValue, setMethodInputValue] = useState("");
+  const [editableItemInputValue, setEditableItemInputValue] = useState("");
   const { _id } = useSelector((state) => state.user.userData); 
   const createdRecipe = useSelector((state) => state.user.createdRecipe);
   const dispatch = useDispatch();
-
+  
   useEffect(() => {
     if (Object.keys(createdRecipe).length) {
-      setRecipeShared(true);
+      if (recipeSharedFail.fail) setRecipeSharedFail(false);
+      setRecipeSharedSuccess(true);
       setTimeout(() => {
-        setRecipeShared(false);
+        setRecipeSharedSuccess(false);
       }, 5000);
     }
   }, [createdRecipe]);
@@ -47,7 +49,7 @@ const ShareRecipePage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (recipeInfo.recipeName.length && recipeInfo.ingredients && recipeInfo.methods.length) {
+    if (recipeInfo.recipeName.length && recipeInfo.ingredients.length && recipeInfo.methods.length) {
       const recipeObj = {
         recipeName: formatRecipeName(recipeInfo.recipeName),
         ingredients: recipeInfo.ingredients,
@@ -58,25 +60,35 @@ const ShareRecipePage = () => {
         user: _id  
       };
       dispatch(createRecipe(recipeObj));
+      setRecipeInfo({ ...recipeInfoInitialState });
+    } else {
+      if (!recipeInfo.recipeName.length) setRecipeSharedFail({ fail: true, message: "A recipe must have a name!" }); 
+      if (!recipeInfo.ingredients.length) setRecipeSharedFail({ fail: true, message: "A recipe must have at least one ingredient!" });
+      if (!recipeInfo.methods.length) setRecipeSharedFail({ fail: true, message: "A recipe must have at least one method!"});
+      setTimeout(() => {
+        setRecipeSharedFail({ fail: false, message: "" });
+      }, 4000)
     }
   }
 
   const handleChange = (value, field) => {
-    if (field === 'servings' && value >= 0) setRecipeInfo(prev => ({ ...prev, servings: value }));
-    if (field === 'time' && value >= 0) setRecipeInfo(prev => ({ ...prev, preparationTime: value }));
+    if (value >= 0) {
+      if (field === 'servings') setRecipeInfo(prev => ({ ...prev, servings: value }));
+      if (field === 'time') setRecipeInfo(prev => ({ ...prev, preparationTime: value }));
+    }
   }
 
   const handleClick = (e, field) => {
     e.preventDefault(e);
-    if (field === 'recipeName' && recipeNameInput.current.value.length) {
-      setRecipeInfo(prev => ({ ...prev, recipeName: recipeNameInput.current.value.toUpperCase() }));
-      setTimeout(() => recipeNameInput.current.value = '', 200);
-    } else if (field === 'ingredient' && ingredientInput.current.value.length) {
-      setRecipeInfo(prev => ({ ...prev, ingredients: prev.ingredients.concat(ingredientInput.current.value) }));
-      setTimeout(() => ingredientInput.current.value = '', 200);
-    } else if (field === 'method' && methodInput.current.value.length) {
-      setRecipeInfo(prev => ({ ...prev, methods: prev.methods.concat(methodInput.current.value) }));
-      setTimeout(() => methodInput.current.value = '', 200);
+    if (field === 'recipeName' && recipeNameInputValue.length) {
+      setRecipeInfo(prev => ({ ...prev, recipeName: recipeNameInputValue }));
+      setRecipeNameInputValue("");
+    } else if (field === 'ingredient' && ingredientInputValue.length) {
+      setRecipeInfo(prev => ({ ...prev, ingredients: prev.ingredients.concat(ingredientInputValue) }));
+      setIngredientInputValue("");
+    } else if (field === 'method' && methodInputValue.length) {
+      setRecipeInfo(prev => ({ ...prev, methods: prev.methods.concat(methodInputValue) }));
+      setMethodInputValue("");
     }
   }
 
@@ -99,20 +111,21 @@ const ShareRecipePage = () => {
   }
 
   const handleEditedItem = (field, idx) => {
-    if (editableItem.current.innerText.length) {
+    if (editableItemInputValue.length) {
       if (field === "recipeName") {
-        const newRecipeName = editableItem.current.innerText.replace(/\s+/g, ' ').trim().toUpperCase();
+        const newRecipeName = editableItemInputValue.replace(/\s+/g, ' ').trim().toUpperCase();
         setRecipeInfo(prev => ({ ...prev, recipeName: newRecipeName }));
       } else if (field === "ingredients") {
         const ingredientsNewArray = recipeInfo.ingredients;
-        ingredientsNewArray[idx] = editableItem.current.innerText.replace(/\s+/g,' ').trim();
+        ingredientsNewArray[idx] = editableItemInputValue.replace(/\s+/g,' ').trim();
         setRecipeInfo(prev => ({ ...prev, ingredients: ingredientsNewArray }));
       } else if (field === "methods") {
         const methodsNewArray = recipeInfo.methods;
-        methodsNewArray[idx] = editableItem.current.innerText.replace(/\s+/g,' ').trim();
+        methodsNewArray[idx] = editableItemInputValue.replace(/\s+/g,' ').trim();
         setRecipeInfo(prev => ({ ...prev, methods: methodsNewArray }));
       }
     }
+    setEditableItemInputValue("");
     setEditMode(false);
   }
 
@@ -126,7 +139,13 @@ const ShareRecipePage = () => {
           <div className="input-container">
             <div className="input-wrapper">
               <label htmlFor="recipeName">Your recipe name</label>
-              <input className="share-input" name="recipeName" type="text" ref={recipeNameInput}/>
+              <input 
+              className="share-input" 
+              name="recipeName" 
+              type="text" 
+              value={recipeNameInputValue} 
+              onChange={e => setRecipeNameInputValue(e.target.value)}
+              />
             </div>
             <div className="add-btn">
               <button type="button" onClick={(e) => handleClick(e, 'recipeName')}>Add Recipe Name</button>
@@ -136,7 +155,13 @@ const ShareRecipePage = () => {
           <div className="input-container">
             <div className="input-wrapper">
               <label htmlFor="ingredients">Add your recipe ingredients</label>
-              <input className="share-input" name="ingredients" type="text" ref={ingredientInput}/>
+              <input 
+              className="share-input" 
+              name="ingredients" 
+              type="text" 
+              value={ingredientInputValue}
+              onChange={e => setIngredientInputValue(e.target.value)}
+              />
             </div>
             <div className="add-btn">
               <button type="button" onClick={(e) => handleClick(e, 'ingredient')}>Add Ingredient</button>
@@ -146,7 +171,13 @@ const ShareRecipePage = () => {
           <div className="input-container">
             <div className="input-wrapper">
               <label htmlFor="method">Add preparation methods</label>
-              <input className="share-input" name="method" type="text" ref={methodInput}/>
+              <input 
+              className="share-input" 
+              name="method" 
+              type="text" 
+              value={methodInputValue}
+              onChange={e => setMethodInputValue(e.target.value)}
+              />
             </div>
             <div className="add-btn">
               <button type="button" onClick={(e) => handleClick(e, 'method')}>Add Method</button>
@@ -156,14 +187,26 @@ const ShareRecipePage = () => {
           <div className="input-container">
             <div className="input-wrapper">
               <label htmlFor="servings">How many servings</label>
-              <input className="share-input" name="servings" type="number" min="0" onChange={(e) => handleChange(e.target.value, 'servings')}/>
+              <input 
+              className="share-input" 
+              name="servings" 
+              type="number" 
+              min="0" 
+              onChange={(e) => handleChange(e.target.value, 'servings')}
+              />
             </div>
           </div>
 
           <div className="input-container">
             <div className="input-wrapper">
               <label htmlFor="preparationTime">Preparation time in minutes</label>
-              <input className="share-input" name="preparationTime" type="number" min="0" onChange={(e) => handleChange(e.target.value, 'time')}/>
+              <input 
+              className="share-input" 
+              name="preparationTime" 
+              type="number" 
+              min="0" 
+              onChange={(e) => handleChange(e.target.value, 'time')}
+              />
             </div>
           </div>
 
@@ -185,7 +228,7 @@ const ShareRecipePage = () => {
         </div>
         <div className="recipe-info-title ingredients">
           <h3>Ingredients</h3>
-          <ul className="items-list" ref={ingredientRecipeItems}>
+          <ul className="items-list">
             { recipeInfo.ingredients.map((item, idx) => (
               <div className="recipe-item" key={uuidv4()}>
                 <li>{item}</li>
@@ -223,8 +266,14 @@ const ShareRecipePage = () => {
       {editMode &&
       <div className="edit-mode">
         <div className="item">
-          <div className="item-div">
-            <div contentEditable="true" suppressContentEditableWarning="true" ref={editableItem}>{itemBeingEdited.item}</div>
+          <div className="item-input">
+            <input 
+            className=""
+            type="text"
+            placeholder={itemBeingEdited.item}
+            value={editableItemInputValue}
+            onChange={(e) => setEditableItemInputValue(e.target.value)}
+            />
           </div>
           <div className="edit-btn">
             <button onClick={() => handleEditedItem(itemBeingEdited.field, itemBeingEdited.itemIdx)}>Edit</button>
@@ -235,9 +284,14 @@ const ShareRecipePage = () => {
         </div>
       </div>
       }
-      {recipeShared &&
-      <div className="recipe-created-modal">
+      {recipeSharedSuccess &&
+      <div className="recipe-page-modal success-modal">
         <div>Recipe Created Successfully!</div>
+      </div>
+      }
+      {recipeSharedFail.fail &&
+      <div className="recipe-page-modal error-modal">
+        <div>{recipeSharedFail.message}</div>
       </div>
       }
     </div>

@@ -14,7 +14,7 @@ exports.getAllRecipes = catchAsync(async (req, res, next) => {
   })
 })
 
-exports.createRecipe = async (req, res, next) => {
+exports.createRecipe = catchAsync(async (req, res, next) => {
   if (!req.body.user) req.body.user = req.user.id
 
   const recipe = await Recipe.create(req.body)
@@ -25,9 +25,9 @@ exports.createRecipe = async (req, res, next) => {
       recipe
     }
   })
-}
+})
 
-exports.getRecipe = async (req, res, next) => {
+exports.getRecipe = catchAsync(async (req, res, next) => {
   const recipe = await Recipe.findById(req.params.id).populate('user')
 
   if (!recipe) {
@@ -40,7 +40,7 @@ exports.getRecipe = async (req, res, next) => {
       recipe
     }
   })
-}
+})
 
 exports.getMostRecent = catchAsync(async (req, res, next) => {
   const page = req.params.page * 1 || 1 //1

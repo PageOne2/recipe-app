@@ -8,7 +8,7 @@ import {
   getMyRecipesSuccess,
   recipeLiked, 
   recipeDisliked,
-  createRecipeSuccess 
+  createRecipeSuccess
 } from './userReducer';
 import Cookies from 'js-cookie';
 
@@ -175,9 +175,11 @@ export function* createRecipe({ payload }) {
     let res = yield data.json();
     if (data.status === 201) {
       yield put(createRecipeSuccess(res.data.recipe));
+    } else {
+      throw new Error(res.message);
     }
   } catch (err) {
-    
+    console.log(err.message);
   }
 }
 
