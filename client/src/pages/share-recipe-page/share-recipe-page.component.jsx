@@ -22,10 +22,12 @@ const ShareRecipePage = () => {
   const [editMode, setEditMode] = useState(false);
   const [itemBeingEdited, setItemBeingEdited] = useState({ field: "", item: "", itemIdx: null });
   const [recipeSharedSuccess, setRecipeSharedSuccess] = useState(false);
-  const [recipeSharedFail, setRecipeSharedFail] = useState({ fail: false, message: "" });
+  const [recipeSharedFail, setRecipeSharedFail] = useState(false);
   const [recipeNameInputValue, setRecipeNameInputValue] = useState("");
   const [ingredientInputValue, setIngredientInputValue] = useState("");
   const [methodInputValue, setMethodInputValue] = useState("");
+  const [servingsInputValue, setServingsInputValue] = useState(0); 
+  const [preparationTimeInputValue, setPreparationTimeInputValue] = useState(0);
   const [editableItemInputValue, setEditableItemInputValue] = useState("");
   const { _id } = useSelector((state) => state.user.userData); 
   const createdRecipe = useSelector((state) => state.user.createdRecipe);
@@ -33,7 +35,7 @@ const ShareRecipePage = () => {
   
   useEffect(() => {
     if (Object.keys(createdRecipe).length) {
-      if (recipeSharedFail.fail) setRecipeSharedFail(false);
+      if (recipeSharedFail) setRecipeSharedFail(false);
       setRecipeSharedSuccess(true);
       setTimeout(() => {
         setRecipeSharedSuccess(false);
@@ -54,34 +56,27 @@ const ShareRecipePage = () => {
         recipeName: formatRecipeName(recipeInfo.recipeName),
         ingredients: recipeInfo.ingredients,
         method: recipeInfo.methods,
-        servings: parseInt(recipeInfo.servings),
-        preparationTime: parseInt(recipeInfo.preparationTime),
+        servings: parseInt(servingsInputValue),
+        preparationTime: parseInt(preparationTimeInputValue),
         imageCover: "default.jpg",
         user: _id  
       };
       dispatch(createRecipe(recipeObj));
+      setServingsInputValue(0);
+      setPreparationTimeInputValue(0);
       setRecipeInfo({ ...recipeInfoInitialState });
     } else {
-      if (!recipeInfo.recipeName.length) setRecipeSharedFail({ fail: true, message: "A recipe must have a name!" }); 
-      if (!recipeInfo.ingredients.length) setRecipeSharedFail({ fail: true, message: "A recipe must have at least one ingredient!" });
-      if (!recipeInfo.methods.length) setRecipeSharedFail({ fail: true, message: "A recipe must have at least one method!"});
+      setRecipeSharedFail(true); 
       setTimeout(() => {
-        setRecipeSharedFail({ fail: false, message: "" });
+        setRecipeSharedFail(false);
       }, 4000)
-    }
-  }
-
-  const handleChange = (value, field) => {
-    if (value >= 0) {
-      if (field === 'servings') setRecipeInfo(prev => ({ ...prev, servings: value }));
-      if (field === 'time') setRecipeInfo(prev => ({ ...prev, preparationTime: value }));
     }
   }
 
   const handleClick = (e, field) => {
     e.preventDefault(e);
     if (field === 'recipeName' && recipeNameInputValue.length) {
-      setRecipeInfo(prev => ({ ...prev, recipeName: recipeNameInputValue }));
+      setRecipeInfo(prev => ({ ...prev, recipeName: recipeNameInputValue.trim().toUpperCase() }));
       setRecipeNameInputValue("");
     } else if (field === 'ingredient' && ingredientInputValue.length) {
       setRecipeInfo(prev => ({ ...prev, ingredients: prev.ingredients.concat(ingredientInputValue) }));
@@ -106,7 +101,8 @@ const ShareRecipePage = () => {
   }
   
   const openItemEditor = (field, item, idx) => {
-    setItemBeingEdited({ field: field, item: item, itemIdx: idx });
+    const itemToEdit = item.replace(/\s+/g, ' ').trim();
+    setItemBeingEdited({ field: field, item: itemToEdit, itemIdx: idx });
     setEditMode(true);
   }
 
@@ -148,7 +144,7 @@ const ShareRecipePage = () => {
               />
             </div>
             <div className="add-btn">
-              <button type="button" onClick={(e) => handleClick(e, 'recipeName')}>Add Recipe Name</button>
+              <button className="add-recipe-name" type="button" onClick={(e) => handleClick(e, 'recipeName')}>Add Recipe Name</button>
             </div>
           </div>
 
@@ -164,7 +160,7 @@ const ShareRecipePage = () => {
               />
             </div>
             <div className="add-btn">
-              <button type="button" onClick={(e) => handleClick(e, 'ingredient')}>Add Ingredient</button>
+              <button className="add-ingredient" type="button" onClick={(e) => handleClick(e, 'ingredient')}>Add Ingredient</button>
             </div>
           </div>
 
@@ -180,7 +176,7 @@ const ShareRecipePage = () => {
               />
             </div>
             <div className="add-btn">
-              <button type="button" onClick={(e) => handleClick(e, 'method')}>Add Method</button>
+              <button className="add-method" type="button" onClick={(e) => handleClick(e, 'method')}>Add Method</button>
             </div>
           </div>
 
@@ -192,7 +188,11 @@ const ShareRecipePage = () => {
               name="servings" 
               type="number" 
               min="0" 
-              onChange={(e) => handleChange(e.target.value, 'servings')}
+              value={servingsInputValue}
+              onChange={e => {
+                  if (e.target.value >= 0) setServingsInputValue(e.target.value);
+                }
+              }
               />
             </div>
           </div>
@@ -205,7 +205,11 @@ const ShareRecipePage = () => {
               name="preparationTime" 
               type="number" 
               min="0" 
-              onChange={(e) => handleChange(e.target.value, 'time')}
+              value={preparationTimeInputValue}
+              onChange={e => {
+                  if (e.target.value >= 0) setPreparationTimeInputValue(e.target.value)
+                }
+              }
               />
             </div>
           </div>
@@ -256,11 +260,11 @@ const ShareRecipePage = () => {
         </div>
         <div className="recipe-info-title servings">
           <h3>Servings</h3>
-          <p>{recipeInfo.servings} servings</p>
+          <p>{servingsInputValue} servings</p>
         </div>
         <div className="recipe-info-title preparation-time">
           <h3>Preparation Time</h3>
-          <p>{recipeInfo.preparationTime} minutes</p>
+          <p>{preparationTimeInputValue} minutes</p>
         </div>
       </div>
       {editMode &&
@@ -289,9 +293,9 @@ const ShareRecipePage = () => {
         <div>Recipe Created Successfully!</div>
       </div>
       }
-      {recipeSharedFail.fail &&
+      {recipeSharedFail &&
       <div className="recipe-page-modal error-modal">
-        <div>{recipeSharedFail.message}</div>
+        <div>All fields are required!</div>
       </div>
       }
     </div>
