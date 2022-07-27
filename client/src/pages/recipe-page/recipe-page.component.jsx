@@ -41,7 +41,7 @@ const RecipePage = () => {
             <div className="recipe-info">
               <div className="recipe-page-info">
                 <div className="recipe-page-image">
-                  <img src={recipeImage} alt="dish"/>
+                  <img crossOrigin="anonymous" src={`http://localhost:3000/api/recipes/recipeImageCover/${recipe.imageCover}`} alt="dish"/>
                 </div>
                 <div className="recipe-page-method">
                   <h4 className="method-title">Method</h4>

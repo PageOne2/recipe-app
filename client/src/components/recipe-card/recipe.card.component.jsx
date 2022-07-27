@@ -28,7 +28,7 @@ const RecipeCard = ({
             <button className="go-to-btn">Go To Recipe</button>
           </Link>
         </div>
-        <img src={recipeImage} alt="dish" />
+        <img crossOrigin="anonymous" src={`http://localhost:3000/api/recipes/recipeImageCover/${imageCover}`} alt="dish" />
       </div>
       <div className="recipe-name">
         <h3>{formatRecipeName(recipeName)}</h3>

@@ -19,6 +19,7 @@ const ShareRecipePage = () => {
     preparationTime: 0
   };
   const [recipeInfo, setRecipeInfo] = useState(recipeInfoInitialState);
+  const [file, setFile] = useState();
   const [editMode, setEditMode] = useState(false);
   const [itemBeingEdited, setItemBeingEdited] = useState({ field: "", item: "", itemIdx: null });
   const [recipeSharedSuccess, setRecipeSharedSuccess] = useState(false);
@@ -29,7 +30,6 @@ const ShareRecipePage = () => {
   const [servingsInputValue, setServingsInputValue] = useState(0); 
   const [preparationTimeInputValue, setPreparationTimeInputValue] = useState(0);
   const [editableItemInputValue, setEditableItemInputValue] = useState("");
-  const { _id } = useSelector((state) => state.user.userData); 
   const createdRecipe = useSelector((state) => state.user.createdRecipe);
   const dispatch = useDispatch();
   
@@ -58,8 +58,7 @@ const ShareRecipePage = () => {
         method: recipeInfo.methods,
         servings: parseInt(servingsInputValue),
         preparationTime: parseInt(preparationTimeInputValue),
-        imageCover: "default.jpg",
-        user: _id  
+        imageCover: file
       };
       dispatch(createRecipe(recipeObj));
       setServingsInputValue(0);
@@ -125,6 +124,11 @@ const ShareRecipePage = () => {
     setEditMode(false);
   }
 
+  const handleFileSelection = (e) => {
+    const file = e.target.files[0];
+    setFile(file);
+  }
+
   return (
     <div className="share-recipe-container">
       <div className="share-recipe-form">
@@ -133,6 +137,19 @@ const ShareRecipePage = () => {
         </div>
         <form onSubmit={(e) => handleSubmit(e)}>
           <div className="input-container">
+            <div className="input-wrapper">
+              <label htmlFor="recipeImage">Your recipe image</label>
+              <input 
+              className="recipe-image-input"
+              name="recipeImage"
+              type="file"
+              accept="image/*"
+              onChange={(e) => handleFileSelection(e)}
+              />
+            </div>
+          </div>
+
+          <div className="input-container">            
             <div className="input-wrapper">
               <label htmlFor="recipeName">Your recipe name</label>
               <input 

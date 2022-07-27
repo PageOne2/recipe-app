@@ -16,7 +16,7 @@ router.use(authController.protect)
 
 router.get('/me', userController.getMe, userController.getUser)
 router.patch('/updateMyPassword', authController.updatePassword)
-router.patch('/updateMe', userController.updateUserPhoto, userController.resizeUserPhoto, userController.updateMe)
+router.patch('/updateMe', userController.uploadUserPhoto, userController.resizeUserPhoto, userController.updateMe)
 router.patch('/likeRecipe/:id', userController.likeRecipe)
 router.patch('/dislikeRecipe/:id', userController.dislikeRecipe)
 router.get('/myRecipes', userController.getMyRecipes)

@@ -21,7 +21,7 @@ const recipeSchema = mongoose.Schema({
         type: String,
         required: [true, 'A recipe must have a image cover!']
     },
-    servings: String,
+    servings: Number,
     likes: {
         type: Number,
         default: 0

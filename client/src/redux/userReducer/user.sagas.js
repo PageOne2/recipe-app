@@ -1,3 +1,4 @@
+import axios from "axios";
 import SagaActionTypes from '../redux-saga/sagaActionTypes';
 import { takeLatest, put, call, all } from 'redux-saga/effects';
 import { 
@@ -164,19 +165,28 @@ export function* dislikeRecipe({payload}) {
 export function* createRecipe({ payload }) {
   try {
     const apiUrl = process.env.NODE_ENV === 'production' ? `${process.env.REACT_APP_API_URL}/recipes` : 'http://localhost:3000/api/recipes';
-    let data = yield fetch(apiUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + Cookies.get('jwt')
-      },
-      body: JSON.stringify(payload)
-    });
-    let res = yield data.json();
-    if (data.status === 201) {
-      yield put(createRecipeSuccess(res.data.recipe));
+    const formData = new FormData();
+    const recipeInfo = {
+      recipeName: payload.recipeName,
+      ingredients: payload.ingredients,
+      method: payload.method,
+      servings: payload.servings,
+      preparationTime: payload.preparationTime,
+    };
+
+    formData.append("recipeInfo", JSON.stringify(recipeInfo));
+    formData.append("imageCover", payload.imageCover);
+
+    const headers = { 'Authorization': 'Bearer ' + Cookies.get('jwt') };
+
+    let res = yield axios.post(apiUrl, formData, { headers });
+    let createdRecipe = res.data.data.recipe;
+    console.log(res.data)
+    console.log('createdRecipe ' + createRecipe)
+    if (res.status === 201) {
+      yield put(createRecipeSuccess(createdRecipe));
     } else {
-      throw new Error(res.message);
+      throw new Error("Something went very wrong!");
     }
   } catch (err) {
     console.log(err.message);
