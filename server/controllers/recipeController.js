@@ -1,6 +1,44 @@
 const Recipe = require('../model/recipeModel')
 const AppError = require('../utils/appError')
 const catchAsync = require('../utils/catchAsync')
+const awsS3 = require('../s3');
+const multer = require('multer')
+const sharp = require('sharp')
+const fs = require('fs')
+const util = require('util');
+const unlinkFile = util.promisify(fs.unlink);
+
+const multerStorage = multer.memoryStorage();
+
+const multerFilter = (req, file, callback) => {
+  if (file.mimetype.startsWith('image')) {
+    callback(null, true)
+  } else {
+    callback(new AppError('This file is not an image! Only image uploads allowed.'), false)
+  }
+}
+
+const upload = multer({
+  storage: multerStorage,
+  fileFilter: multerFilter
+})
+
+exports.uploadRecipeImageCover = upload.single('imageCover')
+
+exports.resizeRecipeImageCover = catchAsync(async (req, res, next) => {
+  if (!req.file) return next()
+
+  req.file.filename = `recipe-image-${req.user.id}-${Date.now()}.jpeg`
+  req.file.path = `public/img/recipeImageCover/${req.file.filename}`
+
+  await sharp(req.file.buffer)
+    .resize(400, 300)
+    .toFormat('jpg')
+    .jpeg({ quality: 90 })
+    .toFile(req.file.path)
+
+  next()
+})
 
 exports.getAllRecipes = catchAsync(async (req, res, next) => {
   const recipes = await Recipe.find()
@@ -17,15 +55,26 @@ exports.getAllRecipes = catchAsync(async (req, res, next) => {
 exports.createRecipe = catchAsync(async (req, res, next) => {
   if (!req.body.user) req.body.user = req.user.id
 
-  const recipe = await Recipe.create(req.body)
+  const recipeInfoObj = JSON.parse(req.body.recipeInfo);
+  recipeInfoObj.imageCover = req.file.filename;
+  recipeInfoObj.user = req.body.user;
+  const recipe = await Recipe.create(recipeInfoObj);
+  const imageCoverUploadResult = await awsS3.uploadFile(req.file);
+  await unlinkFile(req.file.path);
 
   res.status(201).json({
     status: 'success',
     data: {
-      recipe
+      recipe,
+      imageCoverPath: `/images/${imageCoverUploadResult.Key}`
     }
   })
 })
+
+exports.getRecipeImageCover = async (req, res, next) => {
+  const readStream = await awsS3.getFile(req.params.key)
+  if (readStream) readStream.pipe(res);
+}
 
 exports.getRecipe = catchAsync(async (req, res, next) => {
   const recipe = await Recipe.findById(req.params.id).populate('user')

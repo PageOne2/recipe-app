@@ -5,16 +5,6 @@ const AppError = require('../utils/appError')
 const multer = require('multer')
 const sharp = require('sharp')
 
-/*const multerStorage = multer.diskStorage({
-    destination: (req, file, callback) => {
-        callback(null, 'dev-data/img/user-imgs')
-    },
-    filename: (req, file, callback) => {
-        const extension = file.mimetype.split('/')[1]
-        callback(null, `user-${req.user.id}-${Date.now()}.${extension}`)
-    }
-})*/
-
 const multerStorage = multer.memoryStorage()
 
 const multerFilter = (req, file, callback) => {
@@ -30,7 +20,7 @@ const upload = multer({
   fileFilter: multerFilter
 })
 
-exports.updateUserPhoto = upload.single('photo')
+exports.uploadUserPhoto = upload.single('photo')
 
 exports.resizeUserPhoto = catchAsync(async (req, res, next) => {
   if (!req.file) return next()
