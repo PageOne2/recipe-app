@@ -8,7 +8,11 @@ const router = express.Router()
 router
     .route('/')
     .get(recipeController.getAllRecipes)
-    .post(authController.protect, authController.restrictTo('user'), recipeController.createRecipe)
+    .post(authController.protect, authController.restrictTo('user'), recipeController.uploadRecipeImageCover, recipeController.resizeRecipeImageCover,recipeController.createRecipe)
+
+router
+    .route('/recipeImageCover/:key')
+    .get(recipeController.getRecipeImageCover);
 
 router.get('/mostRecent/:page', recipeController.getMostRecent)
 router.get('/mostLiked/:page', recipeController.getMostLiked)

@@ -1,3 +1,4 @@
+import axios from "axios";
 import SagaActionTypes from '../redux-saga/sagaActionTypes';
 import { takeLatest, put, call, all } from 'redux-saga/effects';
 import { 
@@ -7,13 +8,18 @@ import {
   userLikedRecipes, 
   getMyRecipesSuccess,
   recipeLiked, 
-  recipeDisliked 
+  recipeDisliked,
+  createRecipeSuccess
 } from './userReducer';
 import Cookies from 'js-cookie';
 
 export function* logUser({payload}) {
   try {
-    let data = yield fetch('http://localhost:3000/api/users/login', {
+    const apiUrl = process.env.NODE_ENV === 'production' 
+    ? `${process.env.REACT_APP_API_URL}/users/login` 
+    : 'http://localhost:3000/api/users/login';
+
+    let data = yield fetch(apiUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -37,7 +43,11 @@ export function* logUser({payload}) {
 
 export function* signUp({payload}) {
   try {
-    let data = yield fetch('http://localhost:3000/api/users/signup', {
+    const apiUrl = process.env.NODE_ENV === 'production' 
+    ? `${process.env.REACT_APP_API_URL}/users/signup` 
+    : 'http://localhost:3000/api/users/signup';
+
+    let data = yield fetch(apiUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -61,7 +71,11 @@ export function* signUp({payload}) {
 
 export function* getMe() {
   try {
-    let data = yield fetch('http://localhost:3000/api/users/me', {
+    const apiUrl = process.env.NODE_ENV === 'production' 
+    ? `${process.env.REACT_APP_API_URL}/users/me` 
+    : 'http://localhost:3000/api/users/me';
+
+    let data = yield fetch(apiUrl, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -82,7 +96,11 @@ export function* getMe() {
 
 export function* updateUserPassword({payload}) {
   try {
-    let data = yield fetch('http://localhost:3000/api/users/updateMyPassword', {
+    const apiUrl = process.env.NODE_ENV === 'production' 
+    ? `${process.env.REACT_APP_API_URL}/users/updateMyPassword` 
+    : 'http://localhost:3000/api/users/updateMyPassword';
+
+    let data = yield fetch(apiUrl, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -101,7 +119,11 @@ export function* updateUserPassword({payload}) {
 
 export function* getMyRecipes() {
   try {
-    let data = yield fetch('http://localhost:3000/api/users/myRecipes', {
+    const apiUrl = process.env.NODE_ENV === 'production' 
+    ? `${process.env.REACT_APP_API_URL}/users/myRecipes` 
+    : 'http://localhost:3000/api/users/myRecipes';
+
+    let data = yield fetch(apiUrl, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -119,7 +141,11 @@ export function* getMyRecipes() {
 
 export function* likeRecipe({payload}) {
   try {
-    let data = yield fetch(`http://localhost:3000/api/users/likeRecipe/${payload}`, {
+    const apiUrl = process.env.NODE_ENV === 'production' 
+    ? `${process.env.REACT_APP_API_URL}/users/likeRecipe/${payload}` 
+    : `http://localhost:3000/api/users/likeRecipe/${payload}`;
+
+    let data = yield fetch(apiUrl, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -137,7 +163,11 @@ export function* likeRecipe({payload}) {
 
 export function* dislikeRecipe({payload}) {
   try {
-    let data = yield fetch(`http://localhost:3000/api/users/dislikeRecipe/${payload}`, {
+    const apiUrl = process.env.NODE_ENV === 'production' 
+    ? `${process.env.REACT_APP_API_URL}/users/dislikeRecipe/${payload}` 
+    : `http://localhost:3000/api/users/dislikeRecipe/${payload}`;
+
+    let data = yield fetch(apiUrl, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -150,6 +180,39 @@ export function* dislikeRecipe({payload}) {
     }
   } catch (err) {
 
+  }
+}
+
+export function* createRecipe({ payload }) {
+  try {
+    const apiUrl = process.env.NODE_ENV === 'production' 
+    ? `${process.env.REACT_APP_API_URL}/recipes` 
+    : 'http://localhost:3000/api/recipes';
+    
+    const formData = new FormData();
+    const recipeInfo = {
+      recipeName: payload.recipeName,
+      ingredients: payload.ingredients,
+      method: payload.method,
+      servings: payload.servings,
+      preparationTime: payload.preparationTime,
+    };
+
+    formData.append("recipeInfo", JSON.stringify(recipeInfo));
+    formData.append("imageCover", payload.imageCover);
+
+    const headers = { 'Authorization': 'Bearer ' + Cookies.get('jwt') };
+
+    let res = yield axios.post(apiUrl, formData, { headers });
+    let createdRecipe = res.data.data.recipe;
+
+    if (res.status === 201) {
+      yield put(createRecipeSuccess(createdRecipe));
+    } else {
+      throw new Error("Something went very wrong!");
+    }
+  } catch (err) {
+    console.log(err.message);
   }
 }
 
@@ -181,6 +244,10 @@ export function* onDislikeRecipe() {
   yield takeLatest(SagaActionTypes.DISLIKE_RECIPE, dislikeRecipe);
 }
 
+export function* onCreateRecipe() {
+  yield takeLatest(SagaActionTypes.CREATE_RECIPE_START, createRecipe)
+}
+
 export function* userSagas() {
   yield all([
     call(onLogUser),
@@ -189,6 +256,7 @@ export function* userSagas() {
     call(onUpdateUserPassword),
     call(onGetMyRecipes),
     call(onLikeRecipe),
-    call(onDislikeRecipe)
+    call(onDislikeRecipe),
+    call(onCreateRecipe)
   ])
 }
