@@ -60,7 +60,6 @@ exports.createRecipe = catchAsync(async (req, res, next) => {
   const recipe = await Recipe.create(recipeInfoObj);
   const imageCoverUploadResult = await awsS3.uploadFile(req.file);
   await unlinkFile(req.file.path);
-  console.log(imageCoverUploadResult);
 
   res.status(201).json({
     status: 'success',

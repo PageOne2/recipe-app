@@ -15,7 +15,10 @@ import Cookies from 'js-cookie';
 
 export function* logUser({payload}) {
   try {
-    const apiUrl = process.env.NODE_ENV === 'production' ? `${process.env.REACT_APP_API_URL}/users/login` : 'http://localhost:3000/api/users/login';
+    const apiUrl = process.env.NODE_ENV === 'production' 
+    ? `${process.env.REACT_APP_API_URL}/users/login` 
+    : 'http://localhost:3000/api/users/login';
+
     let data = yield fetch(apiUrl, {
       method: 'POST',
       headers: {
@@ -40,7 +43,10 @@ export function* logUser({payload}) {
 
 export function* signUp({payload}) {
   try {
-    const apiUrl = process.env.NODE_ENV === 'production' ? `${process.env.REACT_APP_API_URL}/users/signup` : 'http://localhost:3000/api/users/signup';
+    const apiUrl = process.env.NODE_ENV === 'production' 
+    ? `${process.env.REACT_APP_API_URL}/users/signup` 
+    : 'http://localhost:3000/api/users/signup';
+
     let data = yield fetch(apiUrl, {
       method: 'POST',
       headers: {
@@ -65,7 +71,10 @@ export function* signUp({payload}) {
 
 export function* getMe() {
   try {
-    const apiUrl = process.env.NODE_ENV === 'production' ? `${process.env.REACT_APP_API_URL}/users/me` : 'http://localhost:3000/api/users/me';
+    const apiUrl = process.env.NODE_ENV === 'production' 
+    ? `${process.env.REACT_APP_API_URL}/users/me` 
+    : 'http://localhost:3000/api/users/me';
+
     let data = yield fetch(apiUrl, {
       method: 'GET',
       headers: {
@@ -87,7 +96,10 @@ export function* getMe() {
 
 export function* updateUserPassword({payload}) {
   try {
-    const apiUrl = process.env.NODE_ENV === 'production' ? `${process.env.REACT_APP_API_URL}/users/updateMyPassword` : 'http://localhost:3000/api/users/updateMyPassword';
+    const apiUrl = process.env.NODE_ENV === 'production' 
+    ? `${process.env.REACT_APP_API_URL}/users/updateMyPassword` 
+    : 'http://localhost:3000/api/users/updateMyPassword';
+
     let data = yield fetch(apiUrl, {
       method: 'PATCH',
       headers: {
@@ -107,7 +119,10 @@ export function* updateUserPassword({payload}) {
 
 export function* getMyRecipes() {
   try {
-    const apiUrl = process.env.NODE_ENV === 'production' ? `${process.env.REACT_APP_API_URL}/users/myRecipes` : 'http://localhost:3000/api/users/myRecipes';
+    const apiUrl = process.env.NODE_ENV === 'production' 
+    ? `${process.env.REACT_APP_API_URL}/users/myRecipes` 
+    : 'http://localhost:3000/api/users/myRecipes';
+
     let data = yield fetch(apiUrl, {
       method: 'GET',
       headers: {
@@ -126,7 +141,10 @@ export function* getMyRecipes() {
 
 export function* likeRecipe({payload}) {
   try {
-    const apiUrl = process.env.NODE_ENV === 'production' ? `${process.env.REACT_APP_API_URL}/users/likeRecipe/${payload}` : `http://localhost:3000/api/users/likeRecipe/${payload}`;
+    const apiUrl = process.env.NODE_ENV === 'production' 
+    ? `${process.env.REACT_APP_API_URL}/users/likeRecipe/${payload}` 
+    : `http://localhost:3000/api/users/likeRecipe/${payload}`;
+
     let data = yield fetch(apiUrl, {
       method: 'PATCH',
       headers: {
@@ -145,7 +163,10 @@ export function* likeRecipe({payload}) {
 
 export function* dislikeRecipe({payload}) {
   try {
-    const apiUrl = process.env.NODE_ENV === 'production' ? `${process.env.REACT_APP_API_URL}/users/dislikeRecipe/${payload}` : `http://localhost:3000/api/users/dislikeRecipe/${payload}`;
+    const apiUrl = process.env.NODE_ENV === 'production' 
+    ? `${process.env.REACT_APP_API_URL}/users/dislikeRecipe/${payload}` 
+    : `http://localhost:3000/api/users/dislikeRecipe/${payload}`;
+
     let data = yield fetch(apiUrl, {
       method: 'PATCH',
       headers: {
@@ -164,7 +185,10 @@ export function* dislikeRecipe({payload}) {
 
 export function* createRecipe({ payload }) {
   try {
-    const apiUrl = process.env.NODE_ENV === 'production' ? `${process.env.REACT_APP_API_URL}/recipes` : 'http://localhost:3000/api/recipes';
+    const apiUrl = process.env.NODE_ENV === 'production' 
+    ? `${process.env.REACT_APP_API_URL}/recipes` 
+    : 'http://localhost:3000/api/recipes';
+    
     const formData = new FormData();
     const recipeInfo = {
       recipeName: payload.recipeName,
@@ -181,8 +205,7 @@ export function* createRecipe({ payload }) {
 
     let res = yield axios.post(apiUrl, formData, { headers });
     let createdRecipe = res.data.data.recipe;
-    console.log(res.data)
-    console.log('createdRecipe ' + createRecipe)
+
     if (res.status === 201) {
       yield put(createRecipeSuccess(createdRecipe));
     } else {
