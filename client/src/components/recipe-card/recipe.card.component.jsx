@@ -11,6 +11,9 @@ const RecipeCard = ({
 }) => {
   const isUserLogged = useSelector((state) => state.user.userData);
   const myRecipe = Object.keys(isUserLogged).length && isUserLogged._id === user._id ? true : false;
+  const apiUrl = process.env.NODE_ENV === 'production' 
+  ? `${process.env.REACT_APP_API_URL}/recipes/recipeImageCover/${imageCover}` 
+  : `http://localhost:3000/api/recipes/recipeImageCover/${imageCover}`;
 
   return (
     <div className="recipe-card">
@@ -28,7 +31,7 @@ const RecipeCard = ({
             <button className="go-to-btn">Go To Recipe</button>
           </Link>
         </div>
-        <img crossOrigin="anonymous" src={`http://localhost:3000/api/recipes/recipeImageCover/${imageCover}`} alt="dish" />
+        <img crossOrigin="anonymous" src={apiUrl} alt="dish" />
       </div>
       <div className="recipe-name">
         <h3>{formatRecipeName(recipeName)}</h3>
