@@ -11,6 +11,10 @@
   padding: 30px;
 }
 
+.share-recipe-form-title {
+  margin-bottom: 15px;
+}
+
 .input-container {
   display: flex;
   align-items: center;
@@ -28,7 +32,7 @@
 .recipe-image-input {
   width: 350px;
   margin-bottom: 5px;
-  padding: 15px 5px;
+  padding: 10px 5px 15px 5px;
 }
 
 .share-input {
@@ -109,6 +113,26 @@
   width: fit-content;
   padding: 5px 15px;
   border-radius: 20px;
+}
+
+.recipe-image-cover h3 {
+  background-color: #bc79fb;
+  color: #fff;
+}
+
+.recipe-image-cover .recipe-image-wrapper {
+  width: 400px;
+  height: 300px;
+}
+
+.recipe-image-wrapper {
+  padding: 20px 0px 0px 5px;
+}
+
+.recipe-image-wrapper img {
+  width: 100%;
+  height: 100%;
+  border-radius: 3px;
 }
 
 .recipe-name-field h3 {

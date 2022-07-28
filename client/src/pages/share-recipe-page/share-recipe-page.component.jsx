@@ -20,6 +20,7 @@ const ShareRecipePage = () => {
   };
   const [recipeInfo, setRecipeInfo] = useState(recipeInfoInitialState);
   const [file, setFile] = useState();
+  const [imagePreview, setImagePreview] = useState();
   const [editMode, setEditMode] = useState(false);
   const [itemBeingEdited, setItemBeingEdited] = useState({ field: "", item: "", itemIdx: null });
   const [recipeSharedSuccess, setRecipeSharedSuccess] = useState(false);
@@ -45,6 +46,7 @@ const ShareRecipePage = () => {
 
   useEffect(() => {
     return () => {
+      URL.revokeObjectURL(file);
       dispatch(createRecipeSuccess({}));
     }
   }, []);
@@ -63,6 +65,7 @@ const ShareRecipePage = () => {
       dispatch(createRecipe(recipeObj));
       setServingsInputValue(0);
       setPreparationTimeInputValue(0);
+      setFile();
       setRecipeInfo({ ...recipeInfoInitialState });
     } else {
       setRecipeSharedFail(true); 
@@ -127,12 +130,13 @@ const ShareRecipePage = () => {
   const handleFileSelection = (e) => {
     const file = e.target.files[0];
     setFile(file);
+    setImagePreview(URL.createObjectURL(file));
   }
 
   return (
     <div className="share-recipe-container">
       <div className="share-recipe-form">
-        <div className="form-title">
+        <div className="form-title share-recipe-form-title">
           <h2>Share your recipe</h2>
         </div>
         <form onSubmit={(e) => handleSubmit(e)}>
@@ -234,7 +238,16 @@ const ShareRecipePage = () => {
           <div className="submit-btn-wrapper"><button type="submit" className="submit-btn">Share Recipe</button></div>
         </form>
       </div>
+
       <div className="share-recipe-info">
+        <div className="recipe-info-title recipe-image-cover">
+          <h3>Recipe Image Cover</h3>
+          {file && 
+          <div className="recipe-image-wrapper">
+            <img src={imagePreview}/>
+          </div>
+          }
+        </div>
         <div className="recipe-info-title recipe-name-field">
           <h3>Recipe Name</h3>
           {recipeInfo.recipeName.length ? 
