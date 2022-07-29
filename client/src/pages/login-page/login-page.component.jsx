@@ -12,8 +12,8 @@ import './login-page.styles.css';
 const LoginPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
-  const logInErrorMessage = useSelector((state) => state.user.logInErrorMessage);
+  const isLoggedIn = useSelector(state => state.user.isLoggedIn);
+  const logInErrorMessage = useSelector(state => state.user.logInErrorMessage);
   const [failedLog, setFailedLog] = useState({fail: false, errMessage: ''});
   
   useEffect(() => {

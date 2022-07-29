@@ -8,7 +8,7 @@ import "./most-liked-recipes.styles.css";
 import MoreButton from "../more-button/more-button.component";
 
 const MostLikedRecipes = () => {
-  const mostLikedRecipes = useSelector((state) => state.recipe.mostLikedRecipes);
+  const mostLikedRecipes = useSelector(state => state.recipe.mostLikedRecipes);
   const dispatch = useDispatch();
 
   useEffect(() => {

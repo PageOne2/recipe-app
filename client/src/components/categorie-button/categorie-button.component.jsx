@@ -4,7 +4,7 @@ import { changeCategorie } from "../../redux/recipeReducer/recipeReducer";
 import "./categorie-button.styles.css";
 
 const CategorieButton = () => {
-  const categorie = useSelector((state) => state.recipe.categorie);
+  const categorie = useSelector(state => state.recipe.categorie);
   const dispatch = useDispatch();
   
   return (

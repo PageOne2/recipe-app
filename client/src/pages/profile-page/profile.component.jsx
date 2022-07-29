@@ -12,8 +12,8 @@ import "./profile.styles.css"
 
 const ProfilePage = () => {
   const [tabIndex, setTabIndex] = useState(0);
-  const me = useSelector((state) => state.user.userData);
-  const myRecipes = useSelector((state) => state.user.myRecipes);
+  const me = useSelector(state => state.user.userData);
+  const myRecipes = useSelector(state => state.user.myRecipes);
   const dispatch = useDispatch();
 
   useEffect(() => {

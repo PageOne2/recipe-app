@@ -31,7 +31,7 @@ const ShareRecipePage = () => {
   const [servingsInputValue, setServingsInputValue] = useState(0); 
   const [preparationTimeInputValue, setPreparationTimeInputValue] = useState(0);
   const [editableItemInputValue, setEditableItemInputValue] = useState("");
-  const createdRecipe = useSelector((state) => state.user.createdRecipe);
+  const createdRecipe = useSelector(state => state.user.createdRecipe);
   const dispatch = useDispatch();
   
   useEffect(() => {

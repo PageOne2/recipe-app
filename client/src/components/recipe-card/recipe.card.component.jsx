@@ -9,7 +9,7 @@ import "./recipe.card.styles.css";
 const RecipeCard = ({
   item: { recipeName, likes, preparationTime, imageCover, user, _id }
 }) => {
-  const isUserLogged = useSelector((state) => state.user.userData);
+  const isUserLogged = useSelector(state => state.user.userData);
   const myRecipe = Object.keys(isUserLogged).length && isUserLogged._id === user._id ? true : false;
   const apiUrl = process.env.NODE_ENV === 'production' 
   ? `${process.env.REACT_APP_API_URL}/recipes/recipeImageCover/${imageCover}` 

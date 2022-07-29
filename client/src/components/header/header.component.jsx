@@ -7,8 +7,8 @@ import "./header.styles.css";
 
 const Header = () => {
   const dispatch = useDispatch();
-  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
-  const userName = useSelector((state) => state.user.userData);
+  const isLoggedIn = useSelector(state => state.user.isLoggedIn);
+  const userName = useSelector(state => state.user.userData);
 
   const handleClick = () => {
     Cookie.remove('jwt');

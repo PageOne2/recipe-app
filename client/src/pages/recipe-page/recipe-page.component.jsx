@@ -12,8 +12,8 @@ import "./recipe-page.styles.css";
 
 const RecipePage = () => {
   const params = useParams();
-  const recipe = useSelector((state) => state.recipe.recipeById);
-  const isUserLogged = useSelector((state) => state.user.userData);
+  const recipe = useSelector(state => state.recipe.recipeById);
+  const isUserLogged = useSelector(state => state.user.userData);
   const myRecipe = () => {
     if (Object.keys(recipe).length) {
       return Object.keys(isUserLogged).length && isUserLogged._id === recipe.user._id ? true : false;

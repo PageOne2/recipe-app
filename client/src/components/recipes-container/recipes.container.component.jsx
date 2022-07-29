@@ -5,7 +5,7 @@ import MostLikedRecipes from "../most-liked-recipes/most-liked-recipes.component
 import "./recipes.container.styles.css";
 
 const RecipesContainer = () => {
-  const categorie = useSelector((state) => state.recipe.categorie);
+  const categorie = useSelector(state => state.recipe.categorie);
 
   const loadCategorie = () => {
     if (categorie === "mostRecent") {

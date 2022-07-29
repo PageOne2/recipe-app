@@ -8,11 +8,11 @@ import {
 import "./more-button.styles.css";
 
 const MoreButton = () => {
-  const mostRecentPage = useSelector((state) => state.recipe.mostRecentPage);
-  const mostLikedPage = useSelector((state) => state.recipe.mostLikedPage);
-  const categorie = useSelector((state) => state.recipe.categorie);
-  const noResultsMostRecent = useSelector((state) => state.recipe.noResultsMostRecent);
-  const noResultsMostLiked = useSelector((state) => state.recipe.noResultsMostLiked);
+  const mostRecentPage = useSelector(state => state.recipe.mostRecentPage);
+  const mostLikedPage = useSelector(state => state.recipe.mostLikedPage);
+  const categorie = useSelector(state => state.recipe.categorie);
+  const noResultsMostRecent = useSelector(state => state.recipe.noResultsMostRecent);
+  const noResultsMostLiked = useSelector(state => state.recipe.noResultsMostLiked);
   const dispatch = useDispatch();
   const [btnState, setBtnState] = useState({ disabled: false, class: "more_btn" });
 

@@ -13,8 +13,8 @@ import "./signup.styles.css";
 const SignUpPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
-  const signUpErrorMessage = useSelector((state) => state.user.signUpErrorMessage);
+  const isLoggedIn = useSelector(state => state.user.isLoggedIn);
+  const signUpErrorMessage = useSelector(state => state.user.signUpErrorMessage);
   const [failedLog, setFailedLog] = useState({ fail: false, errMessage: '' });
 
   useEffect(() => {

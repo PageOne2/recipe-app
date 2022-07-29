@@ -15,7 +15,7 @@ import Cookies from 'js-cookie';
 import './App.css';
 
 function App() {
-  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+  const isLoggedIn = useSelector(state => state.user.isLoggedIn);
   const dispatch = useDispatch();
 
   useEffect(() => {

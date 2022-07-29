@@ -8,7 +8,7 @@ import { v4 as uuidv4 } from "uuid";
 import "./most-recent-recipes.styles.css";
 
 const MostRecentRecipes = () => {
-  const mostRecentRecipes = useSelector((state) => state.recipe.mostRecentRecipes);
+  const mostRecentRecipes = useSelector(state => state.recipe.mostRecentRecipes);
   const dispatch = useDispatch();  
 
   useEffect(() => {

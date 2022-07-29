@@ -6,7 +6,7 @@ import RecipesContainer from "../../components/recipes-container/recipes.contain
 import "./homepage.styles.css";
 
 const HomePage = () => {
-  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+  const isLoggedIn = useSelector(state => state.user.isLoggedIn);
   const navigate = useNavigate();
 
   const handleClick = () => {
