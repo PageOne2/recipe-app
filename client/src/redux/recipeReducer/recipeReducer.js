@@ -41,6 +41,13 @@ export const recipeReducer = createSlice({
         recipeById: action.payload
       }
     },
+    addRecentSharedRecipe: (state, action) => {
+      return {
+        ...state,
+        mostRecentRecipes: [action.payload, ...state.mostRecentRecipes],
+        mostLikedRecipes: [...state.mostLikedRecipes, action.payload]
+      }
+    },
     keepPage: (state, action) => {
       let newState = {};
       if (action.payload === 'mostRecent') {
@@ -58,6 +65,7 @@ export const {
   getMostRecentRecipesSuccess, 
   getMostLikedRecipesSuccess, 
   getRecipeByIdSuccess, 
+  addRecentSharedRecipe,
   keepPage 
 } = recipeReducer.actions
 

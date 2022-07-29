@@ -11,6 +11,7 @@ import {
   recipeDisliked,
   createRecipeSuccess
 } from './userReducer';
+import { addRecentSharedRecipe } from "../recipeReducer/recipeReducer";
 import Cookies from 'js-cookie';
 
 export function* logUser({payload}) {
@@ -208,6 +209,7 @@ export function* createRecipe({ payload }) {
 
     if (res.status === 201) {
       yield put(createRecipeSuccess(createdRecipe));
+      yield put(addRecentSharedRecipe(createdRecipe));
     } else {
       throw new Error("Something went very wrong!");
     }
