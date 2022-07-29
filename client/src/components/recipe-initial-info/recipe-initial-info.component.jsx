@@ -1,17 +1,18 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from 'react-router-dom';
 import { likeRecipe, dislikeRecipe } from "../../redux/redux-saga/sagaActions";
 import { userLikedRecipes } from "../../redux/userReducer/userReducer";
 
 import "./recipe-initial-info.styles.css"
 
 const RecipeInitialInfo = ({ id, myRecipe, likes, preparationTime }) => {
-  const [notLogged, setNotLogged] = useState(false);
   const [liked, setLiked] = useState(false);
   const [likesTotal, setLikesTotal] = useState(likes);
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
   const userLikes = useSelector((state) => state.user.userLikedRecipes);
   const interactedRecipes = useSelector((state) => state.user.interactedRecipes);
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -44,7 +45,7 @@ const RecipeInitialInfo = ({ id, myRecipe, likes, preparationTime }) => {
         setLiked(false);
       }
     } else {
-      setNotLogged(true);
+      navigate('/login');
     }
   }
 
@@ -62,7 +63,6 @@ const RecipeInitialInfo = ({ id, myRecipe, likes, preparationTime }) => {
         <span className="material-icons">timer</span>
         <span className="minutes">{preparationTime} MIN</span>
       </div>
-      {notLogged && <div className="not_logged">You are not logged in! Log In to like this recipe.</div>}
     </div>
   )
 }

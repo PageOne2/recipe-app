@@ -2,6 +2,7 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import RecipeInitialInfo from "../recipe-initial-info/recipe-initial-info.component";
 import recipeImage from "../../assets/default.jpg";
+import { formatRecipeName } from "../../utils/formatStr";
 
 import "./recipe.card.styles.css";
 
@@ -10,6 +11,9 @@ const RecipeCard = ({
 }) => {
   const isUserLogged = useSelector((state) => state.user.userData);
   const myRecipe = Object.keys(isUserLogged).length && isUserLogged._id === user._id ? true : false;
+  const apiUrl = process.env.NODE_ENV === 'production' 
+  ? `${process.env.REACT_APP_API_URL}/recipes/recipeImageCover/${imageCover}` 
+  : `http://localhost:3000/api/recipes/recipeImageCover/${imageCover}`;
 
   return (
     <div className="recipe-card">
@@ -27,10 +31,10 @@ const RecipeCard = ({
             <button className="go-to-btn">Go To Recipe</button>
           </Link>
         </div>
-        <img src={recipeImage} alt="dish" />
+        <img crossOrigin="anonymous" src={apiUrl} alt="dish" />
       </div>
       <div className="recipe-name">
-        <h3>{recipeName}</h3>
+        <h3>{formatRecipeName(recipeName)}</h3>
       </div>
       <RecipeInitialInfo id={_id} myRecipe={myRecipe} likes={likes} preparationTime={preparationTime} />
     </div>
