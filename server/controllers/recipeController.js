@@ -53,21 +53,39 @@ exports.getAllRecipes = catchAsync(async (req, res, next) => {
 })
 
 exports.createRecipe = catchAsync(async (req, res, next) => {
+  let recipeInfo;
   if (!req.body.user) req.body.user = req.user.id
-  const recipeInfoObj = JSON.parse(req.body.recipeInfo);
-  recipeInfoObj.imageCover = req.file.filename;
-  recipeInfoObj.user = req.body.user;
-  const recipe = await Recipe.create(recipeInfoObj);
-  const imageCoverUploadResult = await awsS3.uploadFile(req.file);
-  await unlinkFile(req.file.path);
 
-  res.status(201).json({
-    status: 'success',
-    data: {
-      recipe,
-      imageCoverPath: `/images/${imageCoverUploadResult.Key}`
-    }
-  })
+  if (!req.body.recipeInfo) recipeInfo = req.body;
+  else recipeInfo = JSON.parse(req.body.recipeInfo);
+
+  if (req.file) recipeInfo.imageCover = req.file.filename;
+  recipeInfo.user = req.body.user;
+  let recipe = await Recipe.create(recipeInfo);
+  recipe = await recipe.populate({ path: 'user', select: 'name photo' }); 
+
+  let imageCoverUploadResult;
+  if(req.file) {
+    imageCoverUploadResult = await awsS3.uploadFile(req.file);
+    await unlinkFile(req.file.path);
+  }
+
+  if (imageCoverUploadResult) {
+    res.status(201).json({
+      status: 'success',
+      data: {
+        recipe,
+        imageCoverPath: `/images/${imageCoverUploadResult.Key}`
+      }
+    })
+  } else {
+    res.status(201).json({
+      status: 'success',
+      data: {
+        recipe
+      }
+    })
+  }
 })
 
 exports.getRecipeImageCover = async (req, res, next) => {
@@ -76,7 +94,7 @@ exports.getRecipeImageCover = async (req, res, next) => {
 }
 
 exports.getRecipe = catchAsync(async (req, res, next) => {
-  const recipe = await Recipe.findById(req.params.id).populate('user')
+  const recipe = await Recipe.findById(req.params.id)
 
   if (!recipe) {
     return next(new AppError('No recipe with this ID found!', 404))
