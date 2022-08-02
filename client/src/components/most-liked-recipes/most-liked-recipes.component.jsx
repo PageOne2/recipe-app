@@ -13,7 +13,7 @@ const MostLikedRecipes = () => {
 
   useEffect(() => {
     if (!mostLikedRecipes.length) dispatch(getMostLikedRecipes(1));
-  }, [])
+  }, [mostLikedRecipes])
 
   return (
     <div className="categorie-container">
