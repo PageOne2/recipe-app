@@ -9,8 +9,9 @@ import "./recipe.card.styles.css";
 const RecipeCard = ({
   item: { recipeName, likes, preparationTime, imageCover, user, _id }
 }) => {
-  const isUserLogged = useSelector(state => state.user.userData);
-  const myRecipe = Object.keys(isUserLogged).length && isUserLogged._id === user._id ? true : false;
+  const isLoggedIn = useSelector(state => state.user.isLoggedIn);
+  const loggedInUser = useSelector(state => state.user.userData);
+  const myRecipe = isLoggedIn && loggedInUser._id === user._id ? true : false;
   const apiUrl = process.env.NODE_ENV === 'production' 
   ? `${process.env.REACT_APP_API_URL}/recipes/recipeImageCover/${imageCover}` 
   : `http://localhost:3000/api/recipes/recipeImageCover/${imageCover}`;
@@ -23,7 +24,7 @@ const RecipeCard = ({
           src={`http://localhost:3000/img/user/${user.photo}`}
           alt="user"
         />
-        <h4 className={myRecipe ? "user-name-me" : "user-name"}>{user.name}</h4>
+        <h4 className={myRecipe ? "user-name-me" : "user-name"}>{myRecipe ? "You" : user.name}</h4>
       </div>
       <div className="recipe-image">
         <div className="overlay">
