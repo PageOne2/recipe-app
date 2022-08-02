@@ -10,7 +10,6 @@ const sagaActionTypes = {
     CREATE_RECIPE_START: 'CREATE_RECIPE_START',
     LIKE_RECIPE: 'LIKE_RECIPE',
     DISLIKE_RECIPE: 'DISLIKE_RECIPE',
-    KEEP_PAGE: 'KEEP_PAGE'
 }
 
 export default sagaActionTypes

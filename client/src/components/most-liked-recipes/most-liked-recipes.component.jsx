@@ -13,22 +13,15 @@ const MostLikedRecipes = () => {
 
   useEffect(() => {
     if (!mostLikedRecipes.length) dispatch(getMostLikedRecipes(1));
-  }, [mostLikedRecipes])
-
-  const loadRecipes = () => {
-    if (mostLikedRecipes.length) {
-      const existingCardsIds = [];
-      return mostLikedRecipes.map((item) => {
-        if (existingCardsIds.includes(item._id)) return; 
-        existingCardsIds.push(item._id);
-        return <RecipeCard key={uuidv4()} item={item}/>
-      });
-    }
-  }
+  }, [])
 
   return (
     <div className="categorie-container">
-      <div className="recipe-cards">{loadRecipes()}</div>
+      <div className="recipe-cards">
+        {mostLikedRecipes && mostLikedRecipes.map((item) => (
+          <RecipeCard key={uuidv4()} item={item} />
+        ))}
+      </div>
       <MoreButton />
     </div>
   )

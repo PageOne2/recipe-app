@@ -17,10 +17,7 @@ const recipeSchema = mongoose.Schema({
         type: Number,
         required: [true, "A recipe must have the approximated time until it's ready"]
     },
-    imageCover: {
-        type: String,
-        required: [true, 'A recipe must have a image cover!']
-    },
+    imageCover: String,
     servings: Number,
     likes: {
         type: Number,

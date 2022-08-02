@@ -52,8 +52,3 @@ export const dislikeRecipe = (id) => ({
   type: sagaActionTypes.DISLIKE_RECIPE,
   payload: id
 })
-
-export const keepPage = (page) => ({
-  type: sagaActionTypes.KEEP_PAGE,
-  payload: page
-})

@@ -4,7 +4,7 @@ import {
   getMostRecentRecipesSuccess,
   getMostLikedRecipesSuccess,
   getRecipeByIdSuccess,
-  keepPage
+  setRequesting
 } from './recipeReducer';
 
 export function* getMostRecent({ payload }) {
@@ -20,11 +20,10 @@ export function* getMostRecent({ payload }) {
       }
     });
     let res = yield data.json();
+    yield put(setRequesting(false))
     if (data.status === 200) {
       if (res.data.recipes.length) {
         yield put(getMostRecentRecipesSuccess(res.data.recipes));
-      } else {
-        yield put(keepPage('mostRecent'));
       }
     }
   } catch (err) {
@@ -45,11 +44,10 @@ export function* getMostLiked({ payload }) {
       }
     });
     let res = yield data.json();
+    yield put(setRequesting(false));
     if (data.status === 200) {
       if (res.data.recipes.length) {
         yield put(getMostLikedRecipesSuccess(res.data.recipes));
-      } else {
-        yield put(keepPage('mostLiked'));
       }
     }
   } catch (err) {
