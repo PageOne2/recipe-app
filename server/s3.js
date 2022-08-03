@@ -37,3 +37,16 @@ exports.getFile = async (fileKey) => {
     return undefined;
   }
 }
+
+exports.deleteFile = async (fileKey) => {
+  try {
+    const deleteParams = {
+      Bucket: awsBucketName,
+      Key: fileKey
+    }
+    await s3.headObject(deleteParams).promise();
+    return s3.deleteObject(deleteParams).promise();
+  } catch (err) {
+    return undefined
+  }
+}
