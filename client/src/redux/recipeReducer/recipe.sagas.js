@@ -4,8 +4,10 @@ import {
   getMostRecentRecipesSuccess,
   getMostLikedRecipesSuccess,
   getRecipeByIdSuccess,
+  deleteRecipeSuccess,
   setRequesting
 } from './recipeReducer';
+import Cookies from 'js-cookie';
 
 export function* getMostRecent({ payload }) {
   try {
@@ -76,6 +78,28 @@ export function* getRecipeById({ payload }) {
   }
 }
 
+export function* deleteRecipe({ payload }) {
+  try {
+    const apiUrl = process.env.NODE_ENV === 'production' 
+    ? `${process.env.REACT_APP_API_URL}/recipes/${payload}` 
+    : `http://localhost:3000/api/recipes/${payload}`;
+
+    const res = yield fetch(apiUrl, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + Cookies.get('jwt')
+      }
+    }) 
+    if (res.status) {
+      yield put(deleteRecipeSuccess({ id: payload }))
+    }
+  } catch (err) {
+
+  }
+ 
+}
+
 export function* onGetAllRecipes() {
   yield takeLatest(SagaActionTypes.GET_MOST_RECENT_RECIPES_START, getMostRecent)
 }
@@ -88,10 +112,15 @@ export function* onGetById() {
   yield takeLatest(SagaActionTypes.GET_RECIPE_BY_ID_START, getRecipeById)
 }
 
+export function* onDeleteRecipe() {
+  yield takeLatest(SagaActionTypes.DELETE_RECIPE_START, deleteRecipe)
+}
+
 export function* recipeSagas() {
   yield all([
     call(onGetAllRecipes),
     call(onGetMostLiked),
-    call(onGetById)
+    call(onGetById),
+    call(onDeleteRecipe)
   ])
 } 

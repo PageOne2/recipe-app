@@ -1,16 +1,24 @@
-import { useSelector } from "react-redux";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import RecipeInitialInfo from "../recipe-initial-info/recipe-initial-info.component";
 import recipeImage from "../../assets/default.jpg";
+// import MoreVertIcon from '@mui/icons-material/MoreVert';
+import Delete from "@material-ui/icons/Delete";
+import Edit from "@material-ui/icons/Edit";
+import MoreVertIcon from "@material-ui/icons/MoreVertSharp"
 import { formatRecipeName } from "../../utils/formatStr";
+import { deleteRecipe } from "../../redux/redux-saga/sagaActions";
 
 import "./recipe.card.styles.css";
 
 const RecipeCard = ({
   item: { recipeName, likes, preparationTime, imageCover, user, _id }
 }) => {
+  const dispatch = useDispatch();
   const isLoggedIn = useSelector(state => state.user.isLoggedIn);
   const loggedInUser = useSelector(state => state.user.userData);
+  const [more, setMore] = useState(false);
   const myRecipe = isLoggedIn && loggedInUser._id === user._id ? true : false;
   const apiUrl = process.env.NODE_ENV === 'production' 
   ? `${process.env.REACT_APP_API_URL}/recipes/recipeImageCover/${imageCover}` 
@@ -24,7 +32,19 @@ const RecipeCard = ({
           src={`http://localhost:3000/img/user/${user.photo}`}
           alt="user"
         />
-        <h4 className={myRecipe ? "user-name-me" : "user-name"}>{myRecipe ? "You" : user.name}</h4>
+        <div className="user-name-wrapper">
+          <h4 className={myRecipe ? "user-name-me" : "user-name"}>{myRecipe ? "You" : user.name}</h4>
+          {isLoggedIn && myRecipe 
+            ? <MoreVertIcon className="more-vert-icon" onClick={() => setMore(!more)}/>
+            : null
+          }
+        </div>
+        {more &&
+          <div className="more-user-actions">
+            <div className="more-actions-delete" onClick={() => dispatch(deleteRecipe(_id))}>Delete Recipe <Delete className="more-actions-delete-icon"/></div>
+            <div className="more-actions-edit">Update Recipe <Edit className="more-actions-edit-icon"/></div>
+          </div>
+        }
       </div>
       <div className="recipe-image">
         <div className="overlay">

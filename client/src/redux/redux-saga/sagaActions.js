@@ -43,6 +43,11 @@ export const createRecipe = (recipeInfo) => ({
   payload: recipeInfo
 })
 
+export const deleteRecipe = (id) => ({
+  type: sagaActionTypes.DELETE_RECIPE_START,
+  payload: id
+})
+
 export const likeRecipe = (id) => ({
   type: sagaActionTypes.LIKE_RECIPE,
   payload: id
