@@ -302,7 +302,6 @@ const ShareRecipePage = () => {
         <div className="item">
           <div className="item-input">
             <input 
-            className=""
             type="text"
             placeholder={itemBeingEdited.item}
             value={editableItemInputValue}
@@ -316,18 +315,15 @@ const ShareRecipePage = () => {
         <div className="close-edit-btn">
           <Close className="close-edit-icon" onClick={() => setEditMode(false)}/>
         </div>
-      </div>
-      }
+      </div>}
       {recipeSharedSuccess &&
       <div className="recipe-page-modal success-modal">
         <div>Recipe Created Successfully!</div>
-      </div>
-      }
+      </div>}
       {recipeSharedFail &&
       <div className="recipe-page-modal error-modal">
         <div>All fields are required!</div>
-      </div>
-      }
+      </div>}
     </div>
   )
 }

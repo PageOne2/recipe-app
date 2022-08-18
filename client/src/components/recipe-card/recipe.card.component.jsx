@@ -42,7 +42,9 @@ const RecipeCard = ({
         {more &&
           <div className="more-user-actions">
             <div className="more-actions-delete" onClick={() => dispatch(deleteRecipe(_id))}>Delete Recipe <Delete className="more-actions-delete-icon"/></div>
-            <div className="more-actions-edit">Update Recipe <Edit className="more-actions-edit-icon"/></div>
+            <Link to={`recipe/updateRecipe/${_id}`}>
+              <div className="more-actions-edit">Update Recipe <Edit className="more-actions-edit-icon"/></div>
+            </Link>
           </div>
         }
       </div>

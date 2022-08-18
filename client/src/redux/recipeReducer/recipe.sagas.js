@@ -8,6 +8,8 @@ import {
   setRequesting
 } from './recipeReducer';
 import Cookies from 'js-cookie';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
 export function* getMostRecent({ payload }) {
   try {
@@ -96,8 +98,30 @@ export function* deleteRecipe({ payload }) {
     }
   } catch (err) {
 
+  } 
+}
+
+export function* updateRecipe({ payload }) {
+  try {
+    const apiUrl = process.env.NODE_ENV === 'production' 
+    ? `${process.env.REACT_APP_API_URL}/recipes/${payload.id}` 
+    : `http://localhost:3000/api/recipes/${payload.id}`;
+    
+    const formData = new FormData();
+
+    formData.append("recipeInfo", JSON.stringify(payload.updatedRecipe));
+    if (payload.imageCover) formData.append("imageCover", payload.imageCover);
+
+    const headers = { 'Authorization': 'Bearer ' + Cookies.get('jwt') };
+    yield axios.patch(apiUrl, formData, { headers });
+    toast.success("Updated Successfully!", {
+      position: toast.POSITION.TOP_CENTER
+    });
+  } catch (err) {
+    toast.error("Unable to Update!", {
+      position: toast.POSITION.TOP_CENTER
+    });
   }
- 
 }
 
 export function* onGetAllRecipes() {
@@ -116,11 +140,16 @@ export function* onDeleteRecipe() {
   yield takeLatest(SagaActionTypes.DELETE_RECIPE_START, deleteRecipe)
 }
 
+export function* onUpdateRecipe() {
+  yield takeLatest(SagaActionTypes.UPDATE_RECIPE_START, updateRecipe)
+}
+
 export function* recipeSagas() {
   yield all([
     call(onGetAllRecipes),
     call(onGetMostLiked),
     call(onGetById),
-    call(onDeleteRecipe)
+    call(onDeleteRecipe),
+    call(onUpdateRecipe)
   ])
 } 

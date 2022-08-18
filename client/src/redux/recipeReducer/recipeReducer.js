@@ -9,7 +9,7 @@ export const recipeReducer = createSlice({
     categorie: 'mostRecent',
     mostRecentRecipes: [],
     mostLikedRecipes: [],
-    recipeById: {},
+    recipeById: {}
   },
   reducers: {
     changeCategorie: (state, action) => {
@@ -62,6 +62,12 @@ export const recipeReducer = createSlice({
         recipeById: action.payload
       }
     },
+    updateRecipeSuccess: (state, action) => {
+      return {
+        ...state,
+        recipeById: action.payload
+      }
+    },
     deleteRecipeSuccess: (state, action) => {
       return {
         ...state,
@@ -89,6 +95,7 @@ export const {
   getMostRecentRecipesSuccess, 
   getMostLikedRecipesSuccess, 
   getRecipeByIdSuccess, 
+  updateRecipeSuccess,
   deleteRecipeSuccess,
   addRecentSharedRecipe,
   setRequesting
