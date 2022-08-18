@@ -63,14 +63,10 @@ exports.createRecipe = catchAsync(async (req, res, next) => {
   recipeInfo.user = req.body.user;
   let recipe = await Recipe.create(recipeInfo);
   recipe = await recipe.populate({ path: 'user', select: 'name photo' }); 
-
-  let imageCoverUploadResult;
+  
   if(req.file) {
-    imageCoverUploadResult = await awsS3.uploadFile(req.file);
+    const imageCoverUploadResult = await awsS3.uploadFile(req.file);
     await unlinkFile(req.file.path);
-  }
-
-  if (imageCoverUploadResult) {
     res.status(201).json({
       status: 'success',
       data: {
@@ -83,6 +79,43 @@ exports.createRecipe = catchAsync(async (req, res, next) => {
       status: 'success',
       data: {
         recipe
+      }
+    })
+  }
+})
+
+exports.updateRecipe = catchAsync(async (req, res, next) => {
+  let recipeInfo;
+  if (!req.body.recipeInfo) recipeInfo = req.body;
+  else recipeInfo = JSON.parse(req.body.recipeInfo);
+
+  let imageCoverUploadResult;
+  if (req.file) {
+    const { imageCover } = await Recipe.findById(req.params.id).select('imageCover');
+    if (imageCover) await awsS3.deleteFile(imageCover);
+    recipeInfo.imageCover = req.file.filename;
+    imageCoverUploadResult = await awsS3.uploadFile(req.file);
+    await unlinkFile(req.file.path);
+  }
+
+  const updatedRecipe = await Recipe.findByIdAndUpdate(req.params.id, recipeInfo, {
+    new: true,
+    runValidators: true
+  })
+
+  if (imageCoverUploadResult) {
+    res.status(200).json({
+      status: 'succes',
+      data: {
+        updatedRecipe,
+        imageCoverPath: `images/${imageCoverUploadResult.Key}`
+      }
+    })
+  } else {
+    res.status(200).json({
+      status: 'succes',
+      data: {
+        updatedRecipe
       }
     })
   }
@@ -153,19 +186,6 @@ exports.isUserRecipe = operation => catchAsync(async (req, res, next) => {
   next()
 })
 
-exports.updateRecipe = catchAsync(async (req, res, next) => {
-  const updatedRecipe = await Recipe.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-    runValidators: true
-  })
-
-  res.status(200).json({
-    status: 'succes',
-    data: {
-      updatedRecipe
-    }
-  })
-})
 
 exports.deleteRecipe = catchAsync(async (req, res, next) => {
   const { imageCover } = await Recipe.findByIdAndDelete(req.params.id);
