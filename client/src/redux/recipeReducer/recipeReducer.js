@@ -9,7 +9,8 @@ export const recipeReducer = createSlice({
     categorie: 'mostRecent',
     mostRecentRecipes: [],
     mostLikedRecipes: [],
-    recipeById: {}
+    recipeById: {},
+    interactedRecipes: []
   },
   reducers: {
     changeCategorie: (state, action) => {
@@ -81,6 +82,20 @@ export const recipeReducer = createSlice({
         mostRecentRecipes: [action.payload, ...state.mostRecentRecipes],
       }
     },
+    recipeLiked: (state, action) => {
+      const recipeIdx = state.interactedRecipes.findIndex(x => x.id === action.payload.id);
+      const newArray = [...state.interactedRecipes];
+      if (recipeIdx > -1) newArray[recipeIdx].likes = action.payload.likes;
+      else newArray.push(action.payload);
+      state.interactedRecipes = newArray;
+    },
+    recipeDisliked: (state, action) => {
+      const recipeIdx = state.interactedRecipes.findIndex(x => x.id === action.payload.id);
+      const newArray = [...state.interactedRecipes];
+      if (recipeIdx > -1) newArray[recipeIdx].likes = action.payload.likes;
+      else newArray.push(action.payload);
+      state.interactedRecipes = newArray;
+    },
     setRequesting: (state, action) => {
       return {
         ...state,
@@ -98,6 +113,8 @@ export const {
   updateRecipeSuccess,
   deleteRecipeSuccess,
   addRecentSharedRecipe,
+  recipeLiked, 
+  recipeDisliked, 
   setRequesting
 } = recipeReducer.actions
 

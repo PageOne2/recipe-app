@@ -1,4 +1,3 @@
-import axios from "axios";
 import SagaActionTypes from '../redux-saga/sagaActionTypes';
 import { takeLatest, put, call, all } from 'redux-saga/effects';
 import { 
@@ -6,13 +5,9 @@ import {
   logInUserFailure, 
   signUpUserFailure, 
   userLikedRecipes, 
-  getMyRecipesSuccess,
-  recipeLiked, 
-  recipeDisliked
+  getMyRecipesSuccess
 } from './userReducer';
-import { addRecentSharedRecipe } from "../recipeReducer/recipeReducer";
 import Cookies from 'js-cookie';
-import { toast } from 'react-toastify';
 
 export function* logUser({payload}) {
   try {
@@ -140,91 +135,6 @@ export function* getMyRecipes() {
   }
 }
 
-export function* likeRecipe({payload}) {
-  try {
-    const apiUrl = process.env.NODE_ENV === 'production' 
-    ? `${process.env.REACT_APP_API_URL}/users/likeRecipe/${payload}` 
-    : `http://localhost:3000/api/users/likeRecipe/${payload}`;
-
-    let data = yield fetch(apiUrl, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + Cookies.get('jwt')
-      }
-    });
-    let res = yield data.json();
-    if (data.status === 200) {
-      yield put(recipeLiked({ id: payload, likes: res.likes }));
-    }
-  } catch (err) {
-
-  }
-}
-
-export function* dislikeRecipe({payload}) {
-  try {
-    const apiUrl = process.env.NODE_ENV === 'production' 
-    ? `${process.env.REACT_APP_API_URL}/users/dislikeRecipe/${payload}` 
-    : `http://localhost:3000/api/users/dislikeRecipe/${payload}`;
-
-    let data = yield fetch(apiUrl, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + Cookies.get('jwt')
-      }
-    });
-    let res = yield data.json();
-    if (data.status === 200) {
-      yield put(recipeDisliked({ id: payload, likes: res.likes }));
-    }
-  } catch (err) {
-
-  }
-}
-
-export function* createRecipe({ payload }) {
-  try {
-    const apiUrl = process.env.NODE_ENV === 'production' 
-    ? `${process.env.REACT_APP_API_URL}/recipes` 
-    : 'http://localhost:3000/api/recipes';
-    
-    const formData = new FormData();
-    const recipeInfo = {
-      recipeName: payload.recipeName,
-      ingredients: payload.ingredients,
-      method: payload.method,
-      servings: payload.servings,
-      preparationTime: payload.preparationTime,
-    };
-
-    formData.append("recipeInfo", JSON.stringify(recipeInfo));
-    formData.append("imageCover", payload.imageCover);
-
-    const headers = { 'Authorization': 'Bearer ' + Cookies.get('jwt') };
-
-    const res = yield toast.promise(
-      axios.post(apiUrl, formData, { headers }),
-      {
-        pending: 'Sharing your recipe...',
-        success: 'Recipe Shared Successfully!',
-        error: 'Unable to share your recipe!'
-      },
-      {
-        position: toast.POSITION.TOP_CENTER
-      }
-    );
-
-    const createdRecipe = res.data.data.recipe;
-    yield put(addRecentSharedRecipe(createdRecipe));
-  } catch (err) {
-    toast.error("Unable to share your recipe!", {
-      position: toast.POSITION.TOP_CENTER
-    });
-  }
-}
-
 export function* onLogUser() {
   yield takeLatest(SagaActionTypes.LOG_USER, logUser);
 }
@@ -245,27 +155,12 @@ export function* onGetMyRecipes() {
   yield takeLatest(SagaActionTypes.GET_MY_RECIPES_START, getMyRecipes);
 }
 
-export function* onLikeRecipe() {
-  yield takeLatest(SagaActionTypes.LIKE_RECIPE, likeRecipe);
-}
-
-export function* onDislikeRecipe() {
-  yield takeLatest(SagaActionTypes.DISLIKE_RECIPE, dislikeRecipe);
-}
-
-export function* onCreateRecipe() {
-  yield takeLatest(SagaActionTypes.CREATE_RECIPE_START, createRecipe)
-}
-
 export function* userSagas() {
   yield all([
     call(onLogUser),
     call(onSignUp),
     call(onGetUser),
     call(onUpdateUserPassword),
-    call(onGetMyRecipes),
-    call(onLikeRecipe),
-    call(onDislikeRecipe),
-    call(onCreateRecipe)
+    call(onGetMyRecipes)
   ])
 }

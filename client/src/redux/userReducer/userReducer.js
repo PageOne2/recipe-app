@@ -8,8 +8,7 @@ export const userReducer = createSlice({
     signUpErrorMessage: '',
     userLikedRecipes: [],
     myRecipes: [],
-    userData: {},
-    interactedRecipes: []
+    userData: {}
   },
   reducers: {
     getUserSuccess: (state, action) => {
@@ -46,20 +45,6 @@ export const userReducer = createSlice({
         myRecipes: action.payload
       }
     },
-    recipeLiked: (state, action) => {
-      const recipeIdx = state.interactedRecipes.findIndex(x => x.id === action.payload.id);
-      const newArray = [...state.interactedRecipes];
-      if (recipeIdx > -1) newArray[recipeIdx].likes = action.payload.likes;
-      else newArray.push(action.payload);
-      state.interactedRecipes = newArray;
-    },
-    recipeDisliked: (state, action) => {
-      const recipeIdx = state.interactedRecipes.findIndex(x => x.id === action.payload.id);
-      const newArray = [...state.interactedRecipes];
-      if (recipeIdx > -1) newArray[recipeIdx].likes = action.payload.likes;
-      else newArray.push(action.payload);
-      state.interactedRecipes = newArray;
-    },
     logOut: (state, action) => {}
   }
 })
@@ -70,8 +55,7 @@ export const {
   signUpUserFailure, 
   userLikedRecipes, 
   getMyRecipesSuccess,
-  recipeLiked, 
-  recipeDisliked, 
-  logOut } = userReducer.actions;
+  logOut 
+} = userReducer.actions;
 
 export default userReducer.reducer;

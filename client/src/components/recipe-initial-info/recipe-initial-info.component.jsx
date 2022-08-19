@@ -11,7 +11,7 @@ const RecipeInitialInfo = ({ id, myRecipe, likes, preparationTime }) => {
   const [likesTotal, setLikesTotal] = useState(likes);
   const isLoggedIn = useSelector(state => state.user.isLoggedIn);
   const userLikes = useSelector(state => state.user.userLikedRecipes);
-  const interactedRecipes = useSelector(state => state.user.interactedRecipes);
+  const interactedRecipes = useSelector(state => state.recipe.interactedRecipes);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
