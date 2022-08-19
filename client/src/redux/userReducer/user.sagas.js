@@ -8,11 +8,11 @@ import {
   userLikedRecipes, 
   getMyRecipesSuccess,
   recipeLiked, 
-  recipeDisliked,
-  createRecipeSuccess
+  recipeDisliked
 } from './userReducer';
 import { addRecentSharedRecipe } from "../recipeReducer/recipeReducer";
 import Cookies from 'js-cookie';
+import { toast } from 'react-toastify';
 
 export function* logUser({payload}) {
   try {
@@ -204,17 +204,24 @@ export function* createRecipe({ payload }) {
 
     const headers = { 'Authorization': 'Bearer ' + Cookies.get('jwt') };
 
-    let res = yield axios.post(apiUrl, formData, { headers });
-    let createdRecipe = res.data.data.recipe;
+    const res = yield toast.promise(
+      axios.post(apiUrl, formData, { headers }),
+      {
+        pending: 'Sharing your recipe...',
+        success: 'Recipe Shared Successfully!',
+        error: 'Unable to share your recipe!'
+      },
+      {
+        position: toast.POSITION.TOP_CENTER
+      }
+    );
 
-    if (res.status === 201) {
-      yield put(createRecipeSuccess(createdRecipe));
-      yield put(addRecentSharedRecipe(createdRecipe));
-    } else {
-      throw new Error("Something went very wrong!");
-    }
+    const createdRecipe = res.data.data.recipe;
+    yield put(addRecentSharedRecipe(createdRecipe));
   } catch (err) {
-    console.log(err.message);
+    toast.error("Unable to share your recipe!", {
+      position: toast.POSITION.TOP_CENTER
+    });
   }
 }
 

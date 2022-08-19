@@ -113,10 +113,17 @@ export function* updateRecipe({ payload }) {
     if (payload.imageCover) formData.append("imageCover", payload.imageCover);
 
     const headers = { 'Authorization': 'Bearer ' + Cookies.get('jwt') };
-    yield axios.patch(apiUrl, formData, { headers });
-    toast.success("Updated Successfully!", {
-      position: toast.POSITION.TOP_CENTER
-    });
+    yield toast.promise(
+      axios.patch(apiUrl, formData, { headers }),
+      {
+        pending: 'Updating...',
+        success: 'Updated Successfully!',
+        error: 'Unable to update!'
+      },
+      {
+        position: toast.POSITION.TOP_CENTER
+      }
+    );
   } catch (err) {
     toast.error("Unable to Update!", {
       position: toast.POSITION.TOP_CENTER

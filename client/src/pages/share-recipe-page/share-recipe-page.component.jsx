@@ -1,9 +1,9 @@
 import { useEffect ,useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
 import { createRecipe } from "../../redux/redux-saga/sagaActions";
 import { formatRecipeName } from "../../utils/formatStr";
-import { createRecipeSuccess } from "../../redux/userReducer/userReducer";
+import { ToastContainer, toast } from "react-toastify";
 import Delete from "@material-ui/icons/Delete";
 import Edit from "@material-ui/icons/Edit";
 import Close from "@material-ui/icons/Close";
@@ -23,31 +23,20 @@ const ShareRecipePage = () => {
   const [imagePreview, setImagePreview] = useState();
   const [editMode, setEditMode] = useState(false);
   const [itemBeingEdited, setItemBeingEdited] = useState({ field: "", item: "", itemIdx: null });
-  const [recipeSharedSuccess, setRecipeSharedSuccess] = useState(false);
-  const [recipeSharedFail, setRecipeSharedFail] = useState(false);
   const [recipeNameInputValue, setRecipeNameInputValue] = useState("");
   const [ingredientInputValue, setIngredientInputValue] = useState("");
   const [methodInputValue, setMethodInputValue] = useState("");
   const [servingsInputValue, setServingsInputValue] = useState(0); 
   const [preparationTimeInputValue, setPreparationTimeInputValue] = useState(0);
   const [editableItemInputValue, setEditableItemInputValue] = useState("");
-  const createdRecipe = useSelector(state => state.user.createdRecipe);
   const dispatch = useDispatch();
-  
-  useEffect(() => {
-    if (Object.keys(createdRecipe).length) {
-      if (recipeSharedFail) setRecipeSharedFail(false);
-      setRecipeSharedSuccess(true);
-      setTimeout(() => {
-        setRecipeSharedSuccess(false);
-      }, 5000);
-    }
-  }, [createdRecipe]);
+  const recipeShareFail = () => toast.error("All fields are required!", {
+    position: toast.POSITION.TOP_CENTER
+  });
 
   useEffect(() => {
     return () => {
       URL.revokeObjectURL(file);
-      dispatch(createRecipeSuccess({}));
     }
   }, []);
 
@@ -68,10 +57,7 @@ const ShareRecipePage = () => {
       setFile();
       setRecipeInfo({ ...recipeInfoInitialState });
     } else {
-      setRecipeSharedFail(true); 
-      setTimeout(() => {
-        setRecipeSharedFail(false);
-      }, 4000)
+      recipeShareFail();
     }
   }
 
@@ -135,6 +121,7 @@ const ShareRecipePage = () => {
 
   return (
     <div className="share-recipe-container">
+      <ToastContainer />
       <div className="share-recipe-form">
         <div className="form-title share-recipe-form-title">
           <h2>Share your recipe</h2>
@@ -315,14 +302,6 @@ const ShareRecipePage = () => {
         <div className="close-edit-btn">
           <Close className="close-edit-icon" onClick={() => setEditMode(false)}/>
         </div>
-      </div>}
-      {recipeSharedSuccess &&
-      <div className="recipe-page-modal success-modal">
-        <div>Recipe Created Successfully!</div>
-      </div>}
-      {recipeSharedFail &&
-      <div className="recipe-page-modal error-modal">
-        <div>All fields are required!</div>
       </div>}
     </div>
   )
