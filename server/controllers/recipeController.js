@@ -188,7 +188,7 @@ exports.updateRecipe = catchAsync(async (req, res, next) => {
 
 exports.deleteRecipe = catchAsync(async (req, res, next) => {
   const { imageCover } = await Recipe.findByIdAndDelete(req.params.id);
-  if (imageCover) await awsS3.deleteFile(imageCover);
+  if (imageCover && imageCover !== "default.jpg") await awsS3.deleteFile(imageCover);
 
   res.status(204).json({
     status: 'success',
