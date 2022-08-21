@@ -119,25 +119,3 @@ input[type=number]::-webkit-outer-spin-button {
 .share-recipe-info::-webkit-scrollbar-thumb:hover {
   background: #a3a3a3; 
 }
-
-.recipe-page-modal {
-  position: absolute;
-  margin-top: 5px;
-  font-size: 20px;
-  padding: 25px 35px;
-  border: 2px solid #e5e5e5;
-  border-radius: 5px;
-  box-shadow: -3px 5px 8px 0px #f3f3f3;
-}
-
-.recipe-page-modal.success-modal {
-  background-color: #0ecf72;
-  color: #fff;
-  border-color: #0bc96e;
-}
-
-.recipe-page-modal.error-modal {
-  background-color: #f55c5c;
-  color: #fff;
-  border-color: red;
-}

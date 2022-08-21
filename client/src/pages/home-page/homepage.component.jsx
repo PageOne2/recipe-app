@@ -1,8 +1,10 @@
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 import CategorieButton from "../../components/categorie-button/categorie-button.component"
 import RecipesContainer from "../../components/recipes-container/recipes.container.component";
 
+import "react-toastify/dist/ReactToastify.css";
 import "./homepage.styles.css";
 
 const HomePage = () => {
@@ -19,6 +21,7 @@ const HomePage = () => {
 
   return (
     <div className="homepage">
+      <ToastContainer />
       <div className="homepage-btns">
         <CategorieButton />
         <div className="share-recipe-btn">

@@ -1,41 +1,28 @@
-import { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import { signUp } from "../../redux/redux-saga/sagaActions";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom"; 
-import { signUpUserFailure } from "../../redux/userReducer/userReducer";
-import ErrorModal from "../../components/error-modal/error.modal.component";
+import { ToastContainer } from "react-toastify";
 
+import "react-toastify/dist/ReactToastify.css";
 import "./signup.styles.css";
 
 const SignUpPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const isLoggedIn = useSelector(state => state.user.isLoggedIn);
-  const signUpErrorMessage = useSelector(state => state.user.signUpErrorMessage);
-  const [failedLog, setFailedLog] = useState({ fail: false, errMessage: '' });
 
   useEffect(() => {
     if (isLoggedIn) {
       navigate("/");
-    } else if (signUpErrorMessage) {
-      setFailedLog({ fail: true, errMessage: signUpErrorMessage });
-    } else {
-      setFailedLog({ fail: false, errMessage: '' })
     }
-  }, [isLoggedIn, signUpErrorMessage]);
-
-  useEffect(() => {
-    return () => {
-      dispatch(signUpUserFailure(''));
-    }
-  }, []);
+  }, [isLoggedIn]);
 
   return (
     <div className="signup-page">
-      <ErrorModal showModal={failedLog.fail} errMessage={failedLog.errMessage} signUpPage={true}/>
+      <ToastContainer />
       <div className="form">
         <div className="form-title">
           <h2>Sign Up</h2>

@@ -8,6 +8,7 @@ import Delete from "@material-ui/icons/Delete";
 import Edit from "@material-ui/icons/Edit";
 import Close from "@material-ui/icons/Close";
 
+import "react-toastify/dist/ReactToastify.css";
 import "./share-recipe-page.styles.css";
 
 const ShareRecipePage = () => {

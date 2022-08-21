@@ -7,7 +7,9 @@ import * as Yup from "yup";
 import profilePic from "../../assets/user-profile.png";
 import RecipeCard from "../../components/recipe-card/recipe.card.component";
 import { updateUserPassword } from "../../redux/redux-saga/sagaActions";
+import { ToastContainer } from "react-toastify";
 
+import "react-toastify/dist/ReactToastify.css";
 import "./profile.styles.css"
 
 const ProfilePage = () => {
@@ -27,6 +29,7 @@ const ProfilePage = () => {
 
   return (
     <div className="profile-container">
+      <ToastContainer />
       <div className="user-info">
         <img className="profile-pic" src={profilePic} alt="profile-picture"></img>
         <h3>{me.name}</h3>

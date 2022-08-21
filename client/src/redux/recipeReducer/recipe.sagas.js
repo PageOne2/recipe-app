@@ -182,10 +182,15 @@ export function* deleteRecipe({ payload }) {
       }
     }) 
     if (res.status) {
+      toast.success("Recipe deleted successfully!", {
+        position: toast.POSITION.TOP_CENTER
+      });
       yield put(deleteRecipeSuccess({ id: payload }))
     }
   } catch (err) {
-
+    toast.error("Unable to delete your recipe!", {
+      position: toast.POSITION.TOP_CENTER
+    });
   } 
 }
 

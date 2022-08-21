@@ -2,11 +2,10 @@ import SagaActionTypes from '../redux-saga/sagaActionTypes';
 import { takeLatest, put, call, all } from 'redux-saga/effects';
 import { 
   getUserSuccess, 
-  logInUserFailure, 
-  signUpUserFailure, 
   userLikedRecipes, 
   getMyRecipesSuccess
 } from './userReducer';
+import { toast } from "react-toastify";
 import Cookies from 'js-cookie';
 
 export function* logUser({payload}) {
@@ -15,25 +14,31 @@ export function* logUser({payload}) {
     ? `${process.env.REACT_APP_API_URL}/users/login` 
     : 'http://localhost:3000/api/users/login';
 
-    let data = yield fetch(apiUrl, {
+    const res = yield fetch(apiUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(payload) 
     });
-    let res = yield data.json();
-    if (data.status === 200) {
-      Cookies.set('jwt', res.token);
+    
+    const data = yield res.json();
+    if (res.status === 200) {
+      Cookies.set('jwt', data.token);
+      toast.success('Successfully Logged in!', {
+        position: toast.POSITION.TOP_CENTER
+      });
       yield all([
-        put(getUserSuccess(res.data.user)),
-        put(userLikedRecipes(res.data.user.likedRecipes))
+        put(getUserSuccess(data.data.user)),
+        put(userLikedRecipes(data.data.user.likedRecipes))
       ])
     } else {
-      throw new Error(res.message);
+      throw new Error();
     }
   } catch (err) {
-    yield put(logInUserFailure(err.message));
+    toast.error("Incorrect Email or Password!", {
+      position: toast.POSITION.TOP_CENTER
+    });
   }
 }
 
@@ -43,25 +48,30 @@ export function* signUp({payload}) {
     ? `${process.env.REACT_APP_API_URL}/users/signup` 
     : 'http://localhost:3000/api/users/signup';
 
-    let data = yield fetch(apiUrl, {
+    let res = yield fetch(apiUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(payload)
     });
-    let res = yield data.json();
-    if (data.status === 201) {
-      Cookies.set('jwt', res.token);
+    let data = yield res.json();
+    if (res.status === 201) {
+      Cookies.set('jwt', data.token);
+      toast.success('Sign Up Successfull!', {
+        position: toast.POSITION.TOP_CENTER
+      });
       yield all([
-        put(getUserSuccess(res.data.user)),
-        put(userLikedRecipes(res.data.user.likedRecipes))
+        put(getUserSuccess(data.data.user)),
+        put(userLikedRecipes(data.data.user.likedRecipes))
       ])
     } else {
-      throw new Error(res.message);
+      throw new Error(data.message);
     }
   } catch (err) {
-    yield put(signUpUserFailure(err.message));
+    toast.error(`${err.message}`, {
+      position: toast.POSITION.TOP_CENTER
+    });
   }
 }
 
@@ -96,7 +106,7 @@ export function* updateUserPassword({payload}) {
     ? `${process.env.REACT_APP_API_URL}/users/updateMyPassword` 
     : 'http://localhost:3000/api/users/updateMyPassword';
 
-    let data = yield fetch(apiUrl, {
+    const res = yield fetch(apiUrl, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -104,12 +114,18 @@ export function* updateUserPassword({payload}) {
       },
       body: JSON.stringify(payload)
     });
-    let res = yield data.json();
-    if (data.status === 200) {
-      Cookies.set('jwt', res.token);
+      
+    const data = yield res.json();
+    if (res.status === 200) {
+      Cookies.set('jwt', data.token);
+      toast.success('Password successfully updated!', {
+        position: toast.POSITION.TOP_CENTER
+      });
     }
   } catch (err) {
-
+    toast.error("Unable to update your password!", {
+      position: toast.POSITION.TOP_CENTER
+    });
   }
 }
 
