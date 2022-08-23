@@ -11,6 +11,7 @@ router.post('/login', authController.login)
 
 router.post('/forgotPassword', authController.forgotPassword)
 router.patch('/resetPassword/:token', authController.resetPassword)
+router.get('/userProfilePic/:key', userController.getUserProfilePic)
 
 router.use(authController.protect)
 
@@ -24,6 +25,10 @@ router.get('/myRecipes', userController.getMyRecipes)
 router
     .route('/user/:id')
     .get(userController.getUser)
+
+router
+    .route('/updateMyProfilePic/:id')
+    .patch(userController.uploadUserPhoto, userController.resizeUserPhoto, userController.updateProfilePic)
 
 router.use(authController.restrictTo('admin'))
 

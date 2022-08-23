@@ -28,7 +28,7 @@ exports.uploadRecipeImageCover = upload.single('imageCover')
 exports.resizeRecipeImageCover = catchAsync(async (req, res, next) => {
   if (!req.file) return next()
 
-  req.file.filename = `recipe-image-${req.user.id}-${Date.now()}.jpeg`
+  req.file.filename = `recipe-image-${req.user.id}-${Date.now()}.jpg`
   req.file.path = `public/img/recipeImageCover/${req.file.filename}`
 
   await sharp(req.file.buffer)
