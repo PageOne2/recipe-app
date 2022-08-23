@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getMyRecipes } from "../../redux/redux-saga/sagaActions";
+import { changeProfilePicture, getMyRecipes } from "../../redux/redux-saga/sagaActions";
+import { profilePicUpdateStatus } from "../../redux/userReducer/userReducer";
 import { v4 as uuidv4 } from "uuid";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import profilePic from "../../assets/user-profile.png";
 import RecipeCard from "../../components/recipe-card/recipe.card.component";
 import { updateUserPassword } from "../../redux/redux-saga/sagaActions";
 import { ToastContainer } from "react-toastify";
@@ -16,23 +16,49 @@ const ProfilePage = () => {
   const [tabIndex, setTabIndex] = useState(0);
   const me = useSelector(state => state.user.userData);
   const myRecipes = useSelector(state => state.user.myRecipes);
+  const myProfilePicUpdateStatus = useSelector(state => state.user.userProfilePicUpdateStatus);
   const dispatch = useDispatch();
+  const myProfilePicApiUrl = process.env.NODE_ENV === 'production' 
+  ? `${process.env.REACT_APP_API_URL}/user/userProfilePic/${me.photo}`
+  : `http://localhost:3000/api/users/userProfilePic/${me.photo}`
 
   useEffect(() => {
-    dispatch(getMyRecipes());
-  }, [])
+    if (!myRecipes.length) dispatch(getMyRecipes());
+
+    return () => {
+      dispatch(profilePicUpdateStatus(''));
+    }
+  }, [myProfilePicUpdateStatus])
 
   const handleClick = (index) => {
     if (tabIndex === index) return;
     setTabIndex(index);
   }
 
+  const handleFileSelection = (e) => {
+    const file = e.target.files[0];
+    if (file) dispatch(changeProfilePicture({ file, id: me._id }));
+  }
+
   return (
     <div className="profile-container">
       <ToastContainer />
       <div className="user-info">
-        <img className="profile-pic" src={profilePic} alt="profile-picture"></img>
-        <h3>{me.name}</h3>
+        <img className="profile-pic" crossOrigin="anonymous" src={myProfilePicApiUrl} alt="profile-picture"></img>
+        <div>
+          <h3>{me.name}</h3>
+          <div className="change-profile-pic-wrapper">
+            <label htmlFor="photo">Change Profile Picture</label>
+            <input 
+              id="photo"
+              name="photo"
+              type="file"
+              accept="image/*"
+              style={{visibility: "hidden"}}
+              onChange={(e) => handleFileSelection(e)}
+            />
+          </div>
+        </div>
       </div>
       <div className="tab-titles">
         <span className={tabIndex !== 0 ? 'inactive' : ''} onClick={() => handleClick(0)}>My Recipes</span>

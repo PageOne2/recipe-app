@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import RecipeInitialInfo from "../recipe-initial-info/recipe-initial-info.component";
-import recipeImage from "../../assets/default.jpg";
 // import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Delete from "@material-ui/icons/Delete";
 import Edit from "@material-ui/icons/Edit";
@@ -20,16 +19,20 @@ const RecipeCard = ({
   const loggedInUser = useSelector(state => state.user.userData);
   const [more, setMore] = useState(false);
   const myRecipe = isLoggedIn && loggedInUser._id === user._id ? true : false;
-  const apiUrl = process.env.NODE_ENV === 'production' 
+  const recipeImageCoverApiUrl = process.env.NODE_ENV === 'production' 
   ? `${process.env.REACT_APP_API_URL}/recipes/recipeImageCover/${imageCover}` 
   : `http://localhost:3000/api/recipes/recipeImageCover/${imageCover}`;
+  const userProfilePicApiUrl = process.env.NODE_ENV === 'production' 
+  ? `${process.env.REACT_APP_API_URL}/user/userProfilePic/${user.photo}`
+  : `http://localhost:3000/api/users/userProfilePic/${user.photo}`
 
   return (
     <div className="recipe-card">
       <div className="user">
         <img
           className="user-image"
-          src={`http://localhost:3000/img/user/${user.photo}`}
+          crossOrigin="anonymous"
+          src={userProfilePicApiUrl}
           alt="user"
         />
         <div className="user-name-wrapper">
@@ -54,7 +57,7 @@ const RecipeCard = ({
             <button className="go-to-btn">Go To Recipe</button>
           </Link>
         </div>
-        <img crossOrigin="anonymous" src={apiUrl} alt="dish" />
+        <img crossOrigin="anonymous" src={recipeImageCoverApiUrl} alt="dish" />
       </div>
       <div className="recipe-name">
         <h3>{formatRecipeName(recipeName)}</h3>

@@ -6,7 +6,8 @@ export const userReducer = createSlice({
     isLoggedIn: false,
     userLikedRecipes: [],
     myRecipes: [],
-    userData: {}
+    userData: {},
+    userProfilePicUpdateStatus: ''
   },
   reducers: {
     getUserSuccess: (state, action) => {
@@ -31,6 +32,20 @@ export const userReducer = createSlice({
         myRecipes: action.payload
       }
     },
+    updateProfilePicture: (state, action) => {
+      const updatedUserData = {...state.userData};
+      updatedUserData.photo = action.payload;
+      return {
+        ...state,
+        userData: updatedUserData
+      }
+    },
+    profilePicUpdateStatus: (state, action) => {
+      return {
+        ...state,
+        userProfilePicUpdateStatus: action.payload
+      }
+    },
     logOut: (state, action) => {}
   }
 })
@@ -39,6 +54,8 @@ export const {
   getUserSuccess, 
   userLikedRecipes, 
   getMyRecipesSuccess,
+  updateProfilePicture,
+  profilePicUpdateStatus,
   logOut 
 } = userReducer.actions;
 

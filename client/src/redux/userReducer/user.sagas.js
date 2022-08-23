@@ -3,10 +3,13 @@ import { takeLatest, put, call, all } from 'redux-saga/effects';
 import { 
   getUserSuccess, 
   userLikedRecipes, 
-  getMyRecipesSuccess
+  getMyRecipesSuccess,
+  updateProfilePicture,
+  profilePicUpdateStatus
 } from './userReducer';
 import { toast } from "react-toastify";
 import Cookies from 'js-cookie';
+import axios from 'axios';
 
 export function* logUser({payload}) {
   try {
@@ -129,6 +132,37 @@ export function* updateUserPassword({payload}) {
   }
 }
 
+export function* changeProfilePicture({payload}) {
+  try {
+    const apiUrl = process.env.NODE_ENV === 'production' 
+    ? `${process.env.REACT_APP_API_URL}/users/updateMyProfilePic/${payload.id}` 
+    : `http://localhost:3000/api/users/updateMyProfilePic/${payload.id}`;
+
+    const formData = new FormData();
+    formData.append("photo", payload.file);
+
+    const headers = { 'Authorization': 'Bearer ' + Cookies.get('jwt') };
+    const res = yield axios.patch(apiUrl, formData, { headers });
+
+    if (res.status === 200) {
+      yield all([
+        put(updateProfilePicture(res.data.data.updatedProfilePic)),
+        put(profilePicUpdateStatus('success'))
+      ]);
+      toast.success('Profile picture updated successfully!', {
+        position: toast.POSITION.TOP_CENTER
+      });
+    } else {
+      throw new Error();
+    }
+  } catch (err) {
+    yield put(profilePicUpdateStatus('fail'));
+    toast.error('Unable to update your profile picture!', {
+      position: toast.POSITION.TOP_CENTER
+    });
+  }
+}
+
 export function* getMyRecipes() {
   try {
     const apiUrl = process.env.NODE_ENV === 'production' 
@@ -167,6 +201,10 @@ export function* onUpdateUserPassword() {
   yield takeLatest(SagaActionTypes.UPDATE_USER_PASSWORD_START, updateUserPassword);
 }
 
+export function* onChangeProfilePicture() {
+  yield takeLatest(SagaActionTypes.CHANGE_PROFILE_PICTURE, changeProfilePicture);
+}
+
 export function* onGetMyRecipes() {
   yield takeLatest(SagaActionTypes.GET_MY_RECIPES_START, getMyRecipes);
 }
@@ -177,6 +215,7 @@ export function* userSagas() {
     call(onSignUp),
     call(onGetUser),
     call(onUpdateUserPassword),
+    call(onChangeProfilePicture),
     call(onGetMyRecipes)
   ])
 }

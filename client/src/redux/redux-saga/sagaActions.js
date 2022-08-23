@@ -38,6 +38,11 @@ export const updateUserPassword = (passwords) => ({
   payload: passwords
 })
 
+export const changeProfilePicture = (data) => ({
+  type: sagaActionTypes.CHANGE_PROFILE_PICTURE,
+  payload: data
+})
+
 export const createRecipe = (recipeInfo) => ({
   type: sagaActionTypes.CREATE_RECIPE_START,
   payload: recipeInfo
