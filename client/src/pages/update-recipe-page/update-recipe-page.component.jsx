@@ -11,11 +11,38 @@ import CloseIcon from '@mui/icons-material/Close';
 import DoneIcon from '@mui/icons-material/Done';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import { editIconSx, deleteIconSx, doneIconSx, closeIconSx, addIconSx, arrowDropIconSx } from "../../iconStyles";
 import { formatRecipeName } from "../../utils/formatStr";
 import { ToastContainer } from "react-toastify";
+import { 
+  UpdateRecipeContainer,
+  InputWrapper,
+  RecipeImageInput,
+  RecipeInfoTitle, 
+  RecipeFieldTitle, 
+  UlItemList,
+  OlItemList,
+  RecipeImageWrapper,
+  RecipeNameWrapper,
+  PrepAndServingsInfoTitle,
+  RecipeItem,
+  EditOrDelete,
+  EditMode,
+  EditModeItem,
+  ItemInput,
+  EditButton,
+  CloseEditButton,
+  ChooseAndUpdateWrapper,
+  UpdateButtonWrapper,
+  TitleAndAddMore,
+  UpAndDownNumberWrapper,
+  UpAndDownIconsWrapper,
+  AddMoreItem,
+  TitleAndInputAddMoreWrapper,
+  AddOrCancelWrapper
+} from "../../components/styled-components/share-and-update-recipe-page/styled-components";
 
 import "react-toastify/dist/ReactToastify.css";
-import "./update-recipe-page.styles.css";
 
 const UpdateRecipePage = () => {
   const params = useParams();
@@ -150,132 +177,130 @@ const UpdateRecipePage = () => {
   return (
     <div>
       <ToastContainer />
-      <div className="update-recipe-info">
-        <div className="recipe-info-title recipe-image-cover">
-          <div className="title-updateBtn">
-            <div>
-              <h3>Recipe Image Cover</h3>
-              <input 
-                className="recipe-image-input-update"
+      <UpdateRecipeContainer>
+        <RecipeInfoTitle>
+          <ChooseAndUpdateWrapper>
+            <InputWrapper>
+              <RecipeFieldTitle bg="#bc79fb">Recipe Image Cover</RecipeFieldTitle>
+              <RecipeImageInput 
+                marginBottom="0px"
+                padding="10px 5px 0px"
                 name="recipeImage"
                 type="file"
                 accept="image/*"
                 onChange={(e) => handleFileSelection(e)}
               />
-            </div>
-            <div className="update-btn-wrapper">
+            </InputWrapper>
+            <UpdateButtonWrapper>
               <button onClick={() => handleUpdateSubmit()}>Update Recipe</button>
-            </div>
-          </div>
-          <div className="recipe-image-wrapper">
+            </UpdateButtonWrapper>
+          </ChooseAndUpdateWrapper>
+          <RecipeImageWrapper>
             <img crossOrigin="anonymous" src={imagePreview ? imagePreview : apiUrl}/>
-          </div>
-        </div>
-        <div className="recipe-info-title recipe-name-field">
-          <h3>Recipe Name</h3>
-          <div className="recipe-name-wrapper">
+          </RecipeImageWrapper>
+        </RecipeInfoTitle>
+        <RecipeInfoTitle>
+          <RecipeFieldTitle bg="#f5ae37">Recipe Name</RecipeFieldTitle>
+          <RecipeNameWrapper>
             <p>{recipe.recipeName}</p>
-            <div className="edit-or-delete">
-              <EditIcon className="edit-item-icon" onClick={() => openItemEditor('recipeName', recipe.recipeName, null)}/>
-            </div>
-          </div>
-        </div>       
-        <div className="recipe-info-title ingredients">
-          <div className="title-and-add-more">
-            <h3>Ingredients</h3>
-            <AddIcon className="add-more-items-btn" onClick={() => setAddMoreItem({ open: true, field: "ingredient" })}/>
-          </div>
-          <ul className="items-list">
+            <EditOrDelete>
+              <EditIcon sx={editIconSx(2)} onClick={() => openItemEditor('recipeName', recipe.recipeName, null)}/>
+            </EditOrDelete>
+          </RecipeNameWrapper>
+        </RecipeInfoTitle>       
+        <RecipeInfoTitle>
+          <TitleAndAddMore>
+            <RecipeFieldTitle bg="#f55e8b">Ingredients</RecipeFieldTitle>
+            <AddIcon sx={addIconSx} onClick={() => setAddMoreItem({ open: true, field: "ingredient" })}/>
+          </TitleAndAddMore>
+          <UlItemList>
             {Object.keys(recipe).length && recipe.ingredients.map((item, idx) => (
-              <div className="recipe-item" key={uuidv4()}>
+              <RecipeItem key={uuidv4()}>
                 <li>{item}</li>
-                <div className="edit-or-delete">
-                  <EditIcon className="edit-item-icon" onClick={() => openItemEditor('ingredients', item, idx)}/>
-                  <DeleteIcon className="delete-item-icon" onClick={() => handleDeleteItem(idx, 'ingredient')}/>
-                </div>
-              </div>
+                <EditOrDelete>
+                  <EditIcon sx={editIconSx(2)} onClick={() => openItemEditor('ingredients', item, idx)}/>
+                  <DeleteIcon sx={deleteIconSx} onClick={() => handleDeleteItem(idx, 'ingredient')}/>
+                </EditOrDelete>
+              </RecipeItem>
             ))}
-          </ul>
-        </div>
-        <div className="recipe-info-title methods">
-          <div className="title-and-add-more">
-            <h3>Methods</h3>
-            <AddIcon className="add-more-items-btn" onClick={() => setAddMoreItem({ open: true, field: "method" })}/>
-          </div>
-          <ol className="items-list">
+          </UlItemList>
+        </RecipeInfoTitle>
+        <RecipeInfoTitle>
+          <TitleAndAddMore>
+            <RecipeFieldTitle bg="#6784ff">Methods</RecipeFieldTitle>
+            <AddIcon sx={addIconSx} onClick={() => setAddMoreItem({ open: true, field: "method" })}/>
+          </TitleAndAddMore>
+          <OlItemList>
             {Object.keys(recipe).length && recipe.method.map((item, idx) => (
-              <div className="recipe-item" key={uuidv4()}>
+              <RecipeItem key={uuidv4()}>
                 <li>{item}</li>
-                <div className="edit-or-delete">
-                  <EditIcon className="edit-item-icon" onClick={() => openItemEditor('methods', item, idx)}/>
-                  <DeleteIcon className="delete-item-icon" onClick={() => handleDeleteItem(idx, 'method')}/>
-                </div>
-              </div>
+                <EditOrDelete>
+                  <EditIcon sx={editIconSx(2)} onClick={() => openItemEditor('methods', item, idx)}/>
+                  <DeleteIcon sx={deleteIconSx} onClick={() => handleDeleteItem(idx, 'method')}/>
+                </EditOrDelete>
+              </RecipeItem>
             ))}
-          </ol>
-        </div>
-        <div className="recipe-info-title servings up-down-number-wrapper">
-          <div className="title-and-number-wrapper">
-            <h3>Servings</h3>
+          </OlItemList>
+        </RecipeInfoTitle>
+        <UpAndDownNumberWrapper>
+          <PrepAndServingsInfoTitle border="none">
+            <RecipeFieldTitle bg="#0ca981">Servings</RecipeFieldTitle>
             <p>{recipe.servings} servings</p>
-          </div>
-          <div className="up-and-down-icons-wrapper">
-            <ArrowDropUpIcon 
-            className="up-and-down-icon" 
-            onClick={() => handleValueIncrease("servings")}
-            />
-            <ArrowDropDownIcon className="up-and-down-icon" onClick={() => handleValueDecrease("servings")}/>
-          </div>
-        </div>
-        <div className="recipe-info-title preparation-time up-down-number-wrapper">
-          <div className="title-and-number-wrapper">
-            <h3>Preparation Time</h3>
+          </PrepAndServingsInfoTitle>
+          <UpAndDownIconsWrapper>
+            <ArrowDropUpIcon sx={arrowDropIconSx} onClick={() => handleValueIncrease("servings")}/>
+            <ArrowDropDownIcon sx={arrowDropIconSx} onClick={() => handleValueDecrease("servings")}/>
+          </UpAndDownIconsWrapper>
+        </UpAndDownNumberWrapper>
+        <UpAndDownNumberWrapper>
+          <PrepAndServingsInfoTitle border="none">
+            <RecipeFieldTitle bg="#7ad55a">Preparation Time</RecipeFieldTitle>
             <p>{recipe.preparationTime} minutes</p>
-          </div>
-          <div className="up-and-down-icons-wrapper">
-            <ArrowDropUpIcon className="up-and-down-icon" onClick={() => handleValueIncrease("preparationTime")}/>
-            <ArrowDropDownIcon className="up-and-down-icon" onClick={() => handleValueDecrease("preparationTime")}/>
-          </div>
-        </div>
-      </div>
+          </PrepAndServingsInfoTitle>
+          <UpAndDownIconsWrapper>
+            <ArrowDropUpIcon sx={arrowDropIconSx} onClick={() => handleValueIncrease("preparationTime")}/>
+            <ArrowDropDownIcon sx={arrowDropIconSx} onClick={() => handleValueDecrease("preparationTime")}/>
+          </UpAndDownIconsWrapper>
+        </UpAndDownNumberWrapper>
+      </UpdateRecipeContainer>
       {editMode &&
-      <div className="edit-mode">
-        <div className="item">
-          <div className="item-input">
+      <EditMode>
+        <EditModeItem>
+          <ItemInput>
             <input 
             type="text"
             placeholder={itemBeingEdited.item}
             value={editableItemInputValue}
             onChange={(e) => setEditableItemInputValue(e.target.value)}
             />
-          </div>
-          <div className="edit-btn">
+          </ItemInput>
+          <EditButton>
             <button onClick={() => handleEditedItem(itemBeingEdited.field, itemBeingEdited.itemIdx)}>Edit</button>
-          </div>
-        </div>
-        <div className="close-edit-btn">
-          <CloseIcon className="close-edit-icon" onClick={() => setEditMode(false)}/>
-        </div>
-      </div>
+          </EditButton>
+        </EditModeItem>
+        <CloseEditButton>
+          <CloseIcon sx={closeIconSx} onClick={() => setEditMode(false)}/>
+        </CloseEditButton>
+      </EditMode>
       }
       {addMoreItem.open &&
-      <div className="add-more-item">
-        <div className="add-more-field-and-input">
-          <h4 className="field-name">Add one more {addMoreItem.field}</h4>
+      <AddMoreItem>
+        <TitleAndInputAddMoreWrapper>
+          <h4>Add one more {addMoreItem.field}</h4>
           <input 
           type="text"
           value={addMoreItemInputValue}
           onChange={(e) => setAddMoreItemInputValue(e.target.value)}
           />
-        </div>
-        <div className="add-or-cancel">
-          <DoneIcon className="done-icon" onClick={() => handleAddMoreItem(addMoreItemInputValue)}/>
-          <CloseIcon className="close-icon" onClick={() => {
+        </TitleAndInputAddMoreWrapper>
+        <AddOrCancelWrapper>
+          <DoneIcon sx={doneIconSx} onClick={() => handleAddMoreItem(addMoreItemInputValue)}/>
+          <CloseIcon sx={closeIconSx} onClick={() => {
             setAddMoreItem({ open: false, field: "" });
             setAddMoreItemInputValue("");
           }}/>
-        </div>
-      </div>
+        </AddOrCancelWrapper>
+      </AddMoreItem>
       }
     </div>
   )

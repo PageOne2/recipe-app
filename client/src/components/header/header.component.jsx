@@ -2,8 +2,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { logOut } from "../../redux/userReducer/userReducer";
 import { Link } from "react-router-dom";
 import Cookie from "js-cookie";
-
-import "./header.styles.css";
+import { 
+  HeaderWrapper, 
+  NavBar, 
+  Logo,
+  Authenticate,
+  LogIn,
+  SignUp,
+  GoToProfile,
+  GoToProfileButtonWrapper,
+  GoToProfileButton,
+  LogOutButtonWrapper,
+  LogOutButton
+} from "../styled-components/header/styled-components";
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -16,29 +27,33 @@ const Header = () => {
   }
 
   return (
-    <div className="header">
-      <div className="nav-bar">
+    <HeaderWrapper>
+      <NavBar>
         <Link to="/">
-          <div className="logo">Dishes</div>
+          <Logo>Dishes</Logo>
         </Link>
-        <div className="user-log">
-          {!isLoggedIn ?
-          <div className="authenticate">
+        {!isLoggedIn 
+        ? <Authenticate>
             <Link to="/login">
-              <div className="log-in">Log In</div>
+              <LogIn>Log In</LogIn>
             </Link>
             <Link to="/signup">
-              <div className="sign-up">Sign-Up</div>
+              <SignUp>Sign-Up</SignUp>
             </Link>
-          </div>
-          : <div className="profile">
-              <div className="user"><Link to="/myprofile"><div className="my-profile">My Profile &rarr;</div></Link></div>
-              <div className="log-out"><button className="log-out-btn" onClick={handleClick}>Log Out</button></div>
-            </div>
-          }
-        </div>
-      </div>
-    </div>
+          </Authenticate>
+        : <GoToProfile>
+            <GoToProfileButtonWrapper>
+              <Link to="/myprofile">
+                <GoToProfileButton>My Profile &rarr;</GoToProfileButton>
+              </Link>
+            </GoToProfileButtonWrapper>
+            <LogOutButtonWrapper>
+              <LogOutButton onClick={handleClick}>Log Out</LogOutButton>
+            </LogOutButtonWrapper>
+          </GoToProfile>
+        }
+      </NavBar>
+    </HeaderWrapper>
   );
 };
 

@@ -2,14 +2,28 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import RecipeInitialInfo from "../recipe-initial-info/recipe-initial-info.component";
-// import MoreVertIcon from '@mui/icons-material/MoreVert';
-import Delete from "@material-ui/icons/Delete";
-import Edit from "@material-ui/icons/Edit";
-import MoreVertIcon from "@material-ui/icons/MoreVertSharp"
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 import { formatRecipeName } from "../../utils/formatStr";
 import { deleteRecipe } from "../../redux/redux-saga/sagaActions";
-
-import "./recipe.card.styles.css";
+import { editIconSx, deleteIconSx, moreVertIconSx } from "../../iconStyles";
+import { 
+  RecipeCardWrapper,
+  UserInfoWrapper,
+  UserImageWrapper,
+  UserNameWrapper,
+  UserName,
+  UserNameMe,
+  MoreUserActionsWrapper,
+  MoreActions,
+  RecipeImageWrapper,
+  RecipeImageOverlay,
+  GoToButton,
+  RecipeImage,
+  RecipeNameWrapper,
+  RecipeName
+} from "../styled-components/recipe-card/styled-components";
 
 const RecipeCard = ({
   item: { recipeName, likes, preparationTime, imageCover, user, _id }
@@ -27,43 +41,50 @@ const RecipeCard = ({
   : `http://localhost:3000/api/users/userProfilePic/${user.photo}`
 
   return (
-    <div className="recipe-card">
-      <div className="user">
-        <img
-          className="user-image"
-          crossOrigin="anonymous"
-          src={userProfilePicApiUrl}
-          alt="user"
-        />
-        <div className="user-name-wrapper">
-          <h4 className={myRecipe ? "user-name-me" : "user-name"}>{myRecipe ? "You" : user.name}</h4>
+    <RecipeCardWrapper>
+      <UserInfoWrapper>
+        <UserImageWrapper>
+          <img
+            crossOrigin="anonymous"
+            src={userProfilePicApiUrl}
+            alt="user"
+          />
+        </UserImageWrapper>
+        <UserNameWrapper>
+          {myRecipe ? <UserNameMe>You</UserNameMe> : <UserName>{user.name}</UserName>}
           {isLoggedIn && myRecipe 
-            ? <MoreVertIcon className="more-vert-icon" onClick={() => setMore(!more)}/>
+            ? <MoreVertIcon sx={moreVertIconSx} onClick={() => setMore(!more)}/>
             : null
           }
-        </div>
+        </UserNameWrapper>
         {more &&
-          <div className="more-user-actions">
-            <div className="more-actions-delete" onClick={() => dispatch(deleteRecipe(_id))}>Delete Recipe <Delete className="more-actions-delete-icon"/></div>
-            <Link to={`recipe/updateRecipe/${_id}`}>
-              <div className="more-actions-edit">Update Recipe <Edit className="more-actions-edit-icon"/></div>
+          <MoreUserActionsWrapper>
+            <MoreActions onClick={() => dispatch(deleteRecipe(_id))}>
+              Delete Recipe <DeleteIcon sx={deleteIconSx}/>
+            </MoreActions>
+            <Link to={`/recipe/updateRecipe/${_id}`}>
+              <MoreActions>
+                Update Recipe <EditIcon sx={editIconSx()}/>
+              </MoreActions>
             </Link>
-          </div>
+          </MoreUserActionsWrapper>
         }
-      </div>
-      <div className="recipe-image">
-        <div className="overlay">
+      </UserInfoWrapper>
+      <RecipeImageWrapper>
+        <RecipeImageOverlay>
           <Link to={`/recipe/${_id}`}>
-            <button className="go-to-btn">Go To Recipe</button>
+            <GoToButton>Go To Recipe</GoToButton>
           </Link>
-        </div>
-        <img crossOrigin="anonymous" src={recipeImageCoverApiUrl} alt="dish" />
-      </div>
-      <div className="recipe-name">
-        <h3>{formatRecipeName(recipeName)}</h3>
-      </div>
+        </RecipeImageOverlay>
+        <RecipeImage>
+          <img crossOrigin="anonymous" src={recipeImageCoverApiUrl} alt="dish" />
+        </RecipeImage>
+      </RecipeImageWrapper>
+      <RecipeNameWrapper>
+        <RecipeName>{formatRecipeName(recipeName)}</RecipeName>
+      </RecipeNameWrapper>
       <RecipeInitialInfo id={_id} myRecipe={myRecipe} likes={likes} preparationTime={preparationTime} />
-    </div>
+    </RecipeCardWrapper>
   );
 };
 

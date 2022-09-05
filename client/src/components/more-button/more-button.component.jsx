@@ -4,8 +4,11 @@ import {
   getMostLikedRecipes,
 } from "../../redux/redux-saga/sagaActions";
 import { setRequesting } from "../../redux/recipeReducer/recipeReducer";
-
-import "./more-button.styles.css";
+import { 
+  MoreButtonWrapper,
+  LoadMoreButton,
+  MoreButtonSpinner
+} from "../styled-components/more-button/styled-components";
 
 const MoreButton = () => {
   const mostRecentPage = useSelector(state => state.recipe.mostRecentPage);
@@ -24,12 +27,12 @@ const MoreButton = () => {
   }
 
   return (
-    <div className="more">
+    <MoreButtonWrapper>
       {requesting 
-      ? <div className="more-btn-spinner"></div>
-      : <button className="more-btn" onClick={() => handleClick()}>More</button>
+      ? <MoreButtonSpinner />
+      : <LoadMoreButton onClick={() => handleClick()}>More</LoadMoreButton>
       }
-    </div>
+    </MoreButtonWrapper>
   );
 };
 

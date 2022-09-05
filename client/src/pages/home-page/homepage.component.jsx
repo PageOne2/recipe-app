@@ -3,9 +3,12 @@ import { useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import CategorieButton from "../../components/categorie-button/categorie-button.component"
 import RecipesContainer from "../../components/recipes-container/recipes.container.component";
+import { 
+  HomePageButtonsWrapper, 
+  ShareRecipeButtonWrapper 
+} from "../../components/styled-components/home-page/styled-components";
 
 import "react-toastify/dist/ReactToastify.css";
-import "./homepage.styles.css";
 
 const HomePage = () => {
   const isLoggedIn = useSelector(state => state.user.isLoggedIn);
@@ -20,16 +23,16 @@ const HomePage = () => {
   }
 
   return (
-    <div className="homepage">
+    <>
       <ToastContainer />
-      <div className="homepage-btns">
+      <HomePageButtonsWrapper>
         <CategorieButton />
-        <div className="share-recipe-btn">
-          <button className="share-btn" onClick={() => handleClick()}>+ Share Recipe</button>
-        </div>
-      </div>
+        <ShareRecipeButtonWrapper>
+          <button onClick={() => handleClick()}>+ Share Recipe</button>
+        </ShareRecipeButtonWrapper>
+      </HomePageButtonsWrapper>
       <RecipesContainer />
-    </div>
+    </>
   );
 };
 

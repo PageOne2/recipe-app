@@ -8,9 +8,25 @@ import * as Yup from "yup";
 import RecipeCard from "../../components/recipe-card/recipe.card.component";
 import { updateUserPassword } from "../../redux/redux-saga/sagaActions";
 import { ToastContainer } from "react-toastify";
+import { 
+  ProfileWrapper,
+  UserInfo,
+  ProfilePic,
+  ChageProfilePicWrapper,
+  ChangeProfilePicInputWrapper,
+  TabWrapper,
+  Tab,
+  RecipesWrapper,
+  UpdatePassWordFormWrapper
+} from "../../components/styled-components/profile-page/styled-components";
+import { 
+  FormWrapper,
+  FormTitle,
+  InputErrorMessage,
+  SubmitButton, 
+} from "../../components/styled-components/form-styles/styled-components";
 
 import "react-toastify/dist/ReactToastify.css";
-import "./profile.styles.css"
 
 const ProfilePage = () => {
   const [tabIndex, setTabIndex] = useState(0);
@@ -41,42 +57,41 @@ const ProfilePage = () => {
   }
 
   return (
-    <div className="profile-container">
+    <ProfileWrapper>
       <ToastContainer />
-      <div className="user-info">
-        <img className="profile-pic" crossOrigin="anonymous" src={myProfilePicApiUrl} alt="profile-picture"></img>
-        <div>
+      <UserInfo>
+        <ProfilePic crossOrigin="anonymous" src={myProfilePicApiUrl} alt="profile-picture"/>
+        <ChageProfilePicWrapper>
           <h3>{me.name}</h3>
-          <div className="change-profile-pic-wrapper">
+          <ChangeProfilePicInputWrapper>
             <label htmlFor="photo">Change Profile Picture</label>
             <input 
               id="photo"
               name="photo"
               type="file"
               accept="image/*"
-              style={{visibility: "hidden"}}
               onChange={(e) => handleFileSelection(e)}
             />
-          </div>
-        </div>
-      </div>
-      <div className="tab-titles">
-        <span className={tabIndex !== 0 ? 'inactive' : ''} onClick={() => handleClick(0)}>My Recipes</span>
-        <span className={tabIndex !== 1 ? 'inactive' : ''} onClick={() => handleClick(1)}>Update Password</span>
-      </div>
+          </ChangeProfilePicInputWrapper>
+        </ChageProfilePicWrapper>
+      </UserInfo>
+      <TabWrapper>
+        <Tab op={tabIndex !== 0 ? "0.6" : "1"} onClick={() => handleClick(0)}>My Recipes</Tab>
+        <Tab op={tabIndex !== 1 ? "0.6" : "1"} onClick={() => handleClick(1)}>Update Password</Tab>
+      </TabWrapper>
       {tabIndex === 0 &&
-        <div className="my-recipes">
+        <RecipesWrapper>
         {myRecipes.map(item => (
           <RecipeCard key={uuidv4()} item={item}/>
         ))}
-      </div>
+      </RecipesWrapper>
       }
       {tabIndex === 1 &&
-      <div className="update-password">
-        <div className="form">
-          <div className="form-title">
+      <UpdatePassWordFormWrapper>
+        <FormWrapper>
+          <FormTitle>
             <h2>Update Password</h2>
-          </div>
+          </FormTitle>
           <Formik
             initialValues={{currentPassword: '', password: '', passwordConfirm: ''}}
             validationSchema={Yup.object({
@@ -91,22 +106,22 @@ const ProfilePage = () => {
             }}
           >
             <Form>
-              <ErrorMessage name="currentPassword" render={msg => <div className="error-msg">{msg}</div>} />
+              <ErrorMessage name="currentPassword" render={msg => <InputErrorMessage>{msg}</InputErrorMessage>} />
               <Field className="form-input" name="currentPassword" type="password" placeholder="Current Password"/>
 
-              <ErrorMessage name="password" render={msg => <div className="error-msg">{msg}</div>} />
+              <ErrorMessage name="password" render={msg => <InputErrorMessage>{msg}</InputErrorMessage>} />
               <Field className="form-input" name="password" type="password" placeholder="New Password"/>
 
-              <ErrorMessage name="passwordConfirm" render={msg => <div className="error-msg">{msg}</div>} />
+              <ErrorMessage name="passwordConfirm" render={msg => <InputErrorMessage>{msg}</InputErrorMessage>} />
               <Field className="form-input" name="passwordConfirm" type="password" placeholder="Confirm Your Password"/>
 
-              <button className='submit-btn' type='submit'>Submit</button>
+              <SubmitButton type='submit'>Submit</SubmitButton>
             </Form>
           </Formik>
-        </div>
-      </div>
+        </FormWrapper>
+      </UpdatePassWordFormWrapper>
       }
-    </div>
+    </ProfileWrapper>
   )
 }
 

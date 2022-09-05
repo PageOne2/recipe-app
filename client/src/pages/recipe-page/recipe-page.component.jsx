@@ -6,8 +6,18 @@ import RecipeInitialInfo from "../../components/recipe-initial-info/recipe-initi
 import Spinner from "../../components/spinner/spinner.component";
 import { v4 as uuidv4 } from "uuid";
 import { getRecipeByIdSuccess } from "../../redux/recipeReducer/recipeReducer";
-
-import "./recipe-page.styles.css";
+import { 
+  RecipePageWrapper,
+  RecipePageContent,
+  RecipePageName,
+  RecipeInfo,
+  RecipePageInfo,
+  RecipePageImage,
+  RecipeListWrapper,
+  FieldTitle,
+  OlMethodList,
+  UlIngredientList
+} from "../../components/styled-components/recipe-page/styled-components";
 
 const RecipePage = () => {
   const params = useParams();
@@ -33,42 +43,40 @@ const RecipePage = () => {
   }, []);
 
   return (
-    <div className="recipe-page-container">
+    <RecipePageWrapper>
       {Object.keys(recipe).length ? 
-        <div className="recipe-page-content">
-          <div className="wrapper">
-            <div className="recipe-page-name">
-              <h1>{recipe.recipeName}</h1>
-            </div>
-            <div className="recipe-info">
-              <div className="recipe-page-info">
-                <div className="recipe-page-image">
-                  <img crossOrigin="anonymous" src={recipeImageCoverApiUrl} alt="dish"/>
-                </div>
-                <div className="recipe-page-method">
-                  <h4 className="method-title">Method</h4>
-                  <ol className="method">
-                    {recipe.method?.map(item => (
-                      <li key={uuidv4()} >{item}</li>   
-                    ))}
-                  </ol>
-                </div>
-                <RecipeInitialInfo id={params.recipeId} myRecipe={myRecipe()} likes={recipe.likes} preparationTime={recipe.preparationTime} />
-              </div>
-              <div className="recipe-page-ingredient">
-                <h4 className="ingredients-title">Ingredients</h4>
-                <ul className="ingredients">
-                  {recipe.ingredients?.map(ingredient => (
-                    <li key={uuidv4()}>{ ingredient }</li>
+        <RecipePageContent>
+          <RecipePageName>
+            <h1>{recipe.recipeName}</h1>
+          </RecipePageName>
+          <RecipeInfo>
+            <RecipePageInfo>
+              <RecipePageImage>
+                <img crossOrigin="anonymous" src={recipeImageCoverApiUrl} alt="dish"/>
+              </RecipePageImage>
+              <RecipeListWrapper>
+                <FieldTitle>Method</FieldTitle>
+                <OlMethodList>
+                  {recipe.method?.map(item => (
+                    <li key={uuidv4()} >{item}</li>   
                   ))}
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
+                </OlMethodList>
+              </RecipeListWrapper>
+              <RecipeInitialInfo id={params.recipeId} myRecipe={myRecipe()} likes={recipe.likes} preparationTime={recipe.preparationTime} />
+            </RecipePageInfo>
+            <RecipeListWrapper>
+              <FieldTitle>Ingredients</FieldTitle>
+              <UlIngredientList>
+                {recipe.ingredients?.map(ingredient => (
+                  <li key={uuidv4()}>{ ingredient }</li>
+                ))}
+              </UlIngredientList>
+            </RecipeListWrapper>
+          </RecipeInfo>
+        </RecipePageContent>
         : <Spinner />
       }
-    </div>
+    </RecipePageWrapper>
   );
 };
 

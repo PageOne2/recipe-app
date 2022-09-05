@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
+import GlobalStyle from './globalStyles';
 import Header from './components/header/header.component';
 import HomePage from './pages/home-page/homepage.component';
 import RecipePage from './pages/recipe-page/recipe-page.component';
@@ -25,7 +26,8 @@ function App() {
   }, [dispatch])
   
   return (
-    <div>
+    <>
+      <GlobalStyle />
       <Header />
       <Routes>
         <Route path='/' element={<HomePage />}>
@@ -37,7 +39,7 @@ function App() {
         <Route path='/sharerecipe' element={<ShareRecipePage />}></Route>
         <Route path='/recipe/updateRecipe/:recipeId' element={<UpdateRecipePage />}></Route>
       </Routes>
-    </div>
+    </>
   );
 }
 

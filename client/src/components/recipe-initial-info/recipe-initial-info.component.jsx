@@ -3,8 +3,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from 'react-router-dom';
 import { likeRecipe, dislikeRecipe } from "../../redux/redux-saga/sagaActions";
 import { userLikedRecipes } from "../../redux/userReducer/userReducer";
-
-import "./recipe-initial-info.styles.css"
+import TimerIcon from '@mui/icons-material/Timer';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import { favoriteIconSx, timerIconSx } from '../../iconStyles';
+import { 
+  RecipeInitialInfoWrapper,
+  LikesWrapper,
+  TimeWrapper,
+  NumberOfLikes,
+  Minutes
+ } from '../styled-components/recipe-initial-info/styled-components';
 
 const RecipeInitialInfo = ({ id, myRecipe, likes, preparationTime }) => {
   const [liked, setLiked] = useState(false);
@@ -50,20 +58,24 @@ const RecipeInitialInfo = ({ id, myRecipe, likes, preparationTime }) => {
   }
 
   return (
-    <div className="more-info">
-      <div className="likes">
+    <RecipeInitialInfoWrapper>
+      <LikesWrapper>
         {!myRecipe &&
-          <span className="material-icons" id={liked ? "heart-icon-liked" : "heart-icon"} onClick={() => likeRecipeFn(id)}>
-            favorite
-          </span>
+          <FavoriteIcon 
+            sx={liked 
+              ? favoriteIconSx("#ff0000", "#fd7b7b")
+              : favoriteIconSx()
+            } 
+            onClick={() => likeRecipeFn(id)}
+          />
         }
-        <span className="number">{likesTotal}</span>
-      </div>
-      <div className="time">
-        <span className="material-icons">timer</span>
-        <span className="minutes">{preparationTime} MIN</span>
-      </div>
-    </div>
+        <NumberOfLikes>{likesTotal}</NumberOfLikes>
+      </LikesWrapper>
+      <TimeWrapper>
+        <TimerIcon sx={timerIconSx}/>
+        <Minutes>{preparationTime} MIN</Minutes>
+      </TimeWrapper>
+    </RecipeInitialInfoWrapper>
   )
 }
 
