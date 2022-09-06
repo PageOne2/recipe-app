@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { logOut } from "../../redux/userReducer/userReducer";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Cookie from "js-cookie";
 import { 
   HeaderWrapper, 
@@ -20,10 +20,12 @@ const Header = () => {
   const dispatch = useDispatch();
   const isLoggedIn = useSelector(state => state.user.isLoggedIn);
   const userName = useSelector(state => state.user.userData);
+  const navigate = useNavigate();
 
   const handleClick = () => {
     Cookie.remove('jwt');
     dispatch(logOut());
+    navigate('/');
   }
 
   return (
