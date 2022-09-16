@@ -23,7 +23,7 @@ function App() {
   useEffect(() => {
     const jwt = Cookies.get('jwt');
     if (jwt && !isLoggedIn) dispatch(getMe());
-  }, [dispatch])
+  }, [])
   
   return (
     <>

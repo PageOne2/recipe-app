@@ -77,3 +77,13 @@ export const favoriteIconSx = (color, colorHover) => ({
     color: colorHover ? colorHover : "#ff0000",
   }
 })
+
+export const localDiningIconSx = {
+  marginRight: 1,
+  color: "#f55e8b" 
+}
+
+export const formatListNumberedIconSx = {
+  marginRight: 1,
+  color: "#6784ff"
+}
