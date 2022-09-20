@@ -12,6 +12,17 @@ router.post('/login', authController.login)
 router.post('/forgotPassword', authController.forgotPassword)
 router.patch('/resetPassword/:token', authController.resetPassword)
 router.get('/userProfilePic/:key', userController.getUserProfilePic)
+router
+    .route('/user/:id')
+    .get(userController.getUser)
+
+router
+    .route('/user/userRecipes/:id')
+    .get(userController.getUserRecipes)
+
+router
+    .route('/user/recipesUserLiked/:id')
+    .get(userController.getRecipesUserLiked)
 
 router.use(authController.protect)
 
@@ -20,11 +31,8 @@ router.patch('/updateMyPassword', authController.updatePassword)
 router.patch('/updateMe', userController.uploadUserPhoto, userController.resizeUserPhoto, userController.updateMe)
 router.patch('/likeRecipe/:id', userController.likeRecipe)
 router.patch('/dislikeRecipe/:id', userController.dislikeRecipe)
-router.get('/myRecipes', userController.getMyRecipes)
+router.get('/myRecipes', userController.getUserRecipes)
 
-router
-    .route('/user/:id')
-    .get(userController.getUser)
 
 router
     .route('/updateMyProfilePic/:id')
