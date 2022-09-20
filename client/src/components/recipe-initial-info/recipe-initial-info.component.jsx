@@ -69,7 +69,7 @@ const RecipeInitialInfo = ({ id, myRecipe, likes, preparationTime }) => {
             onClick={() => likeRecipeFn(id)}
           />
         }
-        <NumberOfLikes>{likesTotal}</NumberOfLikes>
+        <NumberOfLikes>{likesTotal} likes</NumberOfLikes>
       </LikesWrapper>
       <TimeWrapper>
         <TimerIcon sx={timerIconSx}/>

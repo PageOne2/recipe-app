@@ -140,17 +140,39 @@ exports.updateProfilePic = catchAsync(async (req, res, next) => {
 
 })
 
-exports.getMyRecipes = catchAsync(async (req, res, next) => {
-  const query = Recipe.where('user').equals(req.user.id)
-  const myRecipes = await query
+exports.getUserRecipes = catchAsync(async (req, res, next) => {
+  let userId;
+  if (req.user) {
+    userId = req.user.id 
+  } else {
+    userId = req.params.id
+  }
+  const query = Recipe.where('user').equals(userId)
+  const userRecipes = await query
 
-  if (!myRecipes) return next(new AppError("You don't have recipes yet!"))
+  if (!userRecipes) return next(new AppError("You don't have recipes yet!"))
 
   res.status(200).json({
     status: 'success',
-    length: myRecipes.length,
+    length: userRecipes.length,
     data: {
-      myRecipes
+      userRecipes
+    }
+  })
+})
+
+exports.getRecipesUserLiked = catchAsync(async (req, res, next) => {
+  const { likedRecipes } = await User.findById(req.params.id).select('likedRecipes') 
+  const recipes = [];
+  for (const id of likedRecipes) {
+    const recipe = await Recipe.findById(id);
+    recipes.push(recipe)
+  }
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      recipes
     }
   })
 })

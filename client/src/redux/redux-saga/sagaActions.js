@@ -19,6 +19,16 @@ export const getMyRecipes = () => ({
   type: sagaActionTypes.GET_MY_RECIPES_START
 })
 
+export const getUserRecipes = (id) => ({
+  type: sagaActionTypes.GET_USER_RECIPES,
+  payload: id
+})
+
+export const getRecipesUserLiked = (id) => ({
+  type: sagaActionTypes.GET_RECIPES_USER_LIKED,
+  payload: id
+})
+
 export const logUser = (credentials) => ({
   type: sagaActionTypes.LOG_USER,
   payload: credentials
@@ -31,6 +41,11 @@ export const signUp = (credentials) => ({
 
 export const getMe = () => ({
   type: sagaActionTypes.GET_ME
+})
+
+export const getUserInfo = (userId) => ({
+  type: sagaActionTypes.GET_USER_INFO,
+  payload: userId
 })
 
 export const updateUserPassword = (passwords) => ({

@@ -2,10 +2,14 @@ import SagaActionTypes from '../redux-saga/sagaActionTypes';
 import { takeLatest, put, call, all } from 'redux-saga/effects';
 import { 
   getUserSuccess, 
+  getUserInfoSuccess,
   userLikedRecipes, 
   getMyRecipesSuccess,
+  getUserRecipesSuccess,
   updateProfilePicture,
-  profilePicUpdateStatus
+  profilePicUpdateStatus,
+  getRecipesUserLikedSuccess,
+  getRecipesUserLikedEmpty
 } from './userReducer';
 import { toast } from "react-toastify";
 import Cookies from 'js-cookie';
@@ -103,6 +107,24 @@ export function* getMe() {
   }
 }
 
+export function* getUserInfo({payload}) {
+  try {
+    const apiUrl = process.env.NODE_ENV === 'production' 
+    ? `${process.env.REACT_APP_API_URL}/users/user/${payload}` 
+    : `http://localhost:3000/api/users/user/${payload}`;
+    const res = yield fetch(apiUrl, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    const data = yield res.json();
+    yield put(getUserInfoSuccess(data.data.user));
+  } catch (err) {
+
+  }
+}
+
 export function* updateUserPassword({payload}) {
   try {
     const apiUrl = process.env.NODE_ENV === 'production' 
@@ -178,10 +200,56 @@ export function* getMyRecipes() {
     });
     let res = yield data.json();
     if (data.status === 200) {
-      yield put(getMyRecipesSuccess(res.data.myRecipes));
+      yield put(getMyRecipesSuccess(res.data.userRecipes));
     }
   } catch (err) {
     console.log(err)
+  }
+}
+
+export function* getUserRecipes({payload}) {
+  try {
+    const apiUrl = process.env.NODE_ENV === 'production' 
+    ? `${process.env.REACT_APP_API_URL}/users/user/userRecipes/${payload}` 
+    : `http://localhost:3000/api/users/user/userRecipes/${payload}`;
+
+    let data = yield fetch(apiUrl, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    let res = yield data.json();
+    if (data.status === 200) {
+      yield put(getUserRecipesSuccess(res.data.userRecipes));
+    }
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+export function* getRecipesUserLiked({ payload }) {
+  try {
+    const apiUrl = process.env.NODE_ENV === 'production' 
+    ? `${process.env.REACT_APP_API_URL}/users/user/recipesUserLiked/${payload}` 
+    : `http://localhost:3000/api/users/user/recipesUserLiked/${payload}`;
+    
+    let data = yield fetch(apiUrl, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    let res = yield data.json();
+    if (data.status === 200) {
+      if (res.data.recipes.length) {
+        yield put(getRecipesUserLikedSuccess(res.data.recipes));
+      } else {
+        yield put(getRecipesUserLikedEmpty(true));
+      }
+    }
+  } catch (err) {
+
   }
 }
 
@@ -197,6 +265,10 @@ export function* onGetUser() {
   yield takeLatest(SagaActionTypes.GET_ME, getMe);
 }
 
+export function* onGetUserInfo () {
+  yield takeLatest(SagaActionTypes.GET_USER_INFO, getUserInfo);
+}
+
 export function* onUpdateUserPassword() {
   yield takeLatest(SagaActionTypes.UPDATE_USER_PASSWORD_START, updateUserPassword);
 }
@@ -209,13 +281,24 @@ export function* onGetMyRecipes() {
   yield takeLatest(SagaActionTypes.GET_MY_RECIPES_START, getMyRecipes);
 }
 
+export function* onGetUserRecipes() {
+  yield takeLatest(SagaActionTypes.GET_USER_RECIPES, getUserRecipes);
+}
+
+export function* onGetRecipesUserLiked() {
+  yield takeLatest(SagaActionTypes.GET_RECIPES_USER_LIKED, getRecipesUserLiked)
+}
+
 export function* userSagas() {
   yield all([
     call(onLogUser),
     call(onSignUp),
     call(onGetUser),
+    call(onGetUserInfo),
     call(onUpdateUserPassword),
     call(onChangeProfilePicture),
-    call(onGetMyRecipes)
+    call(onGetMyRecipes),
+    call(onGetUserRecipes),
+    call(onGetRecipesUserLiked)
   ])
 }

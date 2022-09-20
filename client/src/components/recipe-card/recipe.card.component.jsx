@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import RecipeInitialInfo from "../recipe-initial-info/recipe-initial-info.component";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -29,6 +29,7 @@ const RecipeCard = ({
   item: { recipeName, likes, preparationTime, imageCover, user, _id }
 }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const isLoggedIn = useSelector(state => state.user.isLoggedIn);
   const loggedInUser = useSelector(state => state.user.userData);
   const [more, setMore] = useState(false);
@@ -38,12 +39,20 @@ const RecipeCard = ({
   : `http://localhost:3000/api/recipes/recipeImageCover/${imageCover}`;
   const userProfilePicApiUrl = process.env.NODE_ENV === 'production' 
   ? `${process.env.REACT_APP_API_URL}/user/userProfilePic/${user.photo}`
-  : `http://localhost:3000/api/users/userProfilePic/${user.photo}`
+  : `http://localhost:3000/api/users/userProfilePic/${user.photo}`;
+
+  const navigateToUserPage = () => {
+    if (isLoggedIn && loggedInUser._id === user._id) {
+      navigate(`/myprofile`);
+    } else {
+      navigate(`/user-page/${user._id}`);
+    }
+  }
 
   return (
     <RecipeCardWrapper>
       <UserInfoWrapper>
-        <UserImageWrapper>
+        <UserImageWrapper onClick={() => navigateToUserPage()}>
           <img
             crossOrigin="anonymous"
             src={userProfilePicApiUrl}

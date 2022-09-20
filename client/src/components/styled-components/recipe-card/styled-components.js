@@ -18,6 +18,8 @@ export const UserInfoWrapper = styled.div`
 `
 
 export const UserImageWrapper = styled.div`
+  cursor: pointer;
+
   & img {
     width: 40px;
     height: 40px;
