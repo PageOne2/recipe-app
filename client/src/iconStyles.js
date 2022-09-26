@@ -16,7 +16,7 @@ export const deleteIconSx = {
 export const doneIconSx = {
   backgroundColor: "#74eb75",
   color: "#fff",
-  marginRight: 1,
+  marginRight: 3,
   cursor: "pointer",
   borderRadius: 100,
   ":hover": {

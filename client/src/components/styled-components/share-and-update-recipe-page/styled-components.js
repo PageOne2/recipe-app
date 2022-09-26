@@ -6,11 +6,21 @@ export const ShareRecipeContainer = styled.div`
   justify-content: center;
   padding-top: 3px;
   height: 100vh;
+
+  @media (max-width: 1160px) {
+    height: unset;
+    flex-direction: column;
+  }
 `
 
 export const ShareRecipeForm = styled.div`
   width: 50%;
   padding: 30px;
+
+  @media (max-width: 1160px) {
+    width: unset;
+    padding: 10px;
+  }
 `
 
 export const ShareRecipeFormTitle = styled.div`
@@ -22,6 +32,13 @@ export const ShareRecipeFormTitle = styled.div`
 
 export const SubmitButtonWrapper = styled.div`
   width: 150px;
+
+  @media (max-width: 1160px) {
+    width: 100%;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+  }
 `
 
 export const SubmitFormButton = styled.button`
@@ -39,11 +56,27 @@ export const SubmitFormButton = styled.button`
 export const InputContainer = styled.div`
   display: flex;
   align-items: center;
+
+  @media (max-width: 1160px) {
+    align-items: start;
+    flex-direction: column;
+    margin-bottom: 20px;
+  }
 `
 
 export const InputWrapper = styled.div`
   display: flex;
   flex-direction: column;
+
+  @media (max-width: 1160px) {
+    width: -webkit-fill-available;
+    margin-bottom: 5px;
+
+    & input {
+      width: 100%;
+      margin-bottom: 0px;
+    }
+  }
 `
 
 export const RecipeImageInput = styled.input`
@@ -64,6 +97,11 @@ export const ShareInput = styled.input`
 export const AddButtonWrapper = styled.div`
   height: 30px;
   margin-left: 10px;
+
+  @media (max-width: 1160px) {
+    margin-left: 0px;
+    width: -webkit-fill-available;
+  }
 `
 
 export const AddButton = styled.button`
@@ -77,6 +115,10 @@ export const AddButton = styled.button`
 
   &:hover {
     background-color: ${({ bgHover }) => bgHover}
+  }
+
+  @media (max-width: 720px) {
+    width: 100%;
   }
 `
 
@@ -101,6 +143,15 @@ export const ShareRecipeInfoContainer = styled.div`
   /* Handle on hover */
   &::-webkit-scrollbar-thumb:hover {
     background: #a3a3a3; 
+  }
+
+  @media (max-width: 1160px) {
+    position: static;
+    width: unset;
+    height: unset;
+    padding: 10px 10px 30px 10px;
+    overflow-y: unset;
+    direction: unset;
   }
 `
 
@@ -148,6 +199,11 @@ export const RecipeImageWrapper = styled.div`
     height: 100%;
     border-radius: 3px;
   }
+
+  @media (max-width: 620px) {
+    padding: 20px 0px 0px 0px;
+    width: unset;
+  }
 `
 
 export const RecipeNameWrapper = styled.div`
@@ -184,12 +240,23 @@ export const EditMode = styled.div`
   background-color: #fff;
   border: 1px solid #f1f1f1;
   box-shadow: 15px 10px 60px -1px rgb(0 0 0 / 15%);
+
+  @media (max-width: 720px) {
+    top: 6%;
+    padding: 25px 10px;
+    width: 100vw;
+  }
 `
 
 export const EditModeItem = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  
+  @media (max-width: 720px) {
+    flex-direction: column;
+    width: 100%;
+  }
 `
 
 export const ItemInput = styled.div`
@@ -202,6 +269,11 @@ export const ItemInput = styled.div`
     border-radius: 3px;
     padding: 3px;
     font-size: 18px;
+  }
+
+  @media (max-width: 720px) {
+    width: inherit;
+    margin-right: 0px;
   }
 `
 
@@ -218,16 +290,31 @@ export const EditButton = styled.div`
       background-color: #3a3a3a;
     }
   }
+
+  @media (max-width: 720px) {
+    width: -webkit-fill-available;
+    margin-top: 5px;
+    & button {
+      width: inherit;
+    }
+  }
 `
 
 export const CloseEditButton = styled.div`
   position: absolute;
   top: -10px;
   right: -10px;
+  @media (max-width: 720px) {
+    top: -2px;
+    right: 5px;
+  }
 `
 
 export const UpdateRecipeContainer = styled.div`
   padding: 30px 90px;
+  @media (max-width: 620px) {
+    padding: 30px 0px;
+  }
 `
 
 export const ChooseAndUpdateWrapper = styled.div`
@@ -247,6 +334,17 @@ export const UpdateButtonWrapper = styled.div`
 
     &:hover {
       background-color: #f16f3b;
+    }
+  }
+
+  @media (max-width: 775px) {
+    position: fixed;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+
+    & button {
+      padding: 15px 70px;
     }
   }
 `
@@ -285,6 +383,14 @@ export const AddMoreItem = styled.div`
   border: 1px solid #f1f1f1;
   -webkit-box-shadow: 15px 10px 60px -1px rgb(0 0 0 / 15%); 
   box-shadow: 15px 10px 60px -1px rgb(0 0 0 / 15%);
+
+  @media (max-width: 720px) {
+    align-items: unset;
+    flex-direction: column;
+    top: 6%;
+    padding: 20px 10px;
+    width: 100vw;
+  }
 `
 
 export const TitleAndInputAddMoreWrapper = styled.div`
@@ -301,9 +407,21 @@ export const TitleAndInputAddMoreWrapper = styled.div`
     padding: 5px;
     font-size: 18px;
   }
+
+  @media (max-width: 720px) {
+    width: 100%;
+    & input {
+      width: inherit;
+    }
+  }
 `
 
 export const AddOrCancelWrapper = styled.div`
   display: flex;
   margin-left: 10px;
+
+  @media (max-width: 720px) {
+    margin-top: 10px;
+    margin-left: 0px;
+  }
 `

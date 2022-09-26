@@ -23,6 +23,11 @@ export const UserName = styled.p`
 
 export const TabWrapper = styled.div`
   margin: 40px 0px;
+  @media (max-width: 415px) {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+  }
 `
 
 export const Tab = styled.span`

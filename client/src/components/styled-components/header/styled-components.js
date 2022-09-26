@@ -14,10 +14,14 @@ export const NavBar = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0px 150px;
+  padding: 0 150px;
 
   & a {
     text-decoration: none;
+  }
+
+  @media (max-width: 610px) {
+    padding: 0 15px;
   }
 `
 

@@ -2,6 +2,10 @@ import styled from "styled-components";
 
 export const ButtonsWrapper = styled.div`
   display: flex;
+  flex-wrap: wrap;
+  @media (max-width: 945px) {
+    margin-top: 10px;
+  }
 `
 
 export const Button = styled.button`

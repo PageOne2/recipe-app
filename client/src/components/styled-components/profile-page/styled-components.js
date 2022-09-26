@@ -7,6 +7,9 @@ export const ProfileWrapper = styled.div`
 export const UserInfo = styled.div`
   display: flex;
   align-items: center;
+  @media (max-width: 500px) {
+    flex-direction: column;
+  }
 `
 
 export const ProfilePic = styled.img`
@@ -14,6 +17,9 @@ export const ProfilePic = styled.img`
   height: 150px;
   border-radius: 100%;
   margin-right: 40px;
+  @media (max-width: 500px) {
+    margin-right: 0;
+  }
 `
 
 export const ChageProfilePicWrapper = styled.div``
@@ -37,6 +43,11 @@ export const ChangeProfilePicInputWrapper = styled.div`
 
 export const TabWrapper = styled.div`
   margin: 40px 0px;
+  @media (max-width: 500px) {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+  }
 `
 
 export const Tab = styled.span`

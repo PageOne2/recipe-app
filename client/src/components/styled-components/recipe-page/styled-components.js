@@ -2,6 +2,10 @@ import styled, { css } from "styled-components";
 
 export const RecipePageWrapper = styled.div`
   height: 100vh;
+
+  @media (max-width: 720px) {
+    overflow-x: hidden;
+  }
 `
 
 export const RecipePageContent = styled.div`
@@ -16,6 +20,11 @@ export const RecipePageName = styled.div`
   color: #464646;
   width: 530px;
   word-break: break-word;
+
+  @media (max-width: 720px) {
+    width: unset;
+    padding: 0 15px;
+  }
 `
 
 export const RecipeInfo = styled.div`
@@ -27,6 +36,9 @@ export const RecipePageInfo = styled.div`
 
 export const RecipePageImage = styled.div`
   display: flex;  
+  @media (max-width: 720px) {
+    flex-direction: column-reverse;
+  }
 `
 
 export const RecipeImageWrapper = styled.div`
@@ -34,22 +46,39 @@ export const RecipeImageWrapper = styled.div`
     width: 400px;
     height: 300px;
   }
+
+  @media (max-width: 720px) {
+    & img {
+      width: 100%;
+    }
+  }
 `
 
 export const UserPicAndInitialInfoWrapper = styled.div`
   margin-left: 10px;
+
+  @media (max-width: 720px) {
+    display: flex;
+  }
 `
 
 export const UserPicWrapper = styled.div`
-margin-bottom: 10px;
+  margin-bottom: 10px;
   & img {
     width: 60px;
     height: 60px;
     border-radius: 100%;
   }
+
+  @media (max-width: 720px) {
+    margin-right: 20px;
+  }
 `
 
 export const LikesAndPrepTimeWrapper = styled.div`
+  @media (max-width: 720px) {
+    display: flex;
+  }
 `
 
 const LikesAndPrepInfoWrapperStyles = css`
@@ -83,12 +112,21 @@ export const RecipeFieldsWrapper = styled.div`
 
 export const TabWrapper = styled.div`
   display: flex;
+  @media (max-width: 720px) {
+    margin-left: 10px;
+  }
 `
 
 export const RecipeListWrapper = styled.div`
   display: block;
   padding: 15px 0px 10px 20px;
   width: 400px;
+
+  @media (max-width: 720px) {
+    width: unset;
+    margin-left: 10px;
+    padding: 15px 5px 10px 20px;
+  }
 `
 
 export const RecipeFieldNameAndIconWrapper = styled.div`
