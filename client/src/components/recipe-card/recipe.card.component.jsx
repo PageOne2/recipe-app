@@ -54,7 +54,6 @@ const RecipeCard = ({
       <UserInfoWrapper>
         <UserImageWrapper onClick={() => navigateToUserPage()}>
           <img
-            crossOrigin="anonymous"
             src={userProfilePicApiUrl}
             alt="user"
           />
@@ -86,7 +85,7 @@ const RecipeCard = ({
           </Link>
         </RecipeImageOverlay>
         <RecipeImage>
-          <img crossOrigin="anonymous" src={recipeImageCoverApiUrl} alt="dish" />
+          <img src={recipeImageCoverApiUrl} alt="dish" />
         </RecipeImage>
       </RecipeImageWrapper>
       <RecipeNameWrapper>

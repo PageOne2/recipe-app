@@ -75,7 +75,7 @@ const UserPage = () => {
   return (
     <UserPageWrapper>
       <UserProfilePicWrapper>
-        <ProfilePic crossOrigin="anonymous" src={userProfilePicApiUrl}/>
+        <ProfilePic src={userProfilePicApiUrl}/>
         <UserName>{userInfo.name}</UserName>
       </UserProfilePicWrapper>
       <TabWrapper>

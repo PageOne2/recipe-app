@@ -60,7 +60,7 @@ const ProfilePage = () => {
     <ProfileWrapper>
       <ToastContainer />
       <UserInfo>
-        <ProfilePic crossOrigin="anonymous" src={myProfilePicApiUrl} alt="profile-picture"/>
+        <ProfilePic src={myProfilePicApiUrl} alt="profile-picture"/>
         <ChageProfilePicWrapper>
           <h3>{me.name}</h3>
           <ChangeProfilePicInputWrapper>

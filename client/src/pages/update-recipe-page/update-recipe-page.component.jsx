@@ -196,7 +196,7 @@ const UpdateRecipePage = () => {
             </UpdateButtonWrapper>
           </ChooseAndUpdateWrapper>
           <RecipeImageWrapper>
-            <img crossOrigin="anonymous" src={imagePreview ? imagePreview : apiUrl}/>
+            <img src={imagePreview ? imagePreview : apiUrl}/>
           </RecipeImageWrapper>
         </RecipeInfoTitle>
         <RecipeInfoTitle>

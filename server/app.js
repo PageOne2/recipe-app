@@ -21,7 +21,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.use(cors())
 
 // Set security HTTP headers
-app.use(helmet())
+app.use(helmet({ crossOriginResourcePolicy: { policy: 'cross-origin' } }))
 
 // Limit requests from same IP adress
 const limiter = rateLimit({

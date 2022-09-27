@@ -120,11 +120,11 @@ const RecipePage = () => {
               </RecipePageName>
               <RecipePageImage>
                 <RecipeImageWrapper>
-                  <img crossOrigin="anonymous" src={recipeImageCoverApiUrl} alt="dish"/>
+                  <img src={recipeImageCoverApiUrl} alt="dish"/>
                 </RecipeImageWrapper>
                 <UserPicAndInitialInfoWrapper>
                   <UserPicWrapper>
-                    <img crossOrigin="anonymous" src={userProfilePicApiUrl} title={recipe.user.name} alt={recipe.user.name}/>
+                    <img src={userProfilePicApiUrl} title={recipe.user.name} alt={recipe.user.name}/>
                   </UserPicWrapper>
                   <LikesAndPrepTimeWrapper>
                     <LikesInfoWrapper bgColor="#ff707021" borderColor="#ed4444">
