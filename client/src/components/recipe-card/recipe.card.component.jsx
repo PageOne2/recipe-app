@@ -38,7 +38,7 @@ const RecipeCard = ({
   ? `${process.env.REACT_APP_API_URL}/recipes/recipeImageCover/${imageCover}` 
   : `http://localhost:3000/api/recipes/recipeImageCover/${imageCover}`;
   const userProfilePicApiUrl = process.env.NODE_ENV === 'production' 
-  ? `${process.env.REACT_APP_API_URL}/user/userProfilePic/${user.photo}`
+  ? `${process.env.REACT_APP_API_URL}/users/userProfilePic/${user.photo}`
   : `http://localhost:3000/api/users/userProfilePic/${user.photo}`;
 
   const navigateToUserPage = () => {

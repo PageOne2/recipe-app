@@ -35,7 +35,7 @@ const ProfilePage = () => {
   const myProfilePicUpdateStatus = useSelector(state => state.user.userProfilePicUpdateStatus);
   const dispatch = useDispatch();
   const myProfilePicApiUrl = process.env.NODE_ENV === 'production' 
-  ? `${process.env.REACT_APP_API_URL}/user/userProfilePic/${me.photo}`
+  ? `${process.env.REACT_APP_API_URL}/users/userProfilePic/${me.photo}`
   : `http://localhost:3000/api/users/userProfilePic/${me.photo}`
 
   useEffect(() => {

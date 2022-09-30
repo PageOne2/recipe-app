@@ -27,7 +27,7 @@ const UserPage = () => {
   const params = useParams();
   const dispatch = useDispatch();
   const userProfilePicApiUrl = process.env.NODE_ENV === 'production' 
-  ? `${process.env.REACT_APP_API_URL}/user/userProfilePic/${userInfo.photo}`
+  ? `${process.env.REACT_APP_API_URL}/users/userProfilePic/${userInfo.photo}`
   : `http://localhost:3000/api/users/userProfilePic/${userInfo.photo}`
 
   useEffect(() => {
