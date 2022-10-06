@@ -4,13 +4,14 @@ export const userReducer = createSlice({
   name: 'user',
   initialState: {
     isLoggedIn: false,
-    logInErrorMessage: '',
-    signUpErrorMessage: '',
     userLikedRecipes: [],
     myRecipes: [],
+    userRecipes: [],
+    recipesUserLiked: [],
+    noRecipesUserLiked: false,
     userData: {},
-    interactedRecipes: [],
-    createdRecipe: {}
+    userInfo: {},
+    userProfilePicUpdateStatus: ''
   },
   reducers: {
     getUserSuccess: (state, action) => {
@@ -21,16 +22,10 @@ export const userReducer = createSlice({
         userData: action.payload
       }
     },
-    logInUserFailure: (state, action) => {
+    getUserInfoSuccess: (state, action) => {
       return {
         ...state,
-        logInErrorMessage: action.payload
-      }
-    },
-    signUpUserFailure: (state, action) => {
-      return {
-        ...state,
-        signUpErrorMessage: action.payload
+        userInfo: action.payload
       }
     },
     userLikedRecipes: (state, action) => {
@@ -47,24 +42,37 @@ export const userReducer = createSlice({
         myRecipes: action.payload
       }
     },
-    recipeLiked: (state, action) => {
-      const recipeIdx = state.interactedRecipes.findIndex(x => x.id === action.payload.id);
-      const newArray = [...state.interactedRecipes];
-      if (recipeIdx > -1) newArray[recipeIdx].likes = action.payload.likes;
-      else newArray.push(action.payload);
-      state.interactedRecipes = newArray;
-    },
-    recipeDisliked: (state, action) => {
-      const recipeIdx = state.interactedRecipes.findIndex(x => x.id === action.payload.id);
-      const newArray = [...state.interactedRecipes];
-      if (recipeIdx > -1) newArray[recipeIdx].likes = action.payload.likes;
-      else newArray.push(action.payload);
-      state.interactedRecipes = newArray;
-    },
-    createRecipeSuccess: (state, action) => {
+    getUserRecipesSuccess: (state, action) => {
       return {
         ...state,
-        createdRecipe: action.payload
+        userRecipes: action.payload
+      }
+    },
+    getRecipesUserLikedSuccess: (state, action) => {
+      return {
+        ...state,
+        recipesUserLiked: action.payload,
+        noRecipesUserLiked: false
+      }
+    },
+    getRecipesUserLikedEmpty: (state, action) => {
+      return {
+        ...state,
+        noRecipesUserLiked: action.payload 
+      }
+    },
+    updateProfilePicture: (state, action) => {
+      const updatedUserData = {...state.userData};
+      updatedUserData.photo = action.payload;
+      return {
+        ...state,
+        userData: updatedUserData
+      }
+    },
+    profilePicUpdateStatus: (state, action) => {
+      return {
+        ...state,
+        userProfilePicUpdateStatus: action.payload
       }
     },
     logOut: (state, action) => {}
@@ -73,13 +81,15 @@ export const userReducer = createSlice({
 
 export const { 
   getUserSuccess, 
-  logInUserFailure, 
-  signUpUserFailure, 
+  getUserInfoSuccess,
   userLikedRecipes, 
   getMyRecipesSuccess,
-  recipeLiked, 
-  recipeDisliked, 
-  createRecipeSuccess,
-  logOut } = userReducer.actions;
+  getUserRecipesSuccess,
+  getRecipesUserLikedSuccess,
+  getRecipesUserLikedEmpty,
+  updateProfilePicture,
+  profilePicUpdateStatus,
+  logOut 
+} = userReducer.actions;
 
 export default userReducer.reducer;

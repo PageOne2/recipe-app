@@ -1,43 +1,98 @@
-import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 import RecipeInitialInfo from "../recipe-initial-info/recipe-initial-info.component";
-import recipeImage from "../../assets/default.jpg";
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 import { formatRecipeName } from "../../utils/formatStr";
-
-import "./recipe.card.styles.css";
+import { deleteRecipe } from "../../redux/redux-saga/sagaActions";
+import { editIconSx, deleteIconSx, moreVertIconSx } from "../../iconStyles";
+import { 
+  RecipeCardWrapper,
+  UserInfoWrapper,
+  UserImageWrapper,
+  UserNameWrapper,
+  UserName,
+  UserNameMe,
+  MoreUserActionsWrapper,
+  MoreActions,
+  RecipeImageWrapper,
+  RecipeImageOverlay,
+  GoToButton,
+  RecipeImage,
+  RecipeNameWrapper,
+  RecipeName
+} from "../styled-components/recipe-card/styled-components";
 
 const RecipeCard = ({
   item: { recipeName, likes, preparationTime, imageCover, user, _id }
 }) => {
-  const isUserLogged = useSelector((state) => state.user.userData);
-  const myRecipe = Object.keys(isUserLogged).length && isUserLogged._id === user._id ? true : false;
-  const apiUrl = process.env.NODE_ENV === 'production' 
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const isLoggedIn = useSelector(state => state.user.isLoggedIn);
+  const loggedInUser = useSelector(state => state.user.userData);
+  const [more, setMore] = useState(false);
+  const myRecipe = isLoggedIn && loggedInUser._id === user._id ? true : false;
+  const recipeImageCoverApiUrl = process.env.NODE_ENV === 'production' 
   ? `${process.env.REACT_APP_API_URL}/recipes/recipeImageCover/${imageCover}` 
   : `http://localhost:3000/api/recipes/recipeImageCover/${imageCover}`;
+  const userProfilePicApiUrl = process.env.NODE_ENV === 'production' 
+  ? `${process.env.REACT_APP_API_URL}/users/userProfilePic/${user.photo}`
+  : `http://localhost:3000/api/users/userProfilePic/${user.photo}`;
+
+  const navigateToUserPage = () => {
+    if (isLoggedIn && loggedInUser._id === user._id) {
+      navigate(`/myprofile`);
+    } else {
+      navigate(`/user-page/${user._id}`);
+    }
+  }
 
   return (
-    <div className="recipe-card">
-      <div className="user">
-        <img
-          className="user-image"
-          src={`http://localhost:3000/img/user/${user.photo}`}
-          alt="user"
-        />
-        <h4 className={myRecipe ? "user-name-me" : "user-name"}>{user.name}</h4>
-      </div>
-      <div className="recipe-image">
-        <div className="overlay">
+    <RecipeCardWrapper>
+      <UserInfoWrapper>
+        <UserImageWrapper onClick={() => navigateToUserPage()}>
+          <img
+            src={userProfilePicApiUrl}
+            alt="user"
+          />
+        </UserImageWrapper>
+        <UserNameWrapper>
+          {myRecipe ? <UserNameMe>You</UserNameMe> : <UserName>{user.name}</UserName>}
+          {isLoggedIn && myRecipe 
+            ? <MoreVertIcon sx={moreVertIconSx} onClick={() => setMore(!more)}/>
+            : null
+          }
+        </UserNameWrapper>
+        {more &&
+          <MoreUserActionsWrapper>
+            <MoreActions onClick={() => dispatch(deleteRecipe(_id))}>
+              Delete Recipe <DeleteIcon sx={deleteIconSx}/>
+            </MoreActions>
+            <Link to={`/recipe/updateRecipe/${_id}`}>
+              <MoreActions>
+                Update Recipe <EditIcon sx={editIconSx()}/>
+              </MoreActions>
+            </Link>
+          </MoreUserActionsWrapper>
+        }
+      </UserInfoWrapper>
+      <RecipeImageWrapper>
+        <RecipeImageOverlay>
           <Link to={`/recipe/${_id}`}>
-            <button className="go-to-btn">Go To Recipe</button>
+            <GoToButton>Go To Recipe</GoToButton>
           </Link>
-        </div>
-        <img crossOrigin="anonymous" src={apiUrl} alt="dish" />
-      </div>
-      <div className="recipe-name">
-        <h3>{formatRecipeName(recipeName)}</h3>
-      </div>
+        </RecipeImageOverlay>
+        <RecipeImage>
+          <img src={recipeImageCoverApiUrl} alt="dish" />
+        </RecipeImage>
+      </RecipeImageWrapper>
+      <RecipeNameWrapper>
+        <RecipeName>{formatRecipeName(recipeName)}</RecipeName>
+      </RecipeNameWrapper>
       <RecipeInitialInfo id={_id} myRecipe={myRecipe} likes={likes} preparationTime={preparationTime} />
-    </div>
+    </RecipeCardWrapper>
   );
 };
 

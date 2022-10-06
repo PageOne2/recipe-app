@@ -4,16 +4,10 @@ const catchAsync = require('../utils/catchAsync')
 const AppError = require('../utils/appError')
 const multer = require('multer')
 const sharp = require('sharp')
-
-/*const multerStorage = multer.diskStorage({
-    destination: (req, file, callback) => {
-        callback(null, 'dev-data/img/user-imgs')
-    },
-    filename: (req, file, callback) => {
-        const extension = file.mimetype.split('/')[1]
-        callback(null, `user-${req.user.id}-${Date.now()}.${extension}`)
-    }
-})*/
+const awsS3 = require('../s3');
+const fs = require('fs')
+const util = require('util');
+const unlinkFile = util.promisify(fs.unlink);
 
 const multerStorage = multer.memoryStorage()
 
@@ -35,13 +29,14 @@ exports.uploadUserPhoto = upload.single('photo')
 exports.resizeUserPhoto = catchAsync(async (req, res, next) => {
   if (!req.file) return next()
 
-  req.file.filename = `user-${req.user.id}-${Date.now()}.jpeg`
+  req.file.filename = `user-${req.user.id}-${Date.now()}.jpg`;
+  req.file.path = `public/img/user/${req.file.filename}`;
 
   await sharp(req.file.buffer)
-    .resize(500, 500)
-    .toFormat('jpeg')
+    .resize(300, 300)
+    .toFormat('jpg')
     .jpeg({ quality: 90 })
-    .toFile(`public/img/user/${req.file.filename}`)
+    .toFile(req.file.path)
 
   next()
 })
@@ -56,6 +51,11 @@ exports.getAllUsers = catchAsync(async (req, res) => {
     }
   })
 })
+
+exports.getUserProfilePic = async (req, res, next) => {
+  const readStream = await awsS3.getFile(req.params.key)
+  if (readStream) readStream.pipe(res);
+}
 
 exports.getUser = catchAsync(async (req, res) => {
   const user = await User.findById(req.params.id)
@@ -104,17 +104,75 @@ exports.updateMe = catchAsync(async (req, res, next) => {
   })
 })
 
-exports.getMyRecipes = catchAsync(async (req, res, next) => {
-  const query = Recipe.where('user').equals(req.user.id)
-  const myRecipes = await query
+exports.updateProfilePic = catchAsync(async (req, res, next) => {
+  let profilePicUploadResult;
+  if (req.file) {
+    const { photo } = await User.findById(req.params.id).select('photo');
+    if (photo && photo !== "user-default-pic.jpg") await awsS3.deleteFile(photo);
+    profilePicUploadResult = await awsS3.uploadFile(req.file);
+    await unlinkFile(req.file.path);
 
-  if (!myRecipes) return next(new AppError("You don't have recipes yet!"))
+    const updatedProfilePicture = await User.findByIdAndUpdate(req.params.id, { 'photo': req.file.filename }, {
+      new: true,
+      runValidators: true,
+      select: 'photo'
+    })
+  
+    if (profilePicUploadResult) {
+      res.status(200).json({
+        status: 'succes',
+        data: {
+          updatedProfilePic: updatedProfilePicture.photo,
+          userProfilePicPath: `userProfilePic/${profilePicUploadResult.Key}`
+        }
+      })
+    } else {
+      res.status(200).json({
+        status: 'succes',
+        data: {
+          updatedProfilePic: updatedProfilePicture.photo
+        }
+      })
+    }
+  } else {
+    return next(new AppError('This route is for profile picture update! Please submit a file.'))
+  }
+
+})
+
+exports.getUserRecipes = catchAsync(async (req, res, next) => {
+  let userId;
+  if (req.user) {
+    userId = req.user.id 
+  } else {
+    userId = req.params.id
+  }
+  const query = Recipe.where('user').equals(userId)
+  const userRecipes = await query
+
+  if (!userRecipes) return next(new AppError("You don't have recipes yet!"))
 
   res.status(200).json({
     status: 'success',
-    length: myRecipes.length,
+    length: userRecipes.length,
     data: {
-      myRecipes
+      userRecipes
+    }
+  })
+})
+
+exports.getRecipesUserLiked = catchAsync(async (req, res, next) => {
+  const { likedRecipes } = await User.findById(req.params.id).select('likedRecipes') 
+  const recipes = [];
+  for (const id of likedRecipes) {
+    const recipe = await Recipe.findById(id);
+    recipes.push(recipe)
+  }
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      recipes
     }
   })
 })

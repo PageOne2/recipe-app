@@ -20,7 +20,7 @@ router.get('/mostLiked/:page', recipeController.getMostLiked)
 router
     .route('/:id')
     .get(recipeController.getRecipe)
-    .patch(authController.protect, authController.restrictTo('user'), recipeController.isUserRecipe('update'), recipeController.updateRecipe)
+    .patch(authController.protect, authController.restrictTo('user'), recipeController.isUserRecipe('update'), recipeController.uploadRecipeImageCover, recipeController.resizeRecipeImageCover, recipeController.updateRecipe)
     .delete(authController.protect, recipeController.isUserRecipe('delete'), recipeController.deleteRecipe)    
 
 module.exports = router

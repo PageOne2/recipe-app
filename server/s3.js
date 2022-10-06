@@ -1,7 +1,7 @@
 const fs = require('fs');
 const S3 = require('aws-sdk/clients/s3');
 const awsBucketName = process.env.AWS_BUCKET_NAME;
-const awsBucketRegion = process.env.AWS__REGION;
+const awsBucketRegion = process.env.AWS_REGION;
 const awsAccessKey = process.env.AWS_ACCESS_KEY_ID;
 const awsSecretKey = process.env.AWS_SECRET_ACCESS_KEY;
 const s3 = new S3({
@@ -35,5 +35,18 @@ exports.getFile = async (fileKey) => {
     return s3.getObject(downloadParams).createReadStream();
   } catch (err) {
     return undefined;
+  }
+}
+
+exports.deleteFile = async (fileKey) => {
+  try {
+    const deleteParams = {
+      Bucket: awsBucketName,
+      Key: fileKey
+    }
+    await s3.headObject(deleteParams).promise();
+    return s3.deleteObject(deleteParams).promise();
+  } catch (err) {
+    return undefined
   }
 }

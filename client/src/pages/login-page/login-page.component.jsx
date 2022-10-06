@@ -1,44 +1,40 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { logUser } from '../../redux/redux-saga/sagaActions';
-import { logInUserFailure } from '../../redux/userReducer/userReducer';
-import ErrorModal from '../../components/error-modal/error.modal.component';
+import { ToastContainer } from "react-toastify";
+import { 
+  Wrapper,
+  FormWrapper,
+  FormTitle,
+  InputErrorMessage,
+  FormMessage,
+  Message,
+  SubmitButton
+} from '../../components/styled-components/form-styles/styled-components';
 
-import './login-page.styles.css';
+import "react-toastify/dist/ReactToastify.css";
 
 const LoginPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
-  const logInErrorMessage = useSelector((state) => state.user.logInErrorMessage);
-  const [failedLog, setFailedLog] = useState({fail: false, errMessage: ''});
+  const isLoggedIn = useSelector(state => state.user.isLoggedIn);
   
   useEffect(() => {
     if (isLoggedIn) { 
       navigate('/');
-    } else if (logInErrorMessage) {
-      setFailedLog({fail: true, errMessage: logInErrorMessage});
-    } else {
-      setFailedLog({fail: false, errMessage: ''});
     }
-  }, [isLoggedIn, logInErrorMessage]);
+  }, [isLoggedIn]);
   
-  useEffect(() => {
-    return () => {      
-      dispatch(logInUserFailure(''));
-    }
-  }, []);
-
   return (
-    <div className='login-page'>
-      <ErrorModal showModal={failedLog.fail} errMessage={failedLog.errMessage} logInPage={true}/>
-      <div className='form'>
-        <div className="form-title">
+    <Wrapper>
+      <ToastContainer />
+      <FormWrapper>
+        <FormTitle>
           <h2>Login</h2>
-        </div>
+        </FormTitle>
         <Formik
           initialValues={{ email: '', password: '' }}
           validationSchema={Yup.object({
@@ -54,20 +50,20 @@ const LoginPage = () => {
           }}
         >
           <Form>
-            <ErrorMessage name='email' render={msg => <div className='error-msg'>{msg}</div>} />
+            <ErrorMessage name='email' render={msg => <InputErrorMessage>{msg}</InputErrorMessage>} />
             <Field className='form-input' name='email' type='email' placeholder="Email"/>
 
-            <ErrorMessage name='password' render={msg => <div className='error-msg'>{msg}</div>} />
+            <ErrorMessage name='password' render={msg => <InputErrorMessage>{msg}</InputErrorMessage>} />
             <Field className='form-input' name='password' type='password' placeholder="Password"/>
 
-            <div className='btn-message'>
-              <p className='message'>You don't have a account yet? <a>Sign Up</a></p>
-            </div>
-            <button className='submit-btn' type='submit'>Submit</button>
+            <FormMessage>
+              <Message>You don't have a account yet? <a>Sign Up</a></Message>
+            </FormMessage>
+            <SubmitButton type='submit'>Submit</SubmitButton>
           </Form>
         </Formik>
-      </div>
-    </div>
+      </FormWrapper>
+    </Wrapper>
   )
 }
 

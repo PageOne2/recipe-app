@@ -1,10 +1,10 @@
-import "./spinner.styles.css";
+import { SpinnerWrapper, SpinnerRotate } from "../styled-components/spinner/styled-components";
 
 const Spinner = () => {
     return (
-        <div className="spinner-wrapper">
-            <div className="spinner"></div>
-        </div>
+        <SpinnerWrapper>
+            <SpinnerRotate></SpinnerRotate>
+        </SpinnerWrapper>
     )
 }
 

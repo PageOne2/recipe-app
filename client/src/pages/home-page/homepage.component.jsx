@@ -1,12 +1,17 @@
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 import CategorieButton from "../../components/categorie-button/categorie-button.component"
 import RecipesContainer from "../../components/recipes-container/recipes.container.component";
+import { 
+  HomePageButtonsWrapper, 
+  ShareRecipeButtonWrapper 
+} from "../../components/styled-components/home-page/styled-components";
 
-import "./homepage.styles.css";
+import "react-toastify/dist/ReactToastify.css";
 
 const HomePage = () => {
-  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+  const isLoggedIn = useSelector(state => state.user.isLoggedIn);
   const navigate = useNavigate();
 
   const handleClick = () => {
@@ -18,15 +23,16 @@ const HomePage = () => {
   }
 
   return (
-    <div className="homepage">
-      <div className="homepage-btns">
+    <>
+      <ToastContainer />
+      <HomePageButtonsWrapper>
         <CategorieButton />
-        <div className="share-recipe-btn">
-          <button className="share-btn" onClick={() => handleClick()}>+ Share Recipe</button>
-        </div>
-      </div>
+        <ShareRecipeButtonWrapper>
+          <button onClick={() => handleClick()}>+ Share Recipe</button>
+        </ShareRecipeButtonWrapper>
+      </HomePageButtonsWrapper>
       <RecipesContainer />
-    </div>
+    </>
   );
 };
 

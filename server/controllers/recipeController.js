@@ -28,7 +28,7 @@ exports.uploadRecipeImageCover = upload.single('imageCover')
 exports.resizeRecipeImageCover = catchAsync(async (req, res, next) => {
   if (!req.file) return next()
 
-  req.file.filename = `recipe-image-${req.user.id}-${Date.now()}.jpeg`
+  req.file.filename = `recipe-image-${req.user.id}-${Date.now()}.jpg`
   req.file.path = `public/img/recipeImageCover/${req.file.filename}`
 
   await sharp(req.file.buffer)
@@ -53,21 +53,72 @@ exports.getAllRecipes = catchAsync(async (req, res, next) => {
 })
 
 exports.createRecipe = catchAsync(async (req, res, next) => {
+  let recipeInfo;
   if (!req.body.user) req.body.user = req.user.id
-  const recipeInfoObj = JSON.parse(req.body.recipeInfo);
-  recipeInfoObj.imageCover = req.file.filename;
-  recipeInfoObj.user = req.body.user;
-  const recipe = await Recipe.create(recipeInfoObj);
-  const imageCoverUploadResult = await awsS3.uploadFile(req.file);
-  await unlinkFile(req.file.path);
 
-  res.status(201).json({
-    status: 'success',
-    data: {
-      recipe,
-      imageCoverPath: `/images/${imageCoverUploadResult.Key}`
-    }
+  if (!req.body.recipeInfo) recipeInfo = req.body;
+  else recipeInfo = JSON.parse(req.body.recipeInfo);
+
+  if (req.file) recipeInfo.imageCover = req.file.filename;
+  recipeInfo.user = req.body.user;
+  let recipe = await Recipe.create(recipeInfo);
+  recipe = await recipe.populate({ path: 'user', select: 'name photo' }); 
+  
+  if(req.file) {
+    const imageCoverUploadResult = await awsS3.uploadFile(req.file);
+    await unlinkFile(req.file.path);
+    res.status(201).json({
+      status: 'success',
+      data: {
+        recipe,
+        imageCoverPath: `/images/${imageCoverUploadResult.Key}`
+      }
+    })
+  } else {
+    res.status(201).json({
+      status: 'success',
+      data: {
+        recipe
+      }
+    })
+  }
+})
+
+exports.updateRecipe = catchAsync(async (req, res, next) => {
+  let recipeInfo;
+  if (!req.body.recipeInfo) recipeInfo = req.body;
+  else recipeInfo = JSON.parse(req.body.recipeInfo);
+
+  let imageCoverUploadResult;
+  if (req.file) {
+    const { imageCover } = await Recipe.findById(req.params.id).select('imageCover');
+    if (imageCover) await awsS3.deleteFile(imageCover);
+    recipeInfo.imageCover = req.file.filename;
+    imageCoverUploadResult = await awsS3.uploadFile(req.file);
+    await unlinkFile(req.file.path);
+  }
+
+  const updatedRecipe = await Recipe.findByIdAndUpdate(req.params.id, recipeInfo, {
+    new: true,
+    runValidators: true
   })
+
+  if (imageCoverUploadResult) {
+    res.status(200).json({
+      status: 'succes',
+      data: {
+        updatedRecipe,
+        imageCoverPath: `images/${imageCoverUploadResult.Key}`
+      }
+    })
+  } else {
+    res.status(200).json({
+      status: 'succes',
+      data: {
+        updatedRecipe
+      }
+    })
+  }
 })
 
 exports.getRecipeImageCover = async (req, res, next) => {
@@ -76,7 +127,7 @@ exports.getRecipeImageCover = async (req, res, next) => {
 }
 
 exports.getRecipe = catchAsync(async (req, res, next) => {
-  const recipe = await Recipe.findById(req.params.id).populate('user')
+  const recipe = await Recipe.findById(req.params.id)
 
   if (!recipe) {
     return next(new AppError('No recipe with this ID found!', 404))
@@ -135,22 +186,10 @@ exports.isUserRecipe = operation => catchAsync(async (req, res, next) => {
   next()
 })
 
-exports.updateRecipe = catchAsync(async (req, res, next) => {
-  const updatedRecipe = await Recipe.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-    runValidators: true
-  })
-
-  res.status(200).json({
-    status: 'succes',
-    data: {
-      updatedRecipe
-    }
-  })
-})
 
 exports.deleteRecipe = catchAsync(async (req, res, next) => {
-  await Recipe.findByIdAndDelete(req.params.id)
+  const { imageCover } = await Recipe.findByIdAndDelete(req.params.id);
+  if (imageCover && imageCover !== "default.jpg") await awsS3.deleteFile(imageCover);
 
   res.status(204).json({
     status: 'success',

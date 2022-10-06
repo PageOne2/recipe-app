@@ -1,45 +1,40 @@
-import { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import { signUp } from "../../redux/redux-saga/sagaActions";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom"; 
-import { signUpUserFailure } from "../../redux/userReducer/userReducer";
-import ErrorModal from "../../components/error-modal/error.modal.component";
+import { ToastContainer } from "react-toastify";
+import { 
+  Wrapper,
+  FormWrapper,
+  FormTitle,
+  InputErrorMessage,
+  FormMessage,
+  Message,
+  SubmitButton
+} from '../../components/styled-components/form-styles/styled-components';
 
-import "./signup.styles.css";
+import "react-toastify/dist/ReactToastify.css";
 
 const SignUpPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
-  const signUpErrorMessage = useSelector((state) => state.user.signUpErrorMessage);
-  const [failedLog, setFailedLog] = useState({ fail: false, errMessage: '' });
+  const isLoggedIn = useSelector(state => state.user.isLoggedIn);
 
   useEffect(() => {
     if (isLoggedIn) {
       navigate("/");
-    } else if (signUpErrorMessage) {
-      setFailedLog({ fail: true, errMessage: signUpErrorMessage });
-    } else {
-      setFailedLog({ fail: false, errMessage: '' })
     }
-  }, [isLoggedIn, signUpErrorMessage]);
-
-  useEffect(() => {
-    return () => {
-      dispatch(signUpUserFailure(''));
-    }
-  }, []);
+  }, [isLoggedIn]);
 
   return (
-    <div className="signup-page">
-      <ErrorModal showModal={failedLog.fail} errMessage={failedLog.errMessage} signUpPage={true}/>
-      <div className="form">
-        <div className="form-title">
+    <Wrapper>
+      <ToastContainer />
+      <FormWrapper>
+        <FormTitle>
           <h2>Sign Up</h2>
-        </div>
+        </FormTitle>
         <Formik
           initialValues={{ name: '', email: '', password: '', passwordConfirm: '' }}
           validationSchema={Yup.object({
@@ -55,26 +50,26 @@ const SignUpPage = () => {
           }}
         >
           <Form>
-            <ErrorMessage name="name" render={msg => <div className="error-msg">{msg}</div>} />
+            <ErrorMessage name="name" render={msg => <InputErrorMessage>{msg}</InputErrorMessage>} />
             <Field className="form-input" name="name" type="text" placeholder="Name"/>
 
-            <ErrorMessage name="email" render={msg => <div className="error-msg">{msg}</div>} />
+            <ErrorMessage name="email" render={msg => <InputErrorMessage>{msg}</InputErrorMessage>} />
             <Field className="form-input" name="email" type="email" placeholder="Email"/>
 
-            <ErrorMessage name="password" render={msg => <div className="error-msg">{msg}</div>} />
+            <ErrorMessage name="password" render={msg => <InputErrorMessage>{msg}</InputErrorMessage>} />
             <Field className="form-input" name="password" type="password" placeholder="Password"/>
 
-            <ErrorMessage name="passwordConfirm" render={msg => <div className="error-msg">{msg}</div>} />
+            <ErrorMessage name="passwordConfirm" render={msg => <InputErrorMessage>{msg}</InputErrorMessage>} />
             <Field className="form-input" name="passwordConfirm" type="password" placeholder="Confirm Password"/>
 
-            <div className='btn-message'>
-              <p className='message'>Already have an account ? <a>Log In</a></p>
-            </div>
-            <button className='submit-btn' type='submit'>Submit</button>
+            <FormMessage>
+              <Message>Already have an account ? <a>Log In</a></Message>
+            </FormMessage>
+            <SubmitButton type='submit'>Submit</SubmitButton>
           </Form>
         </Formik>
-      </div>
-    </div>
+      </FormWrapper>
+    </Wrapper>
   )
 }
 
